@@ -1,8 +1,5 @@
-# frozen_string_literal: true
-
 module Scenery
   def self.create_ground
-    # Off-white marble material for the floor
     floor_material = Engine::Material.create(shader: Engine::Shader.default)
     floor_material.set_vec3("baseColour", Vector[0.95, 0.93, 0.88])
     floor_material.set_texture("image", nil)
@@ -13,7 +10,6 @@ module Scenery
     floor_material.set_vec3("ambientLight", Vector[0.02, 0.02, 0.02])
     floor_material.set_float("roughness", 0.3)
 
-    # Ground plane at y=0
     Engine::StandardObjects::Plane.create(
       pos: Vector[0, 0, 0],
       scale: Vector[100, 100, 100],

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require "ruby_rpg"
 require_relative "scenery"
 require_relative "components/player_controller"
