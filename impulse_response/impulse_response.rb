@@ -2,7 +2,7 @@
 
 require "ruby_rpg"
 require_relative "scenery"
-require_relative "components/mouse_look"
+require_relative "components/player_controller"
 
 Engine.start do
   Engine::Cursor.disable
@@ -14,10 +14,10 @@ Engine.start do
     sky: Vector[0.05, 0.05, 0.18]
   )
 
-  # Camera - at y=1, looking forward
+  # Camera - at y=0.5, looking forward
   Engine::GameObject.create(
     name: "Camera",
-    pos: Vector[0, 1, 0],
+    pos: Vector[0, 0.5, 0],
     components: [
       Engine::Components::PerspectiveCamera.create(
         fov: 45.0,
@@ -25,7 +25,7 @@ Engine.start do
         near: 0.1,
         far: 1000.0
       ),
-      MouseLook.create(sensitivity: 0.3)
+      PlayerController.create(move_speed: 5.0, look_sensitivity: 0.3)
     ]
   )
 
