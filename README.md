@@ -22,7 +22,7 @@ Press **Escape** to quit.
 ├── bin/
 │   └── run                   # launch script
 └── impulse_response/
-    ├── impulse_response.rb   # main entry point
+    ├── main.rb               # main entry point
     ├── assets/               # images, models, sounds
     ├── components/           # custom component classes
     └── game_objects/         # reusable game object definitions

@@ -1,2 +1,2 @@
 #!/usr/bin/env ruby
-require_relative "../impulse_response/impulse_response"
+require_relative "../impulse_response/main"

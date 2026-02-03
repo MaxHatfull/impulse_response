@@ -1,5 +1,7 @@
-module Scenery
-  def self.create_ground
+class Scenery
+  include Singleton
+
+  def create_ground
     floor_material = Engine::Material.create(shader: Engine::Shader.default)
     floor_material.set_vec3("baseColour", Vector[0.95, 0.93, 0.88])
     floor_material.set_texture("image", nil)
@@ -15,6 +17,14 @@ module Scenery
       scale: Vector[100, 100, 100],
       rotation: Vector[90, 0, 0],
       material: floor_material
+    )
+
+    Engine::GameObject.create(
+      name: "Direction Light",
+      rotation: Vector[-60, 180, 30],
+      components: [
+        Engine::Components::DirectionLight.create(colour: Vector[1.4, 1.4, 1.2])
+      ]
     )
   end
 end

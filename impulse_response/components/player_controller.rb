@@ -25,5 +25,6 @@ class PlayerController < Engine::Component
 
     world_direction = game_object.local_to_world_direction(direction).normalize
     game_object.pos += world_direction * @move_speed * delta_time
+    puts game_object.pos
   end
 end
