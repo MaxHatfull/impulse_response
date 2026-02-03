@@ -1,6 +1,7 @@
 require "ruby_rpg"
 require_relative "scenery"
 require_relative "components/player_controller"
+require_relative "map"
 
 Engine.start do
   Engine::Cursor.disable
@@ -37,4 +38,5 @@ Engine.start do
   )
 
   Scenery.create_ground
+  Map.instance.load_level
 end

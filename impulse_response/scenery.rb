@@ -16,21 +16,5 @@ module Scenery
       rotation: Vector[90, 0, 0],
       material: floor_material
     )
-
-    # Scatter cubes around (y=0.5 so they sit on the floor)
-    cube_positions = [
-      Vector[-5, 0.5, -8],
-      Vector[3, 0.5, -12],
-      Vector[-2, 0.5, -15],
-      Vector[6, 0.5, -6],
-      Vector[-8, 0.5, -20],
-      Vector[4, 0.5, -18],
-      Vector[-3, 0.5, -25],
-      Vector[7, 0.5, -10]
-    ]
-
-    cube_positions.each do |pos|
-      Engine::StandardObjects::Cube.create(pos: pos)
-    end
   end
 end
