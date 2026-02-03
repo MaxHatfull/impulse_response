@@ -8,7 +8,7 @@ GEM
     matrix (0.4.3)
     native_audio (0.4.0)
     os (1.1.4)
-    ruby_rpg (0.1.1)
+    ruby_rpg (0.1.2)
       chunky_png (~> 1.4)
       concurrent-ruby
       fiddle
@@ -22,7 +22,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  ruby_rpg (~> 0.1.1)
+  ruby_rpg (~> 0.1.2)
 
 BUNDLED WITH
-   2.6.3
+  4.0.5
