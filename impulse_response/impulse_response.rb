@@ -1,19 +1,31 @@
 # frozen_string_literal: true
 
 require "ruby_rpg"
+require_relative "scenery"
+require_relative "components/mouse_look"
 
 Engine.start do
-  # Camera - required for rendering
+  Engine::Cursor.disable
+
+  # Navy twilight sky
+  Rendering::RenderPipeline.set_skybox_colors(
+    ground: Vector[0.02, 0.02, 0.05],
+    horizon: Vector[0.08, 0.06, 0.15],
+    sky: Vector[0.05, 0.05, 0.18]
+  )
+
+  # Camera - at y=1, looking forward
   Engine::GameObject.create(
     name: "Camera",
-    pos: Vector[0, 0, 0],
+    pos: Vector[0, 1, 0],
     components: [
       Engine::Components::PerspectiveCamera.create(
         fov: 45.0,
         aspect: 1920.0 / 1080.0,
         near: 0.1,
         far: 1000.0
-      )
+      ),
+      MouseLook.create(sensitivity: 0.3)
     ]
   )
 
@@ -26,6 +38,5 @@ Engine.start do
     ]
   )
 
-  # A simple sphere in front of the camera
-  Engine::StandardObjects::Sphere.create(pos: Vector[0, 0, -10])
+  Scenery.create_ground
 end
