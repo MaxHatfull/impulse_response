@@ -1,6 +1,7 @@
 module Physics
   class RectCollider < Collider
     serialize :center, :width, :height
+    attr_reader :center, :width, :height
 
     def raycast(ray)
       half_width = @width / 2.0
