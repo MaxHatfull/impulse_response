@@ -92,4 +92,28 @@ RSpec.describe Raycast::RectTarget do
       expect(hit.normal).to eq(Vector[0, -1])
     end
   end
+
+  describe "#inside?" do
+    it "returns true when the point is inside the rectangle" do
+      rect = Raycast::RectTarget.create(center: Vector[0, 0], width: 4, height: 2)
+
+      expect(rect.inside?(Vector[0, 0])).to be true
+      expect(rect.inside?(Vector[1, 0.5])).to be true
+      expect(rect.inside?(Vector[-1, -0.5])).to be true
+    end
+
+    it "returns false when the point is outside the rectangle" do
+      rect = Raycast::RectTarget.create(center: Vector[0, 0], width: 4, height: 2)
+
+      expect(rect.inside?(Vector[3, 0])).to be false
+      expect(rect.inside?(Vector[0, 2])).to be false
+    end
+
+    it "returns false when the point is exactly on the boundary" do
+      rect = Raycast::RectTarget.create(center: Vector[0, 0], width: 4, height: 2)
+
+      expect(rect.inside?(Vector[2, 0])).to be false
+      expect(rect.inside?(Vector[0, 1])).to be false
+    end
+  end
 end

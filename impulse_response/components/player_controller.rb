@@ -51,6 +51,10 @@ class PlayerController < Engine::Component
       end
     end
 
+    # Check if destination is inside any target
+    destination_2d = pos_2d + movement_2d
+    return if Raycast.targets_at(destination_2d).any?
+
     # Apply adjusted movement back to 3D
     game_object.pos = game_object.pos + Vector[movement_2d[0], 0, movement_2d[1]]
   end

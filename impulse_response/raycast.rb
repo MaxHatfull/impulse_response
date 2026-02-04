@@ -19,6 +19,10 @@ module Raycast
     hits(ray).min_by(&:distance)
   end
 
+  def self.targets_at(point)
+    targets.select { |target| target.inside?(point) }
+  end
+
   def self.clear_targets
     @targets = []
   end

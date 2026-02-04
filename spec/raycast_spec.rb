@@ -71,4 +71,24 @@ RSpec.describe Raycast do
       expect(Raycast.closest_hit(ray)).to be_nil
     end
   end
+
+  describe ".targets_at" do
+    it "returns all targets containing the point" do
+      circle1 = Raycast::CircleTarget.create(center: Vector[0, 0], radius: 5)
+      circle2 = Raycast::CircleTarget.create(center: Vector[2, 0], radius: 5)
+      Raycast::CircleTarget.create(center: Vector[10, 10], radius: 1)
+
+      targets = Raycast.targets_at(Vector[1, 0])
+
+      expect(targets).to contain_exactly(circle1, circle2)
+    end
+
+    it "returns an empty array when no targets contain the point" do
+      Raycast::CircleTarget.create(center: Vector[0, 0], radius: 1)
+
+      targets = Raycast.targets_at(Vector[10, 10])
+
+      expect(targets).to eq([])
+    end
+  end
 end

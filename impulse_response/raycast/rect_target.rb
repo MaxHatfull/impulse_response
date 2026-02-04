@@ -50,5 +50,15 @@ module Raycast
 
       Hit.new(target: self, point: point, distance: t_enter, normal: normal)
     end
+
+    def inside?(point)
+      half_width = @width / 2.0
+      half_height = @height / 2.0
+
+      point[0] > @center[0] - half_width &&
+        point[0] < @center[0] + half_width &&
+        point[1] > @center[1] - half_height &&
+        point[1] < @center[1] + half_height
+    end
   end
 end

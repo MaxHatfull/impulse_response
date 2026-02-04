@@ -30,5 +30,10 @@ module Raycast
 
       Hit.new(target: self, point: point, distance: distance, normal: normal)
     end
+
+    def inside?(point)
+      distance_sq = (point - @center).dot(point - @center)
+      distance_sq < @radius * @radius
+    end
   end
 end

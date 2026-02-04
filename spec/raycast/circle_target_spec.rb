@@ -95,4 +95,27 @@ RSpec.describe Raycast::CircleTarget do
       expect(circle.hit(ray)).to be_nil
     end
   end
+
+  describe "#inside?" do
+    it "returns true when the point is inside the circle" do
+      circle = Raycast::CircleTarget.create(center: Vector[0, 0], radius: 5)
+
+      expect(circle.inside?(Vector[0, 0])).to be true
+      expect(circle.inside?(Vector[2, 2])).to be true
+      expect(circle.inside?(Vector[4, 0])).to be true
+    end
+
+    it "returns false when the point is outside the circle" do
+      circle = Raycast::CircleTarget.create(center: Vector[0, 0], radius: 5)
+
+      expect(circle.inside?(Vector[6, 0])).to be false
+      expect(circle.inside?(Vector[4, 4])).to be false
+    end
+
+    it "returns false when the point is exactly on the boundary" do
+      circle = Raycast::CircleTarget.create(center: Vector[0, 0], radius: 5)
+
+      expect(circle.inside?(Vector[5, 0])).to be false
+    end
+  end
 end
