@@ -4,7 +4,7 @@ module Raycast
 
     def initialize(start_point:, direction:, length:)
       @start_point = start_point
-      @direction = direction
+      @direction = direction.normalize
       @length = length
     end
   end
