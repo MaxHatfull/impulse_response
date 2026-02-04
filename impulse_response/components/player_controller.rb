@@ -1,4 +1,6 @@
 class PlayerController < Engine::Component
+  COLLISION_RADIUS = 0.5
+
   serialize :move_speed, :look_sensitivity
 
   def update(delta_time)
@@ -24,6 +26,23 @@ class PlayerController < Engine::Component
     return if direction == Vector[0, 0, 0]
 
     world_direction = game_object.local_to_world_direction(direction).normalize
-    game_object.pos += world_direction * @move_speed * delta_time
+    new_pos = game_object.pos + world_direction * @move_speed * delta_time
+
+    return unless can_move?(new_pos)
+
+    game_object.pos = new_pos
+  end
+
+  def can_move?(pos)
+    8.times.all? do |i|
+      angle = i * Math::PI / 4
+      check_pos = Vector[
+        pos[0] + Math.cos(angle) * COLLISION_RADIUS,
+        pos[1],
+        pos[2] + Math.sin(angle) * COLLISION_RADIUS
+      ]
+      tile = Map.instance.tile_at(check_pos)
+      tile&.can_step_on?
+    end
   end
 end
