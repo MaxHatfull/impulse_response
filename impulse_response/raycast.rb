@@ -1,29 +1,29 @@
 module Raycast
-  def self.targets
-    @targets ||= []
+  def self.colliders
+    @colliders ||= []
   end
 
-  def self.register_target(target)
-    targets << target
+  def self.register_collider(collider)
+    colliders << collider
   end
 
-  def self.deregister_target(target)
-    targets.delete(target)
+  def self.deregister_collider(collider)
+    colliders.delete(collider)
   end
 
   def self.hits(ray)
-    targets.filter_map { |target| target.hit(ray) }
+    colliders.filter_map { |collider| collider.hit(ray) }
   end
 
   def self.closest_hit(ray)
     hits(ray).min_by(&:distance)
   end
 
-  def self.targets_at(point)
-    targets.select { |target| target.inside?(point) }
+  def self.colliders_at(point)
+    colliders.select { |collider| collider.inside?(point) }
   end
 
-  def self.clear_targets
-    @targets = []
+  def self.clear_colliders
+    @colliders = []
   end
 end

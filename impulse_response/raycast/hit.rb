@@ -1,9 +1,9 @@
 module Raycast
   class Hit
-    attr_reader :target, :point, :distance, :normal
+    attr_reader :collider, :point, :distance, :normal
 
-    def initialize(target:, point:, distance:, normal:)
-      @target = target
+    def initialize(collider:, point:, distance:, normal:)
+      @collider = collider
       @point = point
       @distance = distance
       @normal = normal.normalize

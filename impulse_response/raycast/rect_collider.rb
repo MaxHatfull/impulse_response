@@ -1,5 +1,5 @@
 module Raycast
-  class RectTarget < Target
+  class RectCollider < Collider
     serialize :center, :width, :height
 
     def hit(ray)
@@ -48,7 +48,7 @@ module Raycast
         Vector[0, ray.direction[1] > 0 ? -1 : 1]
       end
 
-      Hit.new(target: self, point: point, distance: t_enter, normal: normal)
+      Hit.new(collider: self, point: point, distance: t_enter, normal: normal)
     end
 
     def inside?(point)

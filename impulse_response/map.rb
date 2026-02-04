@@ -5,7 +5,6 @@ class Map
 
   def load_level(path)
     @level_root&.destroy!
-    Raycast.clear_targets
     @level_root = Engine::GameObject.create(name: "Level Root")
 
     wall_material = Engine::Material.create(shader: Engine::Shader.default)
@@ -30,9 +29,12 @@ class Map
 
         case type
         when :wall
-          game_object = Engine::StandardObjects::Cube.create(pos: Vector[x, 0.5, z], material: wall_material)
+          game_object = Engine::StandardObjects::Cube.create(
+            pos: Vector[x, 0.5, z],
+            material: wall_material,
+            components: [Raycast::RectCollider.create(center: Vector[x, z], width: 1, height: 1)]
+          )
           game_object.parent = @level_root
-          Raycast::RectTarget.create(center: Vector[x, z], width: 1, height: 1)
         when :player_spawn
           Player.instance.reset(position)
         end

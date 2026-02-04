@@ -5,7 +5,7 @@ RSpec.describe Raycast::Hit do
   describe "#normal" do
     it "normalizes the normal" do
       hit = Raycast::Hit.new(
-        target: nil,
+        collider: nil,
         point: Vector[0, 0],
         distance: 5,
         normal: Vector[3, 4]
