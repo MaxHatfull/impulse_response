@@ -1,6 +1,7 @@
 module Physics
   class CircleCollider < Collider
     serialize :center, :radius
+    attr_reader :center, :radius
 
     def raycast(ray)
       # Vector from ray start to circle center
