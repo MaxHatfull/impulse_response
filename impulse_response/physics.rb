@@ -26,4 +26,10 @@ module Physics
   def self.clear_colliders
     @colliders = []
   end
+
+  def self.collisions(collider)
+    colliders
+      .reject { |other| other == collider }
+      .filter_map { |other| CollisionResolver.check(collider, other) }
+  end
 end

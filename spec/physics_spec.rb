@@ -91,4 +91,36 @@ RSpec.describe Physics do
       expect(colliders).to eq([])
     end
   end
+
+  describe ".collisions" do
+    it "returns all collisions for a given collider" do
+      target = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
+      hit1 = Physics::CircleCollider.create(center: Vector[1.5, 0], radius: 1)
+      hit2 = Physics::RectCollider.create(center: Vector[0, 1.5], width: 2, height: 2)
+      Physics::CircleCollider.create(center: Vector[10, 10], radius: 1) # not overlapping
+
+      collisions = Physics.collisions(target)
+
+      expect(collisions.length).to eq(2)
+      expect(collisions.map(&:collider_b)).to contain_exactly(hit1, hit2)
+      expect(collisions).to all(be_a(Physics::Collision))
+    end
+
+    it "returns an empty array when no collisions" do
+      target = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
+      Physics::CircleCollider.create(center: Vector[10, 0], radius: 1)
+
+      collisions = Physics.collisions(target)
+
+      expect(collisions).to eq([])
+    end
+
+    it "does not include self-collision" do
+      target = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
+
+      collisions = Physics.collisions(target)
+
+      expect(collisions).to eq([])
+    end
+  end
 end
