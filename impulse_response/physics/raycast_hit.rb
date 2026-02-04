@@ -1,5 +1,5 @@
-module Raycast
-  class Hit
+module Physics
+  class RaycastHit
     attr_reader :collider, :point, :distance, :normal
 
     def initialize(collider:, point:, distance:, normal:)

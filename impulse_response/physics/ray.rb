@@ -1,4 +1,4 @@
-module Raycast
+module Physics
   class Ray
     attr_reader :start_point, :direction, :length
 

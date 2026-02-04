@@ -1,8 +1,8 @@
-module Raycast
+module Physics
   class CircleCollider < Collider
     serialize :center, :radius
 
-    def hit(ray)
+    def raycast(ray)
       # Vector from ray start to circle center
       to_center = @center - ray.start_point
 
@@ -28,7 +28,7 @@ module Raycast
       point = ray.start_point + ray.direction * distance
       normal = (point - @center).normalize
 
-      Hit.new(collider: self, point: point, distance: distance, normal: normal)
+      RaycastHit.new(collider: self, point: point, distance: distance, normal: normal)
     end
 
     def inside?(point)

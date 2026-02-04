@@ -35,13 +35,13 @@ class PlayerController < Engine::Component
 
     return if move_distance == 0
 
-    ray = Raycast::Ray.new(
+    ray = Physics::Ray.new(
       start_point: pos_2d,
       direction: movement_2d,
       length: move_distance + COLLISION_RADIUS
     )
 
-    hit = Raycast.closest_hit(ray)
+    hit = Physics.closest_raycast(ray)
 
     if hit && hit.distance < move_distance + COLLISION_RADIUS
       # Remove the component of movement going into the wall
@@ -53,7 +53,7 @@ class PlayerController < Engine::Component
 
     # Check if destination is inside any target
     destination_2d = pos_2d + movement_2d
-    return if Raycast.colliders_at(destination_2d).any?
+    return if Physics.colliders_at(destination_2d).any?
 
     # Apply adjusted movement back to 3D
     game_object.pos = game_object.pos + Vector[movement_2d[0], 0, movement_2d[1]]

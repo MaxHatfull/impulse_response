@@ -1,10 +1,10 @@
 require "spec_helper"
 require_relative "../../impulse_response/loader"
 
-RSpec.describe Raycast::Hit do
+RSpec.describe Physics::RaycastHit do
   describe "#normal" do
     it "normalizes the normal" do
-      hit = Raycast::Hit.new(
+      hit = Physics::RaycastHit.new(
         collider: nil,
         point: Vector[0, 0],
         distance: 5,

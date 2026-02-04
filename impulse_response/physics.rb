@@ -1,4 +1,4 @@
-module Raycast
+module Physics
   def self.colliders
     @colliders ||= []
   end
@@ -11,12 +11,12 @@ module Raycast
     colliders.delete(collider)
   end
 
-  def self.hits(ray)
-    colliders.filter_map { |collider| collider.hit(ray) }
+  def self.raycast(ray)
+    colliders.filter_map { |collider| collider.raycast(ray) }
   end
 
-  def self.closest_hit(ray)
-    hits(ray).min_by(&:distance)
+  def self.closest_raycast(ray)
+    raycast(ray).min_by(&:distance)
   end
 
   def self.colliders_at(point)
