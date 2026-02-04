@@ -26,23 +26,32 @@ class PlayerController < Engine::Component
     return if direction == Vector[0, 0, 0]
 
     world_direction = game_object.local_to_world_direction(direction).normalize
-    new_pos = game_object.pos + world_direction * @move_speed * delta_time
+    movement = world_direction * @move_speed * delta_time
 
-    return unless can_move?(new_pos)
+    # Convert to 2D (x, z) for raycasting
+    pos_2d = Vector[game_object.pos[0], game_object.pos[2]]
+    movement_2d = Vector[movement[0], movement[2]]
+    move_distance = movement_2d.magnitude
 
-    game_object.pos = new_pos
-  end
+    return if move_distance == 0
 
-  def can_move?(pos)
-    8.times.all? do |i|
-      angle = i * Math::PI / 4
-      check_pos = Vector[
-        pos[0] + Math.cos(angle) * COLLISION_RADIUS,
-        pos[1],
-        pos[2] + Math.sin(angle) * COLLISION_RADIUS
-      ]
-      tile = Map.instance.tile_at(check_pos)
-      tile&.can_step_on?
+    ray = Raycast::Ray.new(
+      start_point: pos_2d,
+      direction: movement_2d,
+      length: move_distance + COLLISION_RADIUS
+    )
+
+    hit = Raycast.closest_hit(ray)
+
+    if hit && hit.distance < move_distance + COLLISION_RADIUS
+      # Remove the component of movement going into the wall
+      normal_component = movement_2d.dot(hit.normal)
+      if normal_component < 0
+        movement_2d = movement_2d - hit.normal * normal_component
+      end
     end
+
+    # Apply adjusted movement back to 3D
+    game_object.pos = game_object.pos + Vector[movement_2d[0], 0, movement_2d[1]]
   end
 end

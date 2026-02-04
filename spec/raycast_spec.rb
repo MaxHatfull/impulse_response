@@ -23,7 +23,7 @@ RSpec.describe Raycast do
     end
   end
 
-  describe ".test" do
+  describe ".hits" do
     it "returns hits for all targets the ray intersects" do
       circle1 = Raycast::CircleTarget.create(center: Vector[5, 0], radius: 1)
       circle2 = Raycast::CircleTarget.create(center: Vector[10, 0], radius: 1)
@@ -31,7 +31,7 @@ RSpec.describe Raycast do
 
       ray = Raycast::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 20)
 
-      hits = Raycast.test(ray)
+      hits = Raycast.hits(ray)
 
       expect(hits.length).to eq(2)
       expect(hits.map(&:target)).to contain_exactly(circle1, circle2)
@@ -42,9 +42,33 @@ RSpec.describe Raycast do
 
       ray = Raycast::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 20)
 
-      hits = Raycast.test(ray)
+      hits = Raycast.hits(ray)
 
       expect(hits).to eq([])
+    end
+  end
+
+  describe ".closest_hit" do
+    it "returns the hit with the smallest distance" do
+      Raycast::CircleTarget.create(center: Vector[10, 0], radius: 1)
+      closest_circle = Raycast::CircleTarget.create(center: Vector[5, 0], radius: 1)
+      Raycast::CircleTarget.create(center: Vector[15, 0], radius: 1)
+
+      ray = Raycast::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 20)
+
+      hit = Raycast.closest_hit(ray)
+
+      expect(hit).to be_a(Raycast::Hit)
+      expect(hit.target).to eq(closest_circle)
+      expect(hit.distance).to eq(4)
+    end
+
+    it "returns nil when no targets are hit" do
+      Raycast::CircleTarget.create(center: Vector[5, 5], radius: 1)
+
+      ray = Raycast::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 20)
+
+      expect(Raycast.closest_hit(ray)).to be_nil
     end
   end
 end

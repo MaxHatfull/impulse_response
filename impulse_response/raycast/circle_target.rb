@@ -2,7 +2,7 @@ module Raycast
   class CircleTarget < Target
     serialize :center, :radius
 
-    def test(ray)
+    def hit(ray)
       # Vector from ray start to circle center
       to_center = @center - ray.start_point
 

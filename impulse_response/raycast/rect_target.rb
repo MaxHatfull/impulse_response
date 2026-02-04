@@ -2,7 +2,7 @@ module Raycast
   class RectTarget < Target
     serialize :center, :width, :height
 
-    def test(ray)
+    def hit(ray)
       half_width = @width / 2.0
       half_height = @height / 2.0
 

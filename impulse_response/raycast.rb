@@ -11,8 +11,12 @@ module Raycast
     targets.delete(target)
   end
 
-  def self.test(ray)
-    targets.filter_map { |target| target.test(ray) }
+  def self.hits(ray)
+    targets.filter_map { |target| target.hit(ray) }
+  end
+
+  def self.closest_hit(ray)
+    hits(ray).min_by(&:distance)
   end
 
   def self.clear_targets
