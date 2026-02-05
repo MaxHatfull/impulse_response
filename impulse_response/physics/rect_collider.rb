@@ -1,16 +1,16 @@
 module Physics
   class RectCollider < Collider
-    serialize :center, :width, :height
-    attr_reader :center, :width, :height
+    serialize :width, :height
+    attr_reader :width, :height
 
     def raycast(ray)
       half_width = @width / 2.0
       half_height = @height / 2.0
 
-      min_x = @center[0] - half_width
-      max_x = @center[0] + half_width
-      min_y = @center[1] - half_height
-      max_y = @center[1] + half_height
+      min_x = center[0] - half_width
+      max_x = center[0] + half_width
+      min_y = center[1] - half_height
+      max_y = center[1] + half_height
 
       # t refers to units along the ray
 
@@ -56,10 +56,10 @@ module Physics
       half_width = @width / 2.0
       half_height = @height / 2.0
 
-      point[0] > @center[0] - half_width &&
-        point[0] < @center[0] + half_width &&
-        point[1] > @center[1] - half_height &&
-        point[1] < @center[1] + half_height
+      point[0] > center[0] - half_width &&
+        point[0] < center[0] + half_width &&
+        point[1] > center[1] - half_height &&
+        point[1] < center[1] + half_height
     end
   end
 end

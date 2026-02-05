@@ -1,11 +1,11 @@
 module Physics
   class CircleCollider < Collider
-    serialize :center, :radius
-    attr_reader :center, :radius
+    serialize :radius
+    attr_reader :radius
 
     def raycast(ray)
       # Vector from ray start to circle center
-      to_center = @center - ray.start_point
+      to_center = center - ray.start_point
 
       # Project onto ray direction to find closest approach
       proj_length = to_center.dot(ray.direction)
@@ -27,13 +27,14 @@ module Physics
       return nil if distance > ray.length
 
       point = ray.start_point + ray.direction * distance
-      normal = (point - @center).normalize
+      normal = (point - center).normalize
 
       RaycastHit.new(collider: self, point: point, distance: distance, normal: normal)
     end
 
     def inside?(point)
-      distance_sq = (point - @center).dot(point - @center)
+      diff = point - center
+      distance_sq = diff.dot(diff)
       distance_sq < @radius * @radius
     end
   end

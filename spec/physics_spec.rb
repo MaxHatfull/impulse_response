@@ -6,15 +6,15 @@ RSpec.describe Physics do
 
   describe ".colliders" do
     it "returns all created raycast colliders" do
-      circle = Physics::CircleCollider.create
-      rect = Physics::RectCollider.create
+      circle = create_circle(center: Vector[0, 0], radius: 1)
+      rect = create_rect(center: Vector[0, 0], width: 1, height: 1)
 
       expect(Physics.colliders).to include(circle, rect)
     end
 
     it "removes colliders when they are destroyed" do
-      circle = Physics::CircleCollider.create
-      rect = Physics::RectCollider.create
+      circle = create_circle(center: Vector[0, 0], radius: 1)
+      rect = create_rect(center: Vector[0, 0], width: 1, height: 1)
 
       circle.destroy
 
@@ -25,9 +25,9 @@ RSpec.describe Physics do
 
   describe ".raycast" do
     it "returns hits for all colliders the ray intersects" do
-      circle1 = Physics::CircleCollider.create(center: Vector[5, 0], radius: 1)
-      circle2 = Physics::CircleCollider.create(center: Vector[10, 0], radius: 1)
-      Physics::CircleCollider.create(center: Vector[5, 5], radius: 1) # not in path
+      circle1 = create_circle(center: Vector[5, 0], radius: 1)
+      circle2 = create_circle(center: Vector[10, 0], radius: 1)
+      create_circle(center: Vector[5, 5], radius: 1) # not in path
 
       ray = Physics::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 20)
 
@@ -38,7 +38,7 @@ RSpec.describe Physics do
     end
 
     it "returns an empty array when no colliders are hit" do
-      Physics::CircleCollider.create(center: Vector[5, 5], radius: 1)
+      create_circle(center: Vector[5, 5], radius: 1)
 
       ray = Physics::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 20)
 
@@ -50,9 +50,9 @@ RSpec.describe Physics do
 
   describe ".closest_raycast" do
     it "returns the hit with the smallest distance" do
-      Physics::CircleCollider.create(center: Vector[10, 0], radius: 1)
-      closest_circle = Physics::CircleCollider.create(center: Vector[5, 0], radius: 1)
-      Physics::CircleCollider.create(center: Vector[15, 0], radius: 1)
+      create_circle(center: Vector[10, 0], radius: 1)
+      closest_circle = create_circle(center: Vector[5, 0], radius: 1)
+      create_circle(center: Vector[15, 0], radius: 1)
 
       ray = Physics::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 20)
 
@@ -64,7 +64,7 @@ RSpec.describe Physics do
     end
 
     it "returns nil when no colliders are hit" do
-      Physics::CircleCollider.create(center: Vector[5, 5], radius: 1)
+      create_circle(center: Vector[5, 5], radius: 1)
 
       ray = Physics::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 20)
 
@@ -74,9 +74,9 @@ RSpec.describe Physics do
 
   describe ".colliders_at" do
     it "returns all colliders containing the point" do
-      circle1 = Physics::CircleCollider.create(center: Vector[0, 0], radius: 5)
-      circle2 = Physics::CircleCollider.create(center: Vector[2, 0], radius: 5)
-      Physics::CircleCollider.create(center: Vector[10, 10], radius: 1)
+      circle1 = create_circle(center: Vector[0, 0], radius: 5)
+      circle2 = create_circle(center: Vector[2, 0], radius: 5)
+      create_circle(center: Vector[10, 10], radius: 1)
 
       colliders = Physics.colliders_at(Vector[1, 0])
 
@@ -84,7 +84,7 @@ RSpec.describe Physics do
     end
 
     it "returns an empty array when no colliders contain the point" do
-      Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
+      create_circle(center: Vector[0, 0], radius: 1)
 
       colliders = Physics.colliders_at(Vector[10, 10])
 
@@ -94,10 +94,10 @@ RSpec.describe Physics do
 
   describe ".collisions" do
     it "returns all collisions for a given collider" do
-      target = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      hit1 = Physics::CircleCollider.create(center: Vector[1.5, 0], radius: 1)
-      hit2 = Physics::RectCollider.create(center: Vector[0, 1.5], width: 2, height: 2)
-      Physics::CircleCollider.create(center: Vector[10, 10], radius: 1) # not overlapping
+      target = create_circle(center: Vector[0, 0], radius: 1)
+      hit1 = create_circle(center: Vector[1.5, 0], radius: 1)
+      hit2 = create_rect(center: Vector[0, 1.5], width: 2, height: 2)
+      create_circle(center: Vector[10, 10], radius: 1) # not overlapping
 
       collisions = Physics.collisions(target)
 
@@ -107,8 +107,8 @@ RSpec.describe Physics do
     end
 
     it "returns an empty array when no collisions" do
-      target = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      Physics::CircleCollider.create(center: Vector[10, 0], radius: 1)
+      target = create_circle(center: Vector[0, 0], radius: 1)
+      create_circle(center: Vector[10, 0], radius: 1)
 
       collisions = Physics.collisions(target)
 
@@ -116,7 +116,7 @@ RSpec.describe Physics do
     end
 
     it "does not include self-collision" do
-      target = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
+      target = create_circle(center: Vector[0, 0], radius: 1)
 
       collisions = Physics.collisions(target)
 

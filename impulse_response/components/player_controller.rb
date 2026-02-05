@@ -1,11 +1,10 @@
 class PlayerController < Engine::Component
-  COLLISION_RADIUS = 0.5
-
   serialize :move_speed, :look_sensitivity
 
   def update(delta_time)
     handle_look
     handle_movement(delta_time)
+    resolve_collisions
   end
 
   private
@@ -28,34 +27,20 @@ class PlayerController < Engine::Component
     world_direction = game_object.local_to_world_direction(direction).normalize
     movement = world_direction * @move_speed * delta_time
 
-    # Convert to 2D (x, z) for raycasting
-    pos_2d = Vector[game_object.pos[0], game_object.pos[2]]
-    movement_2d = Vector[movement[0], movement[2]]
-    move_distance = movement_2d.magnitude
+    game_object.pos = game_object.pos + movement
+  end
 
-    return if move_distance == 0
+  def resolve_collisions
+    return unless collider
 
-    ray = Physics::Ray.new(
-      start_point: pos_2d,
-      direction: movement_2d,
-      length: move_distance + COLLISION_RADIUS
-    )
-
-    hit = Physics.closest_raycast(ray)
-
-    if hit && hit.distance < move_distance + COLLISION_RADIUS
-      # Remove the component of movement going into the wall
-      normal_component = movement_2d.dot(hit.normal)
-      if normal_component < 0
-        movement_2d = movement_2d - hit.normal * normal_component
-      end
+    Physics.collisions(collider).each do |collision|
+      # Push player out of collision along the normal
+      push = collision.normal * collision.penetration
+      game_object.pos = game_object.pos - Vector[push[0], 0, push[1]]
     end
+  end
 
-    # Check if destination is inside any target
-    destination_2d = pos_2d + movement_2d
-    return if Physics.colliders_at(destination_2d).any?
-
-    # Apply adjusted movement back to 3D
-    game_object.pos = game_object.pos + Vector[movement_2d[0], 0, movement_2d[1]]
+  def collider
+    @collider ||= game_object.component(Physics::CircleCollider)
   end
 end

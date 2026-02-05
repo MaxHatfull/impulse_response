@@ -4,35 +4,35 @@ require_relative "../../impulse_response/loader"
 RSpec.describe Physics::CircleCollider do
   describe "#raycast" do
     it "returns nil when the ray misses the circle" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
+      circle = create_circle(center: Vector[0, 0], radius: 1)
       ray = Physics::Ray.new(start_point: Vector[5, 5], direction: Vector[1, 0], length: 10)
 
       expect(circle.raycast(ray)).to be_nil
     end
 
     it "returns nil when the ray points away from the circle" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 2)
+      circle = create_circle(center: Vector[0, 0], radius: 2)
       ray = Physics::Ray.new(start_point: Vector[5, 0], direction: Vector[1, 0], length: 10)
 
       expect(circle.raycast(ray)).to be_nil
     end
 
     it "returns nil when the ray is too short to reach the circle" do
-      circle = Physics::CircleCollider.create(center: Vector[10, 0], radius: 1)
+      circle = create_circle(center: Vector[10, 0], radius: 1)
       ray = Physics::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 5)
 
       expect(circle.raycast(ray)).to be_nil
     end
 
     it "returns nil when the ray passes beside an off-center circle" do
-      circle = Physics::CircleCollider.create(center: Vector[3, 5], radius: 1)
+      circle = create_circle(center: Vector[3, 5], radius: 1)
       ray = Physics::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 20)
 
       expect(circle.raycast(ray)).to be_nil
     end
 
     it "returns a hit when the ray hits the circle head on" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
+      circle = create_circle(center: Vector[0, 0], radius: 1)
       ray = Physics::Ray.new(start_point: Vector[-5, 0], direction: Vector[1, 0], length: 10)
 
       hit = circle.raycast(ray)
@@ -45,7 +45,7 @@ RSpec.describe Physics::CircleCollider do
     end
 
     it "returns a hit when the ray hits at an angle" do
-      circle = Physics::CircleCollider.create(center: Vector[4, 3], radius: 1)
+      circle = create_circle(center: Vector[4, 3], radius: 1)
       ray = Physics::Ray.new(start_point: Vector[0, 0], direction: Vector[0.8, 0.6], length: 10)
 
       hit = circle.raycast(ray)
@@ -60,7 +60,7 @@ RSpec.describe Physics::CircleCollider do
     end
 
     it "returns a hit when the ray is tangent to the circle" do
-      circle = Physics::CircleCollider.create(center: Vector[5, 1], radius: 1)
+      circle = create_circle(center: Vector[5, 1], radius: 1)
       ray = Physics::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 10)
 
       hit = circle.raycast(ray)
@@ -72,7 +72,7 @@ RSpec.describe Physics::CircleCollider do
     end
 
     it "returns a hit when the ray length exactly reaches the circle" do
-      circle = Physics::CircleCollider.create(center: Vector[10, 0], radius: 1)
+      circle = create_circle(center: Vector[10, 0], radius: 1)
       ray = Physics::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 9)
 
       hit = circle.raycast(ray)
@@ -82,14 +82,14 @@ RSpec.describe Physics::CircleCollider do
     end
 
     it "returns nil when the circle is behind the ray start" do
-      circle = Physics::CircleCollider.create(center: Vector[-5, 0], radius: 1)
+      circle = create_circle(center: Vector[-5, 0], radius: 1)
       ray = Physics::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 10)
 
       expect(circle.raycast(ray)).to be_nil
     end
 
     it "returns nil when the ray starts inside the circle" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 5)
+      circle = create_circle(center: Vector[0, 0], radius: 5)
       ray = Physics::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 10)
 
       expect(circle.raycast(ray)).to be_nil
@@ -98,7 +98,7 @@ RSpec.describe Physics::CircleCollider do
 
   describe "#inside?" do
     it "returns true when the point is inside the circle" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 5)
+      circle = create_circle(center: Vector[0, 0], radius: 5)
 
       expect(circle.inside?(Vector[0, 0])).to be true
       expect(circle.inside?(Vector[2, 2])).to be true
@@ -106,14 +106,14 @@ RSpec.describe Physics::CircleCollider do
     end
 
     it "returns false when the point is outside the circle" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 5)
+      circle = create_circle(center: Vector[0, 0], radius: 5)
 
       expect(circle.inside?(Vector[6, 0])).to be false
       expect(circle.inside?(Vector[4, 4])).to be false
     end
 
     it "returns false when the point is exactly on the boundary" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 5)
+      circle = create_circle(center: Vector[0, 0], radius: 5)
 
       expect(circle.inside?(Vector[5, 0])).to be false
     end

@@ -32,7 +32,7 @@ class Map
           game_object = Engine::StandardObjects::Cube.create(
             pos: Vector[x, 0.5, z],
             material: wall_material,
-            components: [Physics::RectCollider.create(center: Vector[x, z], width: 1, height: 1)]
+            components: [Physics::RectCollider.create(width: 1, height: 1)]
           )
           game_object.parent = @level_root
         when :player_spawn

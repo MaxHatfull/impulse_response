@@ -13,7 +13,20 @@
 # it.
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+module ColliderHelpers
+  def create_circle(center:, radius:)
+    go = Engine::GameObject.create(pos: Vector[center[0], 0, center[1]])
+    Physics::CircleCollider.create(radius: radius, game_object: go)
+  end
+
+  def create_rect(center:, width:, height:)
+    go = Engine::GameObject.create(pos: Vector[center[0], 0, center[1]])
+    Physics::RectCollider.create(width: width, height: height, game_object: go)
+  end
+end
+
 RSpec.configure do |config|
+  config.include ColliderHelpers
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

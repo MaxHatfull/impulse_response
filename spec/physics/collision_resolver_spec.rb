@@ -6,15 +6,15 @@ RSpec.describe Physics::CollisionResolver do
 
   describe ".check" do
     it "returns nil when colliders don't overlap" do
-      a = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      b = Physics::CircleCollider.create(center: Vector[5, 0], radius: 1)
+      a = create_circle(center: Vector[0, 0], radius: 1)
+      b = create_circle(center: Vector[5, 0], radius: 1)
 
       expect(Physics::CollisionResolver.check(a, b)).to be_nil
     end
 
     it "dispatches to CircleCircle for two circles" do
-      a = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      b = Physics::CircleCollider.create(center: Vector[1.5, 0], radius: 1)
+      a = create_circle(center: Vector[0, 0], radius: 1)
+      b = create_circle(center: Vector[1.5, 0], radius: 1)
 
       result = Physics::CollisionResolver.check(a, b)
 
@@ -23,8 +23,8 @@ RSpec.describe Physics::CollisionResolver do
     end
 
     it "dispatches to RectRect for two rects" do
-      a = Physics::RectCollider.create(center: Vector[0, 0], width: 2, height: 2)
-      b = Physics::RectCollider.create(center: Vector[1.5, 0], width: 2, height: 2)
+      a = create_rect(center: Vector[0, 0], width: 2, height: 2)
+      b = create_rect(center: Vector[1.5, 0], width: 2, height: 2)
 
       result = Physics::CollisionResolver.check(a, b)
 
@@ -33,8 +33,8 @@ RSpec.describe Physics::CollisionResolver do
     end
 
     it "dispatches to CircleRect for circle and rect" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      rect = Physics::RectCollider.create(center: Vector[1.5, 0], width: 2, height: 2)
+      circle = create_circle(center: Vector[0, 0], radius: 1)
+      rect = create_rect(center: Vector[1.5, 0], width: 2, height: 2)
 
       result = Physics::CollisionResolver.check(circle, rect)
 
@@ -44,8 +44,8 @@ RSpec.describe Physics::CollisionResolver do
     end
 
     it "dispatches to CircleRect for rect and circle (reversed order)" do
-      rect = Physics::RectCollider.create(center: Vector[1.5, 0], width: 2, height: 2)
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
+      rect = create_rect(center: Vector[1.5, 0], width: 2, height: 2)
+      circle = create_circle(center: Vector[0, 0], radius: 1)
 
       result = Physics::CollisionResolver.check(rect, circle)
 

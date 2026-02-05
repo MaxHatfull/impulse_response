@@ -6,8 +6,8 @@ RSpec.describe Physics::Collisions::CircleCircle do
 
   describe ".check" do
     it "returns nil when circles don't overlap" do
-      a = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      b = Physics::CircleCollider.create(center: Vector[5, 0], radius: 1)
+      a = create_circle(center: Vector[0, 0], radius: 1)
+      b = create_circle(center: Vector[5, 0], radius: 1)
 
       result = Physics::Collisions::CircleCircle.check(a, b)
 
@@ -15,8 +15,8 @@ RSpec.describe Physics::Collisions::CircleCircle do
     end
 
     it "returns nil when circles are exactly touching" do
-      a = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      b = Physics::CircleCollider.create(center: Vector[2, 0], radius: 1)
+      a = create_circle(center: Vector[0, 0], radius: 1)
+      b = create_circle(center: Vector[2, 0], radius: 1)
 
       result = Physics::Collisions::CircleCircle.check(a, b)
 
@@ -24,8 +24,8 @@ RSpec.describe Physics::Collisions::CircleCircle do
     end
 
     it "returns collision info when circles overlap" do
-      a = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      b = Physics::CircleCollider.create(center: Vector[1.5, 0], radius: 1)
+      a = create_circle(center: Vector[0, 0], radius: 1)
+      b = create_circle(center: Vector[1.5, 0], radius: 1)
 
       result = Physics::Collisions::CircleCircle.check(a, b)
 
@@ -35,8 +35,8 @@ RSpec.describe Physics::Collisions::CircleCircle do
     end
 
     it "calculates correct penetration depth" do
-      a = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      b = Physics::CircleCollider.create(center: Vector[1.5, 0], radius: 1)
+      a = create_circle(center: Vector[0, 0], radius: 1)
+      b = create_circle(center: Vector[1.5, 0], radius: 1)
 
       result = Physics::Collisions::CircleCircle.check(a, b)
 
@@ -45,8 +45,8 @@ RSpec.describe Physics::Collisions::CircleCircle do
     end
 
     it "calculates correct normal pointing from a to b" do
-      a = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      b = Physics::CircleCollider.create(center: Vector[1.5, 0], radius: 1)
+      a = create_circle(center: Vector[0, 0], radius: 1)
+      b = create_circle(center: Vector[1.5, 0], radius: 1)
 
       result = Physics::Collisions::CircleCircle.check(a, b)
 
@@ -54,8 +54,8 @@ RSpec.describe Physics::Collisions::CircleCircle do
     end
 
     it "calculates correct normal for diagonal overlap" do
-      a = Physics::CircleCollider.create(center: Vector[0, 0], radius: 2)
-      b = Physics::CircleCollider.create(center: Vector[1, 1], radius: 2)
+      a = create_circle(center: Vector[0, 0], radius: 2)
+      b = create_circle(center: Vector[1, 1], radius: 2)
 
       result = Physics::Collisions::CircleCircle.check(a, b)
 
@@ -65,8 +65,8 @@ RSpec.describe Physics::Collisions::CircleCircle do
     end
 
     it "calculates contact point at the edge of circle a" do
-      a = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      b = Physics::CircleCollider.create(center: Vector[1.5, 0], radius: 1)
+      a = create_circle(center: Vector[0, 0], radius: 1)
+      b = create_circle(center: Vector[1.5, 0], radius: 1)
 
       result = Physics::Collisions::CircleCircle.check(a, b)
 

@@ -6,8 +6,8 @@ RSpec.describe Physics::Collisions::CircleRect do
 
   describe ".check" do
     it "returns nil when circle and rect don't overlap" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      rect = Physics::RectCollider.create(center: Vector[5, 0], width: 2, height: 2)
+      circle = create_circle(center: Vector[0, 0], radius: 1)
+      rect = create_rect(center: Vector[5, 0], width: 2, height: 2)
 
       result = Physics::Collisions::CircleRect.check(circle, rect)
 
@@ -15,8 +15,8 @@ RSpec.describe Physics::Collisions::CircleRect do
     end
 
     it "returns nil when circle and rect are exactly touching" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      rect = Physics::RectCollider.create(center: Vector[2, 0], width: 2, height: 2)
+      circle = create_circle(center: Vector[0, 0], radius: 1)
+      rect = create_rect(center: Vector[2, 0], width: 2, height: 2)
 
       result = Physics::Collisions::CircleRect.check(circle, rect)
 
@@ -24,8 +24,8 @@ RSpec.describe Physics::Collisions::CircleRect do
     end
 
     it "returns collision info when circle overlaps rect from the side" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      rect = Physics::RectCollider.create(center: Vector[1.5, 0], width: 2, height: 2)
+      circle = create_circle(center: Vector[0, 0], radius: 1)
+      rect = create_rect(center: Vector[1.5, 0], width: 2, height: 2)
 
       result = Physics::Collisions::CircleRect.check(circle, rect)
 
@@ -35,8 +35,8 @@ RSpec.describe Physics::Collisions::CircleRect do
     end
 
     it "calculates correct penetration when hitting from the side" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      rect = Physics::RectCollider.create(center: Vector[1.5, 0], width: 2, height: 2)
+      circle = create_circle(center: Vector[0, 0], radius: 1)
+      rect = create_rect(center: Vector[1.5, 0], width: 2, height: 2)
 
       result = Physics::Collisions::CircleRect.check(circle, rect)
 
@@ -47,8 +47,8 @@ RSpec.describe Physics::Collisions::CircleRect do
     end
 
     it "calculates correct penetration when hitting from above" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 2], radius: 1)
-      rect = Physics::RectCollider.create(center: Vector[0, 0], width: 2, height: 2)
+      circle = create_circle(center: Vector[0, 2], radius: 1)
+      rect = create_rect(center: Vector[0, 0], width: 2, height: 2)
 
       result = Physics::Collisions::CircleRect.check(circle, rect)
 
@@ -58,8 +58,8 @@ RSpec.describe Physics::Collisions::CircleRect do
     end
 
     it "calculates correct collision when circle overlaps rect corner" do
-      circle = Physics::CircleCollider.create(center: Vector[2, 2], radius: 1)
-      rect = Physics::RectCollider.create(center: Vector[0, 0], width: 2, height: 2)
+      circle = create_circle(center: Vector[2, 2], radius: 1)
+      rect = create_rect(center: Vector[0, 0], width: 2, height: 2)
 
       result = Physics::Collisions::CircleRect.check(circle, rect)
 
@@ -70,8 +70,8 @@ RSpec.describe Physics::Collisions::CircleRect do
     end
 
     it "returns collision when circle overlaps rect corner" do
-      circle = Physics::CircleCollider.create(center: Vector[1.5, 1.5], radius: 1)
-      rect = Physics::RectCollider.create(center: Vector[0, 0], width: 2, height: 2)
+      circle = create_circle(center: Vector[1.5, 1.5], radius: 1)
+      rect = create_rect(center: Vector[0, 0], width: 2, height: 2)
 
       result = Physics::Collisions::CircleRect.check(circle, rect)
 
@@ -87,8 +87,8 @@ RSpec.describe Physics::Collisions::CircleRect do
     end
 
     it "handles circle center inside rect" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      rect = Physics::RectCollider.create(center: Vector[0, 0], width: 4, height: 4)
+      circle = create_circle(center: Vector[0, 0], radius: 1)
+      rect = create_rect(center: Vector[0, 0], width: 4, height: 4)
 
       result = Physics::Collisions::CircleRect.check(circle, rect)
 
@@ -98,8 +98,8 @@ RSpec.describe Physics::Collisions::CircleRect do
     end
 
     it "calculates contact point at edge of circle" do
-      circle = Physics::CircleCollider.create(center: Vector[0, 0], radius: 1)
-      rect = Physics::RectCollider.create(center: Vector[1.5, 0], width: 2, height: 2)
+      circle = create_circle(center: Vector[0, 0], radius: 1)
+      rect = create_rect(center: Vector[1.5, 0], width: 2, height: 2)
 
       result = Physics::Collisions::CircleRect.check(circle, rect)
 

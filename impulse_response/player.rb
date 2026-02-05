@@ -8,7 +8,8 @@ class Player
       name: "Player",
       pos: Vector[0, 0, 0],
       components: [
-        PlayerController.create(move_speed: 5.0, look_sensitivity: 0.3)
+        PlayerController.create(move_speed: 5.0, look_sensitivity: 0.3),
+        Physics::CircleCollider.create(radius: 0.5)
       ]
     )
 

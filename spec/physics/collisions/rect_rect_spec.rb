@@ -6,8 +6,8 @@ RSpec.describe Physics::Collisions::RectRect do
 
   describe ".check" do
     it "returns nil when rects don't overlap" do
-      a = Physics::RectCollider.create(center: Vector[0, 0], width: 2, height: 2)
-      b = Physics::RectCollider.create(center: Vector[5, 0], width: 2, height: 2)
+      a = create_rect(center: Vector[0, 0], width: 2, height: 2)
+      b = create_rect(center: Vector[5, 0], width: 2, height: 2)
 
       result = Physics::Collisions::RectRect.check(a, b)
 
@@ -15,8 +15,8 @@ RSpec.describe Physics::Collisions::RectRect do
     end
 
     it "returns nil when rects are exactly touching" do
-      a = Physics::RectCollider.create(center: Vector[0, 0], width: 2, height: 2)
-      b = Physics::RectCollider.create(center: Vector[2, 0], width: 2, height: 2)
+      a = create_rect(center: Vector[0, 0], width: 2, height: 2)
+      b = create_rect(center: Vector[2, 0], width: 2, height: 2)
 
       result = Physics::Collisions::RectRect.check(a, b)
 
@@ -24,8 +24,8 @@ RSpec.describe Physics::Collisions::RectRect do
     end
 
     it "returns collision info when rects overlap" do
-      a = Physics::RectCollider.create(center: Vector[0, 0], width: 2, height: 2)
-      b = Physics::RectCollider.create(center: Vector[1.5, 0], width: 2, height: 2)
+      a = create_rect(center: Vector[0, 0], width: 2, height: 2)
+      b = create_rect(center: Vector[1.5, 0], width: 2, height: 2)
 
       result = Physics::Collisions::RectRect.check(a, b)
 
@@ -35,8 +35,8 @@ RSpec.describe Physics::Collisions::RectRect do
     end
 
     it "calculates penetration along x axis when x overlap is smaller" do
-      a = Physics::RectCollider.create(center: Vector[0, 0], width: 2, height: 2)
-      b = Physics::RectCollider.create(center: Vector[1.5, 0], width: 2, height: 2)
+      a = create_rect(center: Vector[0, 0], width: 2, height: 2)
+      b = create_rect(center: Vector[1.5, 0], width: 2, height: 2)
 
       result = Physics::Collisions::RectRect.check(a, b)
 
@@ -46,8 +46,8 @@ RSpec.describe Physics::Collisions::RectRect do
     end
 
     it "calculates penetration along y axis when y overlap is smaller" do
-      a = Physics::RectCollider.create(center: Vector[0, 0], width: 2, height: 2)
-      b = Physics::RectCollider.create(center: Vector[0, 1.5], width: 2, height: 2)
+      a = create_rect(center: Vector[0, 0], width: 2, height: 2)
+      b = create_rect(center: Vector[0, 1.5], width: 2, height: 2)
 
       result = Physics::Collisions::RectRect.check(a, b)
 
@@ -57,8 +57,8 @@ RSpec.describe Physics::Collisions::RectRect do
     end
 
     it "uses negative normal when b is to the left of a" do
-      a = Physics::RectCollider.create(center: Vector[0, 0], width: 2, height: 2)
-      b = Physics::RectCollider.create(center: Vector[-1.5, 0], width: 2, height: 2)
+      a = create_rect(center: Vector[0, 0], width: 2, height: 2)
+      b = create_rect(center: Vector[-1.5, 0], width: 2, height: 2)
 
       result = Physics::Collisions::RectRect.check(a, b)
 
@@ -66,8 +66,8 @@ RSpec.describe Physics::Collisions::RectRect do
     end
 
     it "uses negative normal when b is below a" do
-      a = Physics::RectCollider.create(center: Vector[0, 0], width: 2, height: 2)
-      b = Physics::RectCollider.create(center: Vector[0, -1.5], width: 2, height: 2)
+      a = create_rect(center: Vector[0, 0], width: 2, height: 2)
+      b = create_rect(center: Vector[0, -1.5], width: 2, height: 2)
 
       result = Physics::Collisions::RectRect.check(a, b)
 
@@ -75,8 +75,8 @@ RSpec.describe Physics::Collisions::RectRect do
     end
 
     it "calculates contact point at edge of rect a" do
-      a = Physics::RectCollider.create(center: Vector[0, 0], width: 2, height: 2)
-      b = Physics::RectCollider.create(center: Vector[1.5, 0], width: 2, height: 2)
+      a = create_rect(center: Vector[0, 0], width: 2, height: 2)
+      b = create_rect(center: Vector[1.5, 0], width: 2, height: 2)
 
       result = Physics::Collisions::RectRect.check(a, b)
 
