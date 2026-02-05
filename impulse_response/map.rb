@@ -8,7 +8,7 @@ class Map
     @level_root = Engine::GameObject.create(name: "Level Root")
 
     wall_material = Engine::Material.create(shader: Engine::Shader.default)
-    wall_material.set_vec3("baseColour", Vector[1.0, 0.7, 0.5])
+    wall_material.set_vec3("baseColour", Vector[0.9, 0.2, 0.2])
     wall_material.set_texture("image", nil)
     wall_material.set_texture("normalMap", nil)
     wall_material.set_float("diffuseStrength", 0.5)
@@ -16,6 +16,7 @@ class Map
     wall_material.set_float("specularPower", 32.0)
     wall_material.set_vec3("ambientLight", Vector[0.02, 0.02, 0.02])
     wall_material.set_float("roughness", 0.6)
+    wall_material.set_float("ambientStrength", 0.7)
 
     rows = CSV.read(path).map { |row| row.map { |cell| cell&.strip } }
 
