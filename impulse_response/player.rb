@@ -10,7 +10,7 @@ class Player
       components: [
         PlayerController.create(move_speed: 5.0, look_sensitivity: 0.3),
         Physics::CircleCollider.create(radius: 0.5),
-        SoundCastSource.create(beam_length: 1000)
+        SoundCastSource.create(beam_length: 500, beam_color: [1, 1, 1])
       ]
     )
 
