@@ -4,22 +4,24 @@ require_relative "../impulse_response/loader"
 RSpec.describe Physics do
   before { Physics.clear_colliders }
 
-  describe ".colliders" do
-    it "returns all created raycast colliders" do
+  describe "registration" do
+    it "registers colliders in the quadtree" do
       circle = create_circle(center: Vector[0, 0], radius: 1)
       rect = create_rect(center: Vector[0, 0], width: 1, height: 1)
 
-      expect(Physics.colliders).to include(circle, rect)
+      found = Physics.colliders_at(Vector[0, 0])
+      expect(found).to include(circle, rect)
     end
 
-    it "removes colliders when they are destroyed" do
+    it "removes colliders from quadtree when destroyed" do
       circle = create_circle(center: Vector[0, 0], radius: 1)
       rect = create_rect(center: Vector[0, 0], width: 1, height: 1)
 
       circle.destroy
 
-      expect(Physics.colliders).not_to include(circle)
-      expect(Physics.colliders).to include(rect)
+      found = Physics.colliders_at(Vector[0, 0])
+      expect(found).not_to include(circle)
+      expect(found).to include(rect)
     end
   end
 

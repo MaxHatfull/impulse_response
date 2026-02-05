@@ -1,7 +1,16 @@
 module Physics
   class Collider < Engine::Component
-    def awake
+    def start
       Physics.register_collider(self)
+      @last_center = center.dup
+    end
+
+    def update(delta_time)
+      current = center
+      if current != @last_center
+        Physics.update_collider(self)
+        @last_center = current.dup
+      end
     end
 
     def destroy
@@ -10,6 +19,10 @@ module Physics
 
     def center
       Vector[game_object.pos[0], game_object.pos[2]]
+    end
+
+    def aabb
+      raise NotImplementedError, "Subclasses must implement #aabb"
     end
   end
 end

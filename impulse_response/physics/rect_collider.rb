@@ -3,6 +3,13 @@ module Physics
     serialize :width, :height
     attr_reader :width, :height
 
+    def aabb
+      half_width = @width / 2.0
+      half_height = @height / 2.0
+      cx, cy = center[0], center[1]
+      AABB.new(cx - half_width, cy - half_height, cx + half_width, cy + half_height)
+    end
+
     def raycast(ray)
       half_width = @width / 2.0
       half_height = @height / 2.0

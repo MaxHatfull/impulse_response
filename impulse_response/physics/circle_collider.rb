@@ -3,6 +3,11 @@ module Physics
     serialize :radius
     attr_reader :radius
 
+    def aabb
+      cx, cy = center[0], center[1]
+      AABB.new(cx - @radius, cy - @radius, cx + @radius, cy + @radius)
+    end
+
     def raycast(ray)
       # Vector from ray start to circle center
       to_center = center - ray.start_point

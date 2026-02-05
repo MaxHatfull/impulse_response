@@ -16,12 +16,16 @@
 module ColliderHelpers
   def create_circle(center:, radius:)
     go = Engine::GameObject.create(pos: Vector[center[0], 0, center[1]])
-    Physics::CircleCollider.create(radius: radius, game_object: go)
+    collider = Physics::CircleCollider.create(radius: radius, game_object: go)
+    collider.start  # Simulate engine lifecycle for tests
+    collider
   end
 
   def create_rect(center:, width:, height:)
     go = Engine::GameObject.create(pos: Vector[center[0], 0, center[1]])
-    Physics::RectCollider.create(width: width, height: height, game_object: go)
+    collider = Physics::RectCollider.create(width: width, height: height, game_object: go)
+    collider.start  # Simulate engine lifecycle for tests
+    collider
   end
 end
 
