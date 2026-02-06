@@ -1,9 +1,9 @@
 class SoundCastSource < Engine::Component
-  serialize :beam_length, :beam_color
+  serialize :beam_length, :beam_color, :rays
 
   def update(delta_time)
-    8.times do |i|
-      angle = i * Math::PI / 4
+    @rays.times do |i|
+      angle = i * Math::PI / (@rays / 2.0)
       direction = rotate_direction(forward_2d, angle)
       SoundCaster.instance.cast_beam(
         start: position_2d,

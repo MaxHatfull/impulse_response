@@ -1,10 +1,10 @@
 class Level01
   def self.create(map)
     # Outer walls
-    map.wall(x: 9.5, z: 0, width: 20, length: 1)      # top
-    map.wall(x: 9.5, z: -19, width: 20, length: 1)    # bottom
-    map.wall(x: 0, z: -9.5, width: 1, length: 20)     # left
-    map.wall(x: 19, z: -9.5, width: 1, length: 20)    # right
+    map.wall(x: 24.5, z: 0, width: 50, length: 1)      # top
+    map.wall(x: 24.5, z: -49, width: 50, length: 1)    # bottom
+    map.wall(x: 0, z: -24.5, width: 1, length: 50)     # left
+    map.wall(x: 49, z: -24.5, width: 1, length: 50)    # right
 
     # Interior walls
     map.wall(x: 6, z: -2, width: 1, length: 1)
@@ -14,6 +14,14 @@ class Level01
     map.wall(x: 17, z: -10, width: 1, length: 1)
     map.wall(x: 5, z: -12, width: 1, length: 1)
     map.wall(x: 10, z: -15, width: 1, length: 1)
+
+    # Sound source
+    Engine::StandardObjects::Sphere.create(
+      pos: Vector[5, 0.5, -5],
+      components: [
+        SoundCastSource.create(beam_length: 10, beam_color: [1, 1, 1], rays: 32)
+      ]
+    )
 
     # Player spawn
     map.player_spawn(x: 2, z: -18)
