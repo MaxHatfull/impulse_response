@@ -6,7 +6,9 @@ module Physics
       [CircleCollider, RectCollider] => Collisions::CircleRect
     }.freeze
 
-    def self.check(a, b)
+    def self.check(a, b, tag: nil)
+      return nil unless b.matches_tag?(tag)
+
       handler = HANDLERS[[a.class, b.class]]
 
       if handler

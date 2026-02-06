@@ -14,16 +14,16 @@
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 module ColliderHelpers
-  def create_circle(center:, radius:)
+  def create_circle(center:, radius:, tags: [])
     go = Engine::GameObject.create(pos: Vector[center[0], 0, center[1]])
-    collider = Physics::CircleCollider.create(radius: radius, game_object: go)
+    collider = Physics::CircleCollider.create(radius: radius, tags: tags, game_object: go)
     collider.start  # Simulate engine lifecycle for tests
     collider
   end
 
-  def create_rect(center:, width:, height:)
+  def create_rect(center:, width:, height:, tags: [])
     go = Engine::GameObject.create(pos: Vector[center[0], 0, center[1]])
-    collider = Physics::RectCollider.create(width: width, height: height, game_object: go)
+    collider = Physics::RectCollider.create(width: width, height: height, tags: tags, game_object: go)
     collider.start  # Simulate engine lifecycle for tests
     collider
   end

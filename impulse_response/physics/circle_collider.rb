@@ -8,7 +8,9 @@ module Physics
       AABB.new(cx - @radius, cy - @radius, cx + @radius, cy + @radius)
     end
 
-    def raycast(ray)
+    def raycast(ray, tag: nil)
+      return nil unless matches_tag?(tag)
+
       # Vector from ray start to circle center
       to_center = center - ray.start_point
 
@@ -37,7 +39,9 @@ module Physics
       RaycastHit.new(collider: self, point: point, distance: distance, normal: normal)
     end
 
-    def inside?(point)
+    def inside?(point, tag: nil)
+      return false unless matches_tag?(tag)
+
       diff = point - center
       distance_sq = diff.dot(diff)
       distance_sq < @radius * @radius

@@ -23,6 +23,38 @@ RSpec.describe Physics do
       expect(found).not_to include(circle)
       expect(found).to include(rect)
     end
+
+    it "registers tagged colliders in tag-specific quadtrees" do
+      wall = create_circle(center: Vector[0, 0], radius: 1, tags: [:wall])
+      enemy = create_circle(center: Vector[0, 0], radius: 1, tags: [:enemy])
+
+      expect(Physics.colliders_at(Vector[0, 0], tag: :wall)).to eq([wall])
+      expect(Physics.colliders_at(Vector[0, 0], tag: :enemy)).to eq([enemy])
+    end
+
+    it "registers colliders with multiple tags in multiple quadtrees" do
+      multi = create_circle(center: Vector[0, 0], radius: 1, tags: [:wall, :solid])
+
+      expect(Physics.colliders_at(Vector[0, 0], tag: :wall)).to eq([multi])
+      expect(Physics.colliders_at(Vector[0, 0], tag: :solid)).to eq([multi])
+    end
+
+    it "returns all colliders when no tag specified" do
+      untagged = create_circle(center: Vector[0, 0], radius: 1)
+      tagged = create_circle(center: Vector[0, 0], radius: 1, tags: [:wall])
+
+      expect(Physics.colliders_at(Vector[0, 0])).to contain_exactly(untagged, tagged)
+      expect(Physics.colliders_at(Vector[0, 0], tag: :wall)).to eq([tagged])
+    end
+
+    it "removes tagged colliders from the quadtree when destroyed" do
+      multi = create_circle(center: Vector[0, 0], radius: 1, tags: [:wall, :solid])
+      multi.destroy
+
+      expect(Physics.colliders_at(Vector[0, 0])).to eq([])
+      expect(Physics.colliders_at(Vector[0, 0], tag: :wall)).to eq([])
+      expect(Physics.colliders_at(Vector[0, 0], tag: :solid)).to eq([])
+    end
   end
 
   describe ".raycast" do
@@ -48,6 +80,18 @@ RSpec.describe Physics do
 
       expect(hits).to eq([])
     end
+
+    it "only returns hits for colliders with the specified tag" do
+      wall = create_circle(center: Vector[5, 0], radius: 1, tags: [:wall])
+      create_circle(center: Vector[10, 0], radius: 1, tags: [:enemy])
+
+      ray = Physics::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 20)
+
+      hits = Physics.raycast(ray, tag: :wall)
+
+      expect(hits.length).to eq(1)
+      expect(hits.first.collider).to eq(wall)
+    end
   end
 
   describe ".closest_raycast" do
@@ -71,6 +115,17 @@ RSpec.describe Physics do
       ray = Physics::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 20)
 
       expect(Physics.closest_raycast(ray)).to be_nil
+    end
+
+    it "returns the closest hit for the specified tag only" do
+      create_circle(center: Vector[5, 0], radius: 1, tags: [:enemy]) # closer but wrong tag
+      wall = create_circle(center: Vector[10, 0], radius: 1, tags: [:wall])
+
+      ray = Physics::Ray.new(start_point: Vector[0, 0], direction: Vector[1, 0], length: 20)
+
+      hit = Physics.closest_raycast(ray, tag: :wall)
+
+      expect(hit.collider).to eq(wall)
     end
   end
 

@@ -1,6 +1,10 @@
 module Physics
   class Collider < Engine::Component
+    serialize :tags
+    attr_reader :tags
+
     def start
+      @tags ||= []
       Physics.register_collider(self)
       @last_center = center.dup
     end
@@ -23,6 +27,10 @@ module Physics
 
     def aabb
       raise NotImplementedError, "Subclasses must implement #aabb"
+    end
+
+    def matches_tag?(tag)
+      tag.nil? || tags.include?(tag)
     end
   end
 end

@@ -10,7 +10,9 @@ module Physics
       AABB.new(cx - half_width, cy - half_height, cx + half_width, cy + half_height)
     end
 
-    def raycast(ray)
+    def raycast(ray, tag: nil)
+      return nil unless matches_tag?(tag)
+
       half_width = @width / 2.0
       half_height = @height / 2.0
 
@@ -59,7 +61,9 @@ module Physics
       RaycastHit.new(collider: self, point: point, distance: t_enter, normal: normal)
     end
 
-    def inside?(point)
+    def inside?(point, tag: nil)
+      return false unless matches_tag?(tag)
+
       half_width = @width / 2.0
       half_height = @height / 2.0
 

@@ -17,25 +17,25 @@ module Physics
     quadtree.update(collider)
   end
 
-  def self.raycast(ray)
-    quadtree.query_ray(ray).filter_map { |collider| collider.raycast(ray) }
+  def self.raycast(ray, tag: nil)
+    quadtree.query_ray(ray).filter_map { |collider| collider.raycast(ray, tag: tag) }
   end
 
-  def self.closest_raycast(ray)
-    raycast(ray).min_by(&:distance)
+  def self.closest_raycast(ray, tag: nil)
+    raycast(ray, tag: tag).min_by(&:distance)
   end
 
-  def self.colliders_at(point)
-    quadtree.query_point(point).select { |collider| collider.inside?(point) }
+  def self.colliders_at(point, tag: nil)
+    quadtree.query_point(point).select { |collider| collider.inside?(point, tag: tag) }
   end
 
   def self.clear_colliders
     @quadtree = nil
   end
 
-  def self.collisions(collider)
+  def self.collisions(collider, tag: nil)
     quadtree.query(collider.aabb)
       .reject { |other| other == collider }
-      .filter_map { |other| CollisionResolver.check(collider, other) }
+      .filter_map { |other| CollisionResolver.check(collider, other, tag: tag) }
   end
 end
