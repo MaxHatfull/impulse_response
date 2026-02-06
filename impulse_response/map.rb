@@ -12,7 +12,7 @@ class Map
       pos: Vector[x, height / 2.0, z],
       scale: Vector[width, height, length],
       material: wall_material,
-      components: [Physics::RectCollider.create(width: width, height: length)]
+      components: [Physics::RectCollider.create(width: width, height: length, tags: [:wall])]
     )
     game_object.parent = @level_root
     game_object

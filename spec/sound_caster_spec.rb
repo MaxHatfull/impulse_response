@@ -1,9 +1,6 @@
 require "spec_helper"
-require_relative "../impulse_response/loader"
 
 RSpec.describe SoundCaster do
-  before { Physics.clear_colliders }
-
   describe "#cast_beam" do
     let(:sound_caster) { SoundCaster.instance }
 
@@ -23,7 +20,7 @@ RSpec.describe SoundCaster do
 
     context "when a collider is hit" do
       it "bounces off the collider and continues" do
-        create_circle(center: Vector[5, 0], radius: 1)
+        create_circle(center: Vector[5, 0], radius: 1, tags: [:wall])
         start = Vector[0, 0]
         direction = Vector[1, 0]
         length = 10
@@ -39,7 +36,7 @@ RSpec.describe SoundCaster do
         # Wall at x=5, ray coming from left
         # Normal will point left (-1, 0), ray goes right (1, 0)
         # Reflection: d - 2(d·n)n = (1,0) - 2(-1)(-1,0) = (1,0) - (2,0) = (-1,0)
-        create_circle(center: Vector[5, 0], radius: 1)
+        create_circle(center: Vector[5, 0], radius: 1, tags: [:wall])
         start = Vector[0, 0]
         direction = Vector[1, 0]
         length = 10
@@ -54,8 +51,8 @@ RSpec.describe SoundCaster do
     context "with multiple bounces" do
       it "continues bouncing until length is exhausted" do
         # Two circles, ray will bounce between them
-        create_circle(center: Vector[5, 0], radius: 1)
-        create_circle(center: Vector[-5, 0], radius: 1)
+        create_circle(center: Vector[5, 0], radius: 1, tags: [:wall])
+        create_circle(center: Vector[-5, 0], radius: 1, tags: [:wall])
         start = Vector[0, 0]
         direction = Vector[1, 0]
         length = 30

@@ -1,5 +1,4 @@
 require "spec_helper"
-require_relative "../../impulse_response/loader"
 
 RSpec.describe Physics::CircleCollider do
   describe "#raycast" do

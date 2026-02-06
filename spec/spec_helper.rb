@@ -13,6 +13,8 @@
 # it.
 #
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require_relative "../impulse_response/loader"
+
 module ColliderHelpers
   def create_circle(center:, radius:, tags: [])
     go = Engine::GameObject.create(pos: Vector[center[0], 0, center[1]])
@@ -31,6 +33,30 @@ end
 
 RSpec.configure do |config|
   config.include ColliderHelpers
+
+  config.before(:each) do
+    Physics.clear_colliders if defined?(Physics)
+
+    if defined?(Engine::Shader)
+      mock_shader = instance_double(Engine::Shader)
+      allow(Engine::Shader).to receive(:default).and_return(mock_shader)
+    end
+
+    if defined?(Engine::Material)
+      mock_material = instance_double(Engine::Material, set_vec3: nil, set_texture: nil, set_float: nil)
+      allow(Engine::Material).to receive(:create).and_return(mock_material)
+    end
+
+    if defined?(Engine::StandardObjects::Cube)
+      allow(Engine::StandardObjects::Cube).to receive(:create).and_return(
+        Engine::GameObject.create(name: "Mock Cube")
+      )
+    end
+
+    if defined?(Player)
+      allow(Player.instance).to receive(:reset)
+    end
+  end
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

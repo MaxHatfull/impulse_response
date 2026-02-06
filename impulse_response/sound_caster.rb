@@ -13,7 +13,7 @@ class SoundCaster
 
     while remaining_length > 0
       ray = Physics::Ray.new(start_point: current_pos, direction: current_dir, length: remaining_length)
-      hit = Physics.closest_raycast(ray)
+      hit = Physics.closest_raycast(ray, tag: :wall)
 
       if hit && hit.distance < remaining_length && hit.distance > EPSILON
         segments << { from: current_pos, to: hit.point }

@@ -1,9 +1,6 @@
 require "spec_helper"
-require_relative "../../impulse_response/loader"
 
 RSpec.describe SoundCastSource do
-  before { Physics.clear_colliders }
-
   describe "#update" do
     it "casts 8 beams from the game object position" do
       source = SoundCastSource.create(beam_length: 20, beam_color: [1, 0, 0])

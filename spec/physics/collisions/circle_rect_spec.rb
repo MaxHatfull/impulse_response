@@ -1,9 +1,6 @@
 require "spec_helper"
-require_relative "../../../impulse_response/loader"
 
 RSpec.describe Physics::Collisions::CircleRect do
-  before { Physics.clear_colliders }
-
   describe ".check" do
     it "returns nil when circle and rect don't overlap" do
       circle = create_circle(center: Vector[0, 0], radius: 1)

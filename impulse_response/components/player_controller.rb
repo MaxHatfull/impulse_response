@@ -33,7 +33,7 @@ class PlayerController < Engine::Component
   def resolve_collisions
     return unless collider
 
-    Physics.collisions(collider).each do |collision|
+    Physics.collisions(collider, tag: :wall).each do |collision|
       # Push player out of collision along the normal
       push = collision.normal * collision.penetration
       game_object.pos = game_object.pos - Vector[push[0], 0, push[1]]

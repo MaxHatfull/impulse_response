@@ -1,9 +1,6 @@
 require "spec_helper"
-require_relative "../../../impulse_response/loader"
 
 RSpec.describe Physics::Collisions::RectRect do
-  before { Physics.clear_colliders }
-
   describe ".check" do
     it "returns nil when rects don't overlap" do
       a = create_rect(center: Vector[0, 0], width: 2, height: 2)

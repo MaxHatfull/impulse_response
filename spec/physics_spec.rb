@@ -1,9 +1,6 @@
 require "spec_helper"
-require_relative "../impulse_response/loader"
 
 RSpec.describe Physics do
-  before { Physics.clear_colliders }
-
   describe "registration" do
     it "registers colliders in the quadtree" do
       circle = create_circle(center: Vector[0, 0], radius: 1)
