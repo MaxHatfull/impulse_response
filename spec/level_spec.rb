@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe "Levels" do
   describe Level01 do
     it "loads without error" do

@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe Physics::RectCollider do
   describe "#raycast" do
     it "returns nil when the ray misses the rectangle" do

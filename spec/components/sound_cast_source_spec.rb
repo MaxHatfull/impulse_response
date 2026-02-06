@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe SoundCastSource do
   describe "#update" do
     it "casts 8 beams from the game object position" do

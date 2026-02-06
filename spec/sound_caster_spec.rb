@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe SoundCaster do
   describe "#cast_beam" do
     let(:sound_caster) { SoundCaster.instance }

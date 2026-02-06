@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe Physics::Collisions::CircleRect do
   describe ".check" do
     it "returns nil when circle and rect don't overlap" do

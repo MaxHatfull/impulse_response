@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe Physics::CircleCollider do
   describe "#raycast" do
     it "returns nil when the ray misses the circle" do

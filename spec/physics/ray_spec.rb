@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe Physics::Ray do
   describe "#direction" do
     it "normalizes the direction" do

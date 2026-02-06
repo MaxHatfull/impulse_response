@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe Physics::RaycastHit do
   describe "#normal" do
     it "normalizes the normal" do

@@ -1,5 +1,3 @@
-require "spec_helper"
-
 RSpec.describe Physics::CollisionResolver do
   describe ".check" do
     it "returns nil when colliders don't overlap" do
