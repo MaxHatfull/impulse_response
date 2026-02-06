@@ -1,7 +1,7 @@
 class Player
   include Singleton
 
-  CAMERA_HEIGHT = 0.5
+  CAMERA_HEIGHT = 5
 
   def spawn
     @game_object = Engine::GameObject.create(
@@ -16,7 +16,7 @@ class Player
     Engine::GameObject.create(
       name: "Camera",
       pos: Vector[0, CAMERA_HEIGHT, 0],
-      rotation: Vector[0, 180, 0],
+      rotation: Vector[30, 180, 0],
       parent: @game_object,
       components: [
         Engine::Components::PerspectiveCamera.create(

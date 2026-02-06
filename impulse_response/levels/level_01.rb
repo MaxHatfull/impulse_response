@@ -16,8 +16,8 @@ class Level01
     map.wall(x: 10, z: -15, width: 1, length: 1)
 
     # Sound source
-    Engine::StandardObjects::Sphere.create(
-      pos: Vector[5, 0.5, -5],
+    Engine::GameObject.create(
+      pos: Vector[4, 0.5, -5],
       components: [
         SoundCastSource.create(beam_length: 10, beam_color: [1, 1, 1], rays: 32)
       ]
