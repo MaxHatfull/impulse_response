@@ -1,13 +1,11 @@
 require "ruby_rpg"
 require "singleton"
-require "csv"
 
 # Load in dependency order
 require_relative "components/player_controller"
 require_relative "components/sound_cast_source"
 require_relative "player"
 require_relative "scenery"
-require_relative "map_tile"
 require_relative "map"
 require_relative "physics/aabb"
 require_relative "physics/quadtree"
@@ -23,3 +21,4 @@ require_relative "physics/collisions/rect_rect"
 require_relative "physics/collisions/circle_rect"
 require_relative "physics/collision_resolver"
 require_relative "sound_caster"
+require_relative "levels/level_01"
