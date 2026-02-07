@@ -108,6 +108,32 @@ RSpec.describe SoundCaster do
       end
     end
 
+    context "with listener behind wall" do
+      it "does not register hit on listener behind wall" do
+        create_circle(center: Vector[5, 0], radius: 1, tags: [:wall])
+        create_circle(center: Vector[10, 0], radius: 1, tags: [:listener])
+        start = Vector[0, 0]
+        direction = Vector[1, 0]
+        length = 15
+
+        result = sound_caster.cast_beam(start:, direction:, length:)
+
+        expect(result[:listener_hits].keys.length).to eq(0)
+      end
+
+      it "registers hit on listener in front of wall" do
+        create_circle(center: Vector[3, 0], radius: 1, tags: [:listener])
+        create_circle(center: Vector[10, 0], radius: 1, tags: [:wall])
+        start = Vector[0, 0]
+        direction = Vector[1, 0]
+        length = 15
+
+        result = sound_caster.cast_beam(start:, direction:, length:)
+
+        expect(result[:listener_hits].keys.length).to eq(1)
+      end
+    end
+
     context "with listener after wall bounce" do
       it "accumulates travel_distance through bounces" do
         create_circle(center: Vector[5, 0], radius: 1, tags: [:wall])

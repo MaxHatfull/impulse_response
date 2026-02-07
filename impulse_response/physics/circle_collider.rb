@@ -5,7 +5,7 @@ module Physics
 
     def update(delta_time)
       super
-      Engine::Debug.sphere(game_object.pos, @radius, color: [1, 0, 1])
+      #Engine::Debug.sphere(game_object.pos, @radius, color: [1, 0, 1])
     end
 
     def aabb

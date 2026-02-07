@@ -24,12 +24,14 @@ class SoundCaster
       ray = Physics::Ray.new(start_point: current_pos, direction: current_dir, length: remaining_length)
       hits = Physics.raycast(ray)
 
-      hits.select { |h| has_tag?(h, :listener) }.each do |h|
+      wall_hit = hits.select { |h| has_tag?(h, :wall) }.min_by(&:distance)
+      max_distance = wall_hit ? wall_hit.distance : remaining_length
+
+      hits.select { |h| has_tag?(h, :listener) && h.distance < max_distance }.each do |h|
         sound_hit = SoundHit.new(raycast_hit: h, travel_distance: distance_traveled + h.distance)
         game_object = h.collider.game_object
         listener_hits[game_object] << sound_hit
       end
-      wall_hit = hits.select { |h| has_tag?(h, :wall) }.min_by(&:distance)
 
       if wall_hit && wall_hit.distance < remaining_length && wall_hit.distance > EPSILON
         segments << { from: current_pos, to: wall_hit.point }
