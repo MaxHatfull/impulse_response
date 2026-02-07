@@ -12,7 +12,7 @@ class Level01
     map.wall(x: 3, z: -6, width: 1, length: 1)
     map.wall(x: 11, z: -8, width: 1, length: 1)
     map.wall(x: 17, z: -10, width: 1, length: 1)
-    map.wall(x: 5, z: -12, width: 1, length: 1)
+    map.wall(x: 5, z: -12, width: 10, length: 1)
     map.wall(x: 10, z: -15, width: 1, length: 1)
 
     # Sound source
@@ -22,6 +22,19 @@ class Level01
         SoundCastSource.create(beam_length: 20, beam_count: 64)
       ]
     )
+
+    # Listener grid
+    (1..20).step(2) do |x|
+      (1..20).step(2) do |z|
+        Engine::GameObject.create(
+          pos: Vector[x, 0, -z],
+          components: [
+            Physics::CircleCollider.create(radius: 1, tags: [:listener]),
+            SoundListener.create
+          ]
+        )
+      end
+    end
 
     # Player spawn
     map.player_spawn(x: 2, z: -18)

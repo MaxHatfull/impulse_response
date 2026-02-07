@@ -5,7 +5,7 @@ class SoundCastSource < Engine::Component
     @caster = SoundCaster.new
   end
 
-  def update(delta_time)
+  def update(delta_t)
     pos = game_object.pos
     @caster.cast_beams(
       start: Vector[pos[0], pos[2]],

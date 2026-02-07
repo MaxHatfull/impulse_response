@@ -3,6 +3,11 @@ module Physics
     serialize :radius
     attr_reader :radius
 
+    def update(delta_time)
+      super
+      Engine::Debug.sphere(game_object.pos, @radius, color: [1, 0, 1])
+    end
+
     def aabb
       cx, cy = center[0], center[1]
       AABB.new(cx - @radius, cy - @radius, cx + @radius, cy + @radius)

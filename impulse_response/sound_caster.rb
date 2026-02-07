@@ -1,27 +1,20 @@
 class SoundCaster
   EPSILON = 0.001
 
-  def initialize
-    @reset_callbacks = []
-  end
-
-  def on_reset(&block)
-    @reset_callbacks << block
-  end
-
   def cast_beams(start:, beam_count:, length:)
-    @reset_callbacks.each(&:call)
+    listener_hits = Hash.new { |h, k| h[k] = [] }
 
     beam_count.times do |i|
       angle = i * Math::PI / (beam_count / 2.0)
       direction = rotate_direction(Vector[0, 1], angle)
-      cast_beam(start:, direction:, length:)
+      cast_beam(start:, direction:, length:, listener_hits:)
     end
+
+    notify_listeners(listener_hits)
   end
 
-  def cast_beam(start:, direction:, length:)
+  def cast_beam(start:, direction:, length:, listener_hits: Hash.new { |h, k| h[k] = [] })
     segments = []
-    listener_hits = Hash.new { |h, k| h[k] = [] }
     current_pos = start
     current_dir = direction.normalize
     remaining_length = length
@@ -54,15 +47,13 @@ class SoundCaster
       end
     end
 
-    notify_listeners(self, listener_hits)
-
     { segments: segments, listener_hits: listener_hits }
   end
 
-  def notify_listeners(source, listener_hits)
+  def notify_listeners(listener_hits)
     listener_hits.each do |game_object, hits|
       listener = game_object.component(SoundListener)
-      listener&.on_sound_hits(source, hits)
+      listener&.on_sound_hits(self, hits)
     end
   end
 

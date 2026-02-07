@@ -175,26 +175,5 @@ RSpec.describe SoundCaster do
       end
     end
 
-    it "calls reset callbacks at the start" do
-      reset_called = false
-      sound_caster.on_reset { reset_called = true }
-
-      sound_caster.cast_beams(start: Vector[0, 0], beam_count: 4, length: 10)
-
-      expect(reset_called).to be true
-    end
-
-    it "calls reset callbacks before casting any beams" do
-      call_order = []
-      sound_caster.on_reset { call_order << :reset }
-      allow(sound_caster).to receive(:cast_beam) do
-        call_order << :cast
-        { segments: [], listener_hits: [] }
-      end
-
-      sound_caster.cast_beams(start: Vector[0, 0], beam_count: 2, length: 10)
-
-      expect(call_order).to eq([:reset, :cast, :cast])
-    end
   end
 end
