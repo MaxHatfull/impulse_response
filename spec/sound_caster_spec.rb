@@ -1,6 +1,6 @@
 RSpec.describe SoundCaster do
   describe "#cast_beam" do
-    let(:sound_caster) { SoundCaster.instance }
+    let(:sound_caster) { SoundCaster.new }
 
     context "when no colliders are hit" do
       it "returns a single segment from start to end of length" do
@@ -8,56 +8,120 @@ RSpec.describe SoundCaster do
         direction = Vector[1, 0]
         length = 10
 
-        segments = sound_caster.cast_beam(start:, direction:, length:)
+        result = sound_caster.cast_beam(start:, direction:, length:)
 
-        expect(segments.length).to eq(1)
-        expect(segments[0][:from]).to eq(Vector[0, 0])
-        expect(segments[0][:to]).to eq(Vector[10, 0])
+        expect(result[:segments].length).to eq(1)
+        expect(result[:segments][0][:from]).to eq(Vector[0, 0])
+        expect(result[:segments][0][:to]).to eq(Vector[10, 0])
       end
     end
 
-    context "when a collider is hit" do
-      it "bounces off the collider and continues" do
+    context "when a wall is hit" do
+      it "bounces off the wall and continues" do
         create_circle(center: Vector[5, 0], radius: 1, tags: [:wall])
         start = Vector[0, 0]
         direction = Vector[1, 0]
         length = 10
 
-        segments = sound_caster.cast_beam(start:, direction:, length:)
+        result = sound_caster.cast_beam(start:, direction:, length:)
 
-        expect(segments.length).to eq(2)
-        expect(segments[0][:from]).to eq(Vector[0, 0])
-        expect(segments[0][:to][0]).to be_within(0.01).of(4) # hits at x=4
+        expect(result[:segments].length).to eq(2)
+        expect(result[:segments][0][:from]).to eq(Vector[0, 0])
+        expect(result[:segments][0][:to][0]).to be_within(0.01).of(4)
       end
 
       it "reflects correctly off a surface" do
-        # Wall at x=5, ray coming from left
-        # Normal will point left (-1, 0), ray goes right (1, 0)
-        # Reflection: d - 2(d·n)n = (1,0) - 2(-1)(-1,0) = (1,0) - (2,0) = (-1,0)
         create_circle(center: Vector[5, 0], radius: 1, tags: [:wall])
         start = Vector[0, 0]
         direction = Vector[1, 0]
         length = 10
 
-        segments = sound_caster.cast_beam(start:, direction:, length:)
+        result = sound_caster.cast_beam(start:, direction:, length:)
 
-        # After bouncing, should go back the way it came
-        expect(segments[1][:to][0]).to be < segments[1][:from][0]
+        expect(result[:segments][1][:to][0]).to be < result[:segments][1][:from][0]
       end
     end
 
     context "with multiple bounces" do
       it "continues bouncing until length is exhausted" do
-        # Two circles, ray will bounce between them
         create_circle(center: Vector[5, 0], radius: 1, tags: [:wall])
         create_circle(center: Vector[-5, 0], radius: 1, tags: [:wall])
         start = Vector[0, 0]
         direction = Vector[1, 0]
         length = 30
 
-        segments = sound_caster.cast_beam(start:, direction:, length:)
+        result = sound_caster.cast_beam(start:, direction:, length:)
 
-        expect(segments.length).to be >= 3
+        expect(result[:segments].length).to be >= 3
+      end
+    end
+
+    context "when a listener is hit" do
+      it "records the listener hit" do
+        create_circle(center: Vector[5, 0], radius: 1, tags: [:listener])
+        start = Vector[0, 0]
+        direction = Vector[1, 0]
+        length = 10
+
+        result = sound_caster.cast_beam(start:, direction:, length:)
+        all_hits = result[:listener_hits].values.flatten
+
+        expect(result[:listener_hits].keys.length).to eq(1)
+        expect(all_hits.first).to be_a(SoundHit)
+      end
+
+      it "does not bounce off listener" do
+        create_circle(center: Vector[5, 0], radius: 1, tags: [:listener])
+        start = Vector[0, 0]
+        direction = Vector[1, 0]
+        length = 10
+
+        result = sound_caster.cast_beam(start:, direction:, length:)
+
+        expect(result[:segments].length).to eq(1)
+        expect(result[:segments][0][:to]).to eq(Vector[10, 0])
+      end
+
+      it "includes travel_distance in SoundHit" do
+        create_circle(center: Vector[5, 0], radius: 1, tags: [:listener])
+        start = Vector[0, 0]
+        direction = Vector[1, 0]
+        length = 10
+
+        result = sound_caster.cast_beam(start:, direction:, length:)
+        all_hits = result[:listener_hits].values.flatten
+
+        expect(all_hits.first.travel_distance).to be_within(0.01).of(4)
+      end
+
+      it "includes the raycast_hit in SoundHit" do
+        create_circle(center: Vector[5, 0], radius: 1, tags: [:listener])
+        start = Vector[0, 0]
+        direction = Vector[1, 0]
+        length = 10
+
+        result = sound_caster.cast_beam(start:, direction:, length:)
+        all_hits = result[:listener_hits].values.flatten
+
+        expect(all_hits.first.raycast_hit).to be_a(Physics::RaycastHit)
+        expect(all_hits.first.raycast_hit.point[0]).to be_within(0.01).of(4)
+      end
+    end
+
+    context "with listener after wall bounce" do
+      it "accumulates travel_distance through bounces" do
+        create_circle(center: Vector[5, 0], radius: 1, tags: [:wall])
+        create_circle(center: Vector[-5, 0], radius: 1, tags: [:listener])
+        start = Vector[0, 0]
+        direction = Vector[1, 0]
+        length = 20
+
+        result = sound_caster.cast_beam(start:, direction:, length:)
+        all_hits = result[:listener_hits].values.flatten
+
+        expect(result[:listener_hits].keys.length).to eq(1)
+        # 4 units to wall + 8 units back to listener = 12 total
+        expect(all_hits.first.travel_distance).to be_within(0.1).of(12)
       end
     end
 
@@ -75,6 +139,62 @@ RSpec.describe SoundCaster do
 
         sound_caster.cast_beam(start:, direction:, length:)
       end
+    end
+  end
+
+  describe "#cast_beams" do
+    let(:sound_caster) { SoundCaster.new }
+
+    it "casts the specified number of beams" do
+      start = Vector[0, 0]
+
+      expect(sound_caster).to receive(:cast_beam).exactly(8).times.and_call_original
+
+      sound_caster.cast_beams(start:, beam_count: 8, length: 10)
+    end
+
+    it "casts beams in evenly spaced directions" do
+      start = Vector[0, 0]
+
+      directions = []
+      allow(sound_caster).to receive(:cast_beam) do |args|
+        directions << args[:direction]
+        { segments: [], listener_hits: [] }
+      end
+
+      sound_caster.cast_beams(start:, beam_count: 8, length: 10)
+
+      expect(directions.length).to eq(8)
+
+      angles = directions.map { |d| Math.atan2(d[1], d[0]) }
+      angles.sort!
+
+      angle_diffs = angles.each_cons(2).map { |a, b| b - a }
+      angle_diffs.each do |diff|
+        expect(diff).to be_within(0.01).of(Math::PI / 4)
+      end
+    end
+
+    it "calls reset callbacks at the start" do
+      reset_called = false
+      sound_caster.on_reset { reset_called = true }
+
+      sound_caster.cast_beams(start: Vector[0, 0], beam_count: 4, length: 10)
+
+      expect(reset_called).to be true
+    end
+
+    it "calls reset callbacks before casting any beams" do
+      call_order = []
+      sound_caster.on_reset { call_order << :reset }
+      allow(sound_caster).to receive(:cast_beam) do
+        call_order << :cast
+        { segments: [], listener_hits: [] }
+      end
+
+      sound_caster.cast_beams(start: Vector[0, 0], beam_count: 2, length: 10)
+
+      expect(call_order).to eq([:reset, :cast, :cast])
     end
   end
 end

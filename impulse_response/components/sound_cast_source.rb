@@ -1,37 +1,16 @@
 class SoundCastSource < Engine::Component
-  serialize :beam_length, :beam_color, :rays
+  serialize :beam_length, :beam_count
+
+  def start
+    @caster = SoundCaster.new
+  end
 
   def update(delta_time)
-    @rays.times do |i|
-      angle = i * Math::PI / (@rays / 2.0)
-      direction = rotate_direction(forward_2d, angle)
-      SoundCaster.instance.cast_beam(
-        start: position_2d,
-        direction: direction,
-        length: @beam_length,
-        color: @beam_color
-      )
-    end
-  end
-
-  private
-
-  def position_2d
     pos = game_object.pos
-    Vector[pos[0], pos[2]]
-  end
-
-  def forward_2d
-    forward = game_object.local_to_world_direction(Vector[0, 0, 1])
-    Vector[forward[0], forward[2]].normalize
-  end
-
-  def rotate_direction(dir, angle)
-    cos_a = Math.cos(angle)
-    sin_a = Math.sin(angle)
-    Vector[
-      dir[0] * cos_a - dir[1] * sin_a,
-      dir[0] * sin_a + dir[1] * cos_a
-    ]
+    @caster.cast_beams(
+      start: Vector[pos[0], pos[2]],
+      beam_count: @beam_count,
+      length: @beam_length
+    )
   end
 end

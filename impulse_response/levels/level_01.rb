@@ -19,7 +19,7 @@ class Level01
     Engine::GameObject.create(
       pos: Vector[4, 0.5, -5],
       components: [
-        SoundCastSource.create(beam_length: 10, beam_color: [1, 1, 1], rays: 32)
+        SoundCastSource.create(beam_length: 20, beam_count: 64)
       ]
     )
 
