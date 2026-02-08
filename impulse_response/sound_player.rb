@@ -22,10 +22,10 @@ class SoundPlayer
 
   def update(hits)
     visible_hits = hits.select { |hit| has_line_of_sight?(hit) }
-    left_hits, right_hits = visible_hits.partition { |hit| hit_from_left?(hit) }
+    @left_hits, @right_hits = visible_hits.partition { |hit| hit_from_left?(hit) }
 
-    @left_volumes = volume_distribution(left_hits)
-    @right_volumes = volume_distribution(right_hits)
+    @left_volumes = volume_distribution(@left_hits)
+    @right_volumes = volume_distribution(@right_hits)
 
     update_audio
     print_debug
@@ -53,6 +53,26 @@ class SoundPlayer
 
     @left_audio.set_volume((left_total * 128).clamp(0, 128).to_i)
     @right_audio.set_volume((right_total * 128).clamp(0, 128).to_i)
+
+    left_reverb = reverb_from_hits(@left_hits)
+    right_reverb = reverb_from_hits(@right_hits)
+
+    @left_audio.set_reverb(**left_reverb)
+    @right_audio.set_reverb(**right_reverb)
+  end
+
+  def reverb_from_hits(hits)
+    return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 1.0 } if hits.empty?
+
+    total_volume = hits.sum { |h| hit_volume(h) }
+    return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 1.0 } if total_volume <= 0
+
+    avg_bounces = hits.sum { |h| hit_volume(h) * h.total_bounces } / total_volume
+
+    room_size = (avg_bounces / 5.0).clamp(0.0, 1.0)
+    wet = (avg_bounces / 3.0).clamp(0.0, 0.8)
+
+    { room_size: room_size, damping: 0.3, wet: wet, dry: 1.0 }
   end
 
   def listener_pos
