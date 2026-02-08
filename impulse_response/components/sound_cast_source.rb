@@ -7,6 +7,7 @@ class SoundCastSource < Engine::Component
 
   def update(delta_t)
     pos = game_object.pos
+    Engine::Debug.sphere(pos, 1, color: [1,0,1])
     @caster.cast_beams(
       start: Vector[pos[0], pos[2]],
       beam_count: @beam_count,

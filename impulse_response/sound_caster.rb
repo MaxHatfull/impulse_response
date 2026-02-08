@@ -19,6 +19,7 @@ class SoundCaster
     current_dir = direction.normalize
     remaining_length = length
     distance_traveled = 0
+    bounce_count = 0
 
     while remaining_length > 0
       ray = Physics::Ray.new(start_point: current_pos, direction: current_dir, length: remaining_length)
@@ -28,7 +29,12 @@ class SoundCaster
       max_distance = wall_hit ? wall_hit.entry_distance : remaining_length
 
       hits.select { |h| has_tag?(h, :listener) && h.entry_distance < max_distance }.each do |h|
-        sound_hit = SoundHit.new(raycast_hit: h, travel_distance: distance_traveled + h.entry_distance)
+        sound_hit = SoundHit.new(
+          raycast_hit: h,
+          travel_distance: distance_traveled + h.entry_distance,
+          total_bounces: bounce_count,
+          ray_direction: current_dir
+        )
         game_object = h.collider.game_object
         listener_hits[game_object] << sound_hit
       end
@@ -41,6 +47,7 @@ class SoundCaster
         remaining_length -= wall_hit.entry_distance
         current_dir = reflect(current_dir, wall_hit.entry_normal)
         current_pos = wall_hit.entry_point + current_dir * EPSILON
+        bounce_count += 1
       else
         end_point = current_pos + current_dir * remaining_length
         segments << { from: current_pos, to: end_point }

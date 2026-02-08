@@ -19,22 +19,22 @@ class Level01
     Engine::GameObject.create(
       pos: Vector[4, 0.5, -5],
       components: [
-        SoundCastSource.create(beam_length: 40, beam_count: 64)
+        SoundCastSource.create(beam_length: 40, beam_count: 128)
       ]
     )
 
     # Listener grid
-    (1..20).step(2) do |x|
-      (1..20).step(2) do |z|
-        Engine::GameObject.create(
-          pos: Vector[x, 0, -z],
-          components: [
-            Physics::CircleCollider.create(radius: 1, tags: [:listener]),
-            SoundListener.create
-          ]
-        )
-      end
-    end
+    # (1..20).step(2) do |x|
+    #   (1..20).step(2) do |z|
+    #     Engine::GameObject.create(
+    #       pos: Vector[x, 0, -z],
+    #       components: [
+    #         Physics::CircleCollider.create(radius: 1, tags: [:listener]),
+    #         SoundListener.create
+    #       ]
+    #     )
+    #   end
+    # end
 
     # Player spawn
     map.player_spawn(x: 2, z: -18)
