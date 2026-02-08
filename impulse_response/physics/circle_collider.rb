@@ -16,14 +16,22 @@ module Physics
     def raycast(ray, tag: nil)
       return nil unless matches_tag?(tag)
 
-      # Vector from ray start to circle center
-      to_center = center - ray.start_point
+      # Use scratch vectors to avoid allocations
+      c = center
+      cx, cy = c[0], c[1]
+      start_x, start_y = ray.start_point[0], ray.start_point[1]
+      dir_x, dir_y = ray.direction[0], ray.direction[1]
+
+      # Vector from ray start to circle center (scalar math)
+      to_center_x = cx - start_x
+      to_center_y = cy - start_y
 
       # Project onto ray direction to find closest approach
-      proj_length = to_center.dot(ray.direction)
+      proj_length = to_center_x * dir_x + to_center_y * dir_y
 
       # |to_center|² = proj_length² + closest_dist²
-      closest_dist_sq = to_center.dot(to_center) - proj_length * proj_length
+      to_center_sq = to_center_x * to_center_x + to_center_y * to_center_y
+      closest_dist_sq = to_center_sq - proj_length * proj_length
 
       radius_sq = @radius * @radius
       return nil if closest_dist_sq > radius_sq
@@ -47,8 +55,16 @@ module Physics
         entry_point = ray.start_point
         entry_normal = nil
       else
-        entry_point = ray.start_point + ray.direction * entry_distance
-        entry_normal = (entry_point - center).normalize
+        # entry_point = start + dir * entry_distance
+        entry_x = start_x + dir_x * entry_distance
+        entry_y = start_y + dir_y * entry_distance
+        entry_point = Vector[entry_x, entry_y]
+
+        # entry_normal = (entry_point - center).normalize
+        norm_x = entry_x - cx
+        norm_y = entry_y - cy
+        norm_mag = Math.sqrt(norm_x * norm_x + norm_y * norm_y)
+        entry_normal = Vector[norm_x / norm_mag, norm_y / norm_mag]
       end
 
       # Check if ray ends inside the circle
@@ -58,8 +74,16 @@ module Physics
         exit_point = ray.start_point + ray.direction * ray.length
         exit_normal = nil
       else
-        exit_point = ray.start_point + ray.direction * exit_distance
-        exit_normal = (exit_point - center).normalize
+        # exit_point = start + dir * exit_distance
+        exit_x = start_x + dir_x * exit_distance
+        exit_y = start_y + dir_y * exit_distance
+        exit_point = Vector[exit_x, exit_y]
+
+        # exit_normal = (exit_point - center).normalize
+        norm_x = exit_x - cx
+        norm_y = exit_y - cy
+        norm_mag = Math.sqrt(norm_x * norm_x + norm_y * norm_y)
+        exit_normal = Vector[norm_x / norm_mag, norm_y / norm_mag]
       end
 
       RaycastHit.new(
