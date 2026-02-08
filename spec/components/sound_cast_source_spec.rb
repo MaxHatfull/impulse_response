@@ -1,8 +1,14 @@
 RSpec.describe SoundCastSource do
+  let(:mock_clip) { instance_double(NativeAudio::Clip) }
+
+  before do
+    allow(NativeAudio::Clip).to receive(:new).and_return(mock_clip)
+  end
+
   describe "#start" do
     it "creates a SoundCaster with correct parameters" do
       expect(SoundCaster).to receive(:new)
-        .with(beam_count: 8, length: 20, volume: 1.0)
+        .with(beam_count: 8, length: 20, volume: 1.0, clip: mock_clip)
         .and_call_original
 
       source = SoundCastSource.create(beam_length: 20, beam_count: 8)

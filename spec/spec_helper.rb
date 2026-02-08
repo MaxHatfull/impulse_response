@@ -41,6 +41,19 @@ RSpec.configure do |config|
       def self.method_missing(name, *args) = nil
     end)
 
+    if defined?(NativeAudio::Clip)
+      mock_clip = double("NativeAudio::Clip")
+      allow(NativeAudio::Clip).to receive(:new).and_return(mock_clip)
+
+      mock_audio_source = double("NativeAudio::AudioSource",
+        play: nil, stop: nil, pause: nil, resume: nil,
+        set_pos: nil, set_volume: nil, set_pitch: nil,
+        set_looping: nil, set_reverb: nil, enable_reverb: nil,
+        add_delay_tap: nil
+      )
+      allow(NativeAudio::AudioSource).to receive(:new).and_return(mock_audio_source)
+    end
+
     if defined?(Player)
       allow(Player.instance).to receive(:reset)
     end

@@ -8,7 +8,7 @@ GEM
     fiddle (1.1.8)
     logger (1.7.0)
     matrix (0.4.3)
-    native_audio (0.4.0)
+    native_audio (0.5.0)
     os (1.1.4)
     rspec (3.13.2)
       rspec-core (~> 3.13.0)
@@ -23,13 +23,13 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.7)
-    ruby_rpg (0.1.4)
+    ruby_rpg (0.1.5)
       chunky_png (~> 1.4)
       concurrent-ruby
       fiddle
       logger
       matrix (~> 0.3)
-      native_audio (~> 0.4.0)
+      native_audio (~> 0.5.0)
       os
     stackprof (0.2.27)
 

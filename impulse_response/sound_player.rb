@@ -3,6 +3,10 @@ class SoundPlayer
   SOUND_RANGE = 5           # distance for full volume
   DISTANCE_BUCKET_SIZE = 2  # meters per bucket
 
+  # audio
+  LEFT_ANGLE = 270
+  RIGHT_ANGLE = 90
+
   # debug output
   MAX_VOLUME = 1            # bar max
   BAR_WIDTH = 40            # bar width in chars
@@ -12,6 +16,8 @@ class SoundPlayer
     @listener = listener
     @left_volumes = []
     @right_volumes = []
+
+    setup_audio
   end
 
   def update(hits)
@@ -21,10 +27,33 @@ class SoundPlayer
     @left_volumes = volume_distribution(left_hits)
     @right_volumes = volume_distribution(right_hits)
 
+    update_audio
     print_debug
   end
 
   private
+
+  def setup_audio
+    @left_audio = NativeAudio::AudioSource.new(@source.clip)
+    @left_audio.play
+    @left_audio.set_pos(LEFT_ANGLE, 0)
+    @left_audio.set_looping(true)
+    @left_audio.set_reverb(room_size: 0.5, damping: 0.3, wet: 0.3, dry: 1.0)
+
+    @right_audio = NativeAudio::AudioSource.new(@source.clip)
+    @right_audio.play
+    @right_audio.set_pos(RIGHT_ANGLE, 0)
+    @right_audio.set_looping(true)
+    @right_audio.set_reverb(room_size: 0.5, damping: 0.3, wet: 0.3, dry: 1.0)
+  end
+
+  def update_audio
+    left_total = @left_volumes.sum
+    right_total = @right_volumes.sum
+
+    @left_audio.set_volume((left_total * 128).clamp(0, 128).to_i)
+    @right_audio.set_volume((right_total * 128).clamp(0, 128).to_i)
+  end
 
   def listener_pos
     Vector[@listener.game_object.pos[0], @listener.game_object.pos[2]]

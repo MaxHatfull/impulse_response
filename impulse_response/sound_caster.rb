@@ -1,12 +1,13 @@
 class SoundCaster
   EPSILON = 0.001
 
-  attr_reader :max_distance, :beam_strength
+  attr_reader :max_distance, :beam_strength, :clip
 
-  def initialize(beam_count:, length:, volume: 1.0)
+  def initialize(beam_count:, length:, volume: 1.0, clip:)
     @beam_count = beam_count
     @max_distance = length
     @beam_strength = volume / beam_count.to_f
+    @clip = clip
   end
 
   def cast_beams(start:)

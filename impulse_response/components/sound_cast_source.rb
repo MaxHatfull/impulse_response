@@ -1,11 +1,13 @@
 class SoundCastSource < Engine::Component
-  serialize :beam_length, :beam_count, :volume
+  serialize :beam_length, :beam_count, :volume, :clip_path
 
   def start
+    clip = NativeAudio::Clip.new(@clip_path || "impulse_response/assets/audio/test.wav")
     @caster = SoundCaster.new(
       beam_count: @beam_count,
       length: @beam_length,
-      volume: @volume || 1.0
+      volume: @volume || 1.0,
+      clip: clip
     )
   end
 
