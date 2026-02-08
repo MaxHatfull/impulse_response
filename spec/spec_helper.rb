@@ -37,21 +37,9 @@ RSpec.configure do |config|
   config.before(:each) do
     Physics.clear_colliders if defined?(Physics)
 
-    if defined?(Engine::Shader)
-      mock_shader = instance_double(Engine::Shader)
-      allow(Engine::Shader).to receive(:default).and_return(mock_shader)
-    end
-
-    if defined?(Engine::Material)
-      mock_material = instance_double(Engine::Material, set_vec3: nil, set_texture: nil, set_float: nil)
-      allow(Engine::Material).to receive(:create).and_return(mock_material)
-    end
-
-    if defined?(Engine::StandardObjects::Cube)
-      allow(Engine::StandardObjects::Cube).to receive(:create).and_return(
-        Engine::GameObject.create(name: "Mock Cube")
-      )
-    end
+    stub_const("GLNative", Class.new do
+      def self.method_missing(name, *args) = nil
+    end)
 
     if defined?(Player)
       allow(Player.instance).to receive(:reset)
