@@ -94,4 +94,19 @@ RSpec.describe Physics::RaycastHit do
       expect(hit.entry_distance).to be_within(0.001).of(3)
     end
   end
+
+  describe "#exit_distance" do
+    it "calculates distance from ray start to exit point" do
+      hit = Physics::RaycastHit.new(
+        ray: ray,
+        entry_point: Vector[3, 0],
+        exit_point: Vector[7, 0],
+        entry_normal: Vector[-1, 0],
+        exit_normal: Vector[1, 0],
+        collider: collider
+      )
+
+      expect(hit.exit_distance).to be_within(0.001).of(7)
+    end
+  end
 end

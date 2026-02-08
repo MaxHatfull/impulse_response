@@ -1,5 +1,5 @@
 module Physics
-  WORLD_BOUNDS = AABB.new(-500, -500, 500, 500)
+  WORLD_BOUNDS = AABB.new(0, -50, 50, 0)
 
   def self.quadtree
     @quadtree ||= Quadtree.new(WORLD_BOUNDS)

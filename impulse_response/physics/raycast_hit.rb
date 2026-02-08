@@ -22,5 +22,9 @@ module Physics
     def entry_distance
       (@entry_point - @ray.start_point).magnitude
     end
+
+    def exit_distance
+      (@exit_point - @ray.start_point).magnitude
+    end
   end
 end
