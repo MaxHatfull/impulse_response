@@ -25,7 +25,7 @@ module Physics
       entry_axis = nil
       exit_axis = nil
 
-      if ray.direction[0] != 0
+      if ray.direction[0] != 0.0
         t_min_x = (min_x - ray.start_point[0]) / ray.direction[0]
         t_max_x = (max_x - ray.start_point[0]) / ray.direction[0]
         t_min_x, t_max_x = t_max_x, t_min_x if t_min_x > t_max_x
@@ -35,7 +35,7 @@ module Physics
         t_max_x = Float::INFINITY
       end
 
-      if ray.direction[1] != 0
+      if ray.direction[1] != 0.0
         t_min_y = (min_y - ray.start_point[1]) / ray.direction[1]
         t_max_y = (max_y - ray.start_point[1]) / ray.direction[1]
         t_min_y, t_max_y = t_max_y, t_min_y if t_min_y > t_max_y

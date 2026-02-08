@@ -31,7 +31,7 @@ module Physics
       start_x = ray.start_point[0]
       start_y = ray.start_point[1]
 
-      if dir_x != 0
+      if dir_x != 0.0
         t_min_x = (@min_x - start_x) / dir_x
         t_max_x = (@max_x - start_x) / dir_x
         t_min_x, t_max_x = t_max_x, t_min_x if t_min_x > t_max_x
@@ -41,7 +41,7 @@ module Physics
         t_max_x = Float::INFINITY
       end
 
-      if dir_y != 0
+      if dir_y != 0.0
         t_min_y = (@min_y - start_y) / dir_y
         t_max_y = (@max_y - start_y) / dir_y
         t_min_y, t_max_y = t_max_y, t_min_y if t_min_y > t_max_y
