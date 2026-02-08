@@ -1,5 +1,5 @@
 module Physics
-  WORLD_BOUNDS = AABB.new(-500, -500, 500, 500)
+  WORLD_BOUNDS = AABB.new(0, -50, 50, 0)
 
   def self.quadtree
     @quadtree ||= Quadtree.new(WORLD_BOUNDS)
@@ -22,7 +22,7 @@ module Physics
   end
 
   def self.closest_raycast(ray, tag: nil)
-    raycast(ray, tag: tag).min_by(&:distance)
+    raycast(ray, tag: tag).min_by(&:entry_distance)
   end
 
   def self.colliders_at(point, tag: nil)

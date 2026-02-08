@@ -8,3 +8,7 @@ gem "csv"
 group :test do
   gem "rspec", "~> 3.13"
 end
+
+group :development do
+  gem "stackprof"
+end

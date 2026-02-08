@@ -101,7 +101,7 @@ RSpec.describe Physics do
 
       expect(hit).to be_a(Physics::RaycastHit)
       expect(hit.collider).to eq(closest_circle)
-      expect(hit.distance).to eq(4)
+      expect(hit.entry_distance).to eq(4)
     end
 
     it "returns nil when no colliders are hit" do

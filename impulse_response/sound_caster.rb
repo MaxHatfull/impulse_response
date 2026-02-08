@@ -24,23 +24,23 @@ class SoundCaster
       ray = Physics::Ray.new(start_point: current_pos, direction: current_dir, length: remaining_length)
       hits = Physics.raycast(ray)
 
-      wall_hit = hits.select { |h| has_tag?(h, :wall) }.min_by(&:distance)
-      max_distance = wall_hit ? wall_hit.distance : remaining_length
+      wall_hit = hits.select { |h| has_tag?(h, :wall) }.min_by(&:entry_distance)
+      max_distance = wall_hit ? wall_hit.entry_distance : remaining_length
 
-      hits.select { |h| has_tag?(h, :listener) && h.distance < max_distance }.each do |h|
-        sound_hit = SoundHit.new(raycast_hit: h, travel_distance: distance_traveled + h.distance)
+      hits.select { |h| has_tag?(h, :listener) && h.entry_distance < max_distance }.each do |h|
+        sound_hit = SoundHit.new(raycast_hit: h, travel_distance: distance_traveled + h.entry_distance)
         game_object = h.collider.game_object
         listener_hits[game_object] << sound_hit
       end
 
-      if wall_hit && wall_hit.distance < remaining_length && wall_hit.distance > EPSILON
-        segments << { from: current_pos, to: wall_hit.point }
-        draw_debug_line(current_pos, wall_hit.point)
+      if wall_hit && wall_hit.entry_distance < remaining_length && wall_hit.entry_distance > EPSILON
+        segments << { from: current_pos, to: wall_hit.entry_point }
+        draw_debug_line(current_pos, wall_hit.entry_point)
 
-        distance_traveled += wall_hit.distance
-        remaining_length -= wall_hit.distance
-        current_dir = reflect(current_dir, wall_hit.normal)
-        current_pos = wall_hit.point + current_dir * EPSILON
+        distance_traveled += wall_hit.entry_distance
+        remaining_length -= wall_hit.entry_distance
+        current_dir = reflect(current_dir, wall_hit.entry_normal)
+        current_pos = wall_hit.entry_point + current_dir * EPSILON
       else
         end_point = current_pos + current_dir * remaining_length
         segments << { from: current_pos, to: end_point }

@@ -104,7 +104,7 @@ RSpec.describe SoundCaster do
         all_hits = result[:listener_hits].values.flatten
 
         expect(all_hits.first.raycast_hit).to be_a(Physics::RaycastHit)
-        expect(all_hits.first.raycast_hit.point[0]).to be_within(0.01).of(4)
+        expect(all_hits.first.raycast_hit.entry_point[0]).to be_within(0.01).of(4)
       end
     end
 
