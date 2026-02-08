@@ -51,8 +51,8 @@ module Physics
         t_max_y = Float::INFINITY
       end
 
-      t_enter = [t_min_x, t_min_y].max
-      t_exit = [t_max_x, t_max_y].min
+      t_enter = t_min_x > t_min_y ? t_min_x : t_min_y
+      t_exit = t_max_x < t_max_y ? t_max_x : t_max_y
 
       return false if t_enter > t_exit
       return false if t_exit < 0

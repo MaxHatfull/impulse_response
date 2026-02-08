@@ -3,7 +3,7 @@ module Physics
     serialize :width, :height
     attr_reader :width, :height
 
-    def aabb
+    def compute_aabb
       half_width = @width / 2.0
       half_height = @height / 2.0
       cx, cy = center[0], center[1]
