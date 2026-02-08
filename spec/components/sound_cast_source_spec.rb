@@ -15,7 +15,7 @@ RSpec.describe SoundCastSource do
       )
 
       expect(mock_caster).to receive(:cast_beams)
-        .with(start: Vector[5, 10], length: 20, beam_count: 8)
+        .with(start: Vector[5, 10], length: 20, beam_count: 8, volume: 1.0)
 
       source.update(0.016)
     end

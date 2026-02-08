@@ -1,19 +1,20 @@
 class SoundCaster
   EPSILON = 0.001
 
-  def cast_beams(start:, beam_count:, length:)
+  def cast_beams(start:, beam_count:, length:, volume: 1.0)
     listener_hits = Hash.new { |h, k| h[k] = [] }
+    beam_strength = volume / beam_count.to_f
 
     beam_count.times do |i|
       angle = i * Math::PI / (beam_count / 2.0)
       direction = rotate_direction(Vector[0, 1], angle)
-      cast_beam(start:, direction:, length:, listener_hits:)
+      cast_beam(start:, direction:, length:, beam_strength:, listener_hits:)
     end
 
     notify_listeners(listener_hits)
   end
 
-  def cast_beam(start:, direction:, length:, listener_hits: Hash.new { |h, k| h[k] = [] })
+  def cast_beam(start:, direction:, length:, beam_strength: 1.0, listener_hits: Hash.new { |h, k| h[k] = [] })
     segments = []
     current_pos = start
     current_dir = direction.normalize
@@ -33,7 +34,8 @@ class SoundCaster
           raycast_hit: h,
           travel_distance: distance_traveled + h.entry_distance,
           total_bounces: bounce_count,
-          ray_direction: current_dir
+          ray_direction: current_dir,
+          beam_strength: beam_strength
         )
         game_object = h.collider.game_object
         listener_hits[game_object] << sound_hit

@@ -1,5 +1,5 @@
 class SoundCastSource < Engine::Component
-  serialize :beam_length, :beam_count
+  serialize :beam_length, :beam_count, :volume
 
   def start
     @caster = SoundCaster.new
@@ -7,11 +7,11 @@ class SoundCastSource < Engine::Component
 
   def update(delta_t)
     pos = game_object.pos
-    Engine::Debug.sphere(pos, 1, color: [1,0,1])
     @caster.cast_beams(
       start: Vector[pos[0], pos[2]],
       beam_count: @beam_count,
-      length: @beam_length
+      length: @beam_length,
+      volume: @volume || 1.0
     )
   end
 end

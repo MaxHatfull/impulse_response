@@ -16,12 +16,14 @@ class Level01
     map.wall(x: 10, z: -15, width: 1, length: 1)
 
     # Sound source
+    sound_source_pos = Vector[5, 0.5, -5]
     Engine::GameObject.create(
-      pos: Vector[4, 0.5, -5],
+      pos: sound_source_pos,
       components: [
-        SoundCastSource.create(beam_length: 40, beam_count: 128)
+        SoundCastSource.create(beam_length: 40, beam_count: 128, volume: 10)
       ]
     )
+    Engine::StandardObjects::Sphere.create(pos: sound_source_pos)
 
     # Listener grid
     # (1..20).step(2) do |x|

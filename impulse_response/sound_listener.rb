@@ -1,5 +1,5 @@
 class SoundListener < Engine::Component
-  BOUNCE_LOSS = 0.9
+  BOUNCE_LOSS = 1
   SOUND_RANGE = 5
 
   attr_reader :sound_hits
@@ -8,7 +8,7 @@ class SoundListener < Engine::Component
     @sound_hits = {}
   end
 
-  MAX_VOLUME = 2
+  MAX_VOLUME = 1
   BAR_WIDTH = 40
   MAX_BOUNCES = 5
 
@@ -57,7 +57,7 @@ class SoundListener < Engine::Component
 
   def hit_volume(hit)
     direct = [hit.travel_distance / SOUND_RANGE, 1.0].max
-    (1.0 / (direct ** 2)) * (BOUNCE_LOSS ** hit.total_bounces)
+    hit.beam_strength * (1.0 / (direct ** 2)) * (BOUNCE_LOSS ** hit.total_bounces)
   end
 
   def volume_bar(volume)
