@@ -1,12 +1,26 @@
 module Physics
   class RaycastHit
-    attr_reader :collider, :point, :distance, :normal
+    attr_reader :ray, :entry_point, :exit_point, :collider
 
-    def initialize(collider:, point:, distance:, normal:)
+    def initialize(ray:, entry_point:, exit_point:, entry_normal:, exit_normal:, collider:)
+      @ray = ray
+      @entry_point = entry_point
+      @exit_point = exit_point
+      @entry_normal = entry_normal
+      @exit_normal = exit_normal
       @collider = collider
-      @point = point
-      @distance = distance
-      @normal = normal.normalize
+    end
+
+    def entry_normal
+      @entry_normal&.normalize
+    end
+
+    def exit_normal
+      @exit_normal&.normalize
+    end
+
+    def entry_distance
+      (@entry_point - @ray.start_point).magnitude
     end
   end
 end

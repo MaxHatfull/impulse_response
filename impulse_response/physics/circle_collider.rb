@@ -22,8 +22,6 @@ module Physics
       # Project onto ray direction to find closest approach
       proj_length = to_center.dot(ray.direction)
 
-      return nil if proj_length < 0
-
       # |to_center|² = proj_length² + closest_dist²
       closest_dist_sq = to_center.dot(to_center) - proj_length * proj_length
 
@@ -33,15 +31,45 @@ module Physics
       # radius² = closest_dist² + half_chord²
       half_chord = Math.sqrt(radius_sq - closest_dist_sq)
 
-      distance = proj_length - half_chord
+      entry_distance = proj_length - half_chord
+      exit_distance = proj_length + half_chord
 
-      return nil if distance < 0
-      return nil if distance > ray.length
+      # Check if ray starts inside the circle
+      starts_inside = entry_distance < 0
 
-      point = ray.start_point + ray.direction * distance
-      normal = (point - center).normalize
+      # Ray completely misses (circle behind ray or ray too short to reach entry)
+      return nil if !starts_inside && (proj_length < 0 || entry_distance > ray.length)
 
-      RaycastHit.new(collider: self, point: point, distance: distance, normal: normal)
+      # Ray ends before reaching the circle
+      return nil if exit_distance < 0
+
+      if starts_inside
+        entry_point = ray.start_point
+        entry_normal = nil
+      else
+        entry_point = ray.start_point + ray.direction * entry_distance
+        entry_normal = (entry_point - center).normalize
+      end
+
+      # Check if ray ends inside the circle
+      ends_inside = exit_distance > ray.length
+
+      if ends_inside
+        exit_point = ray.start_point + ray.direction * ray.length
+        exit_normal = nil
+      else
+        exit_point = ray.start_point + ray.direction * exit_distance
+        exit_normal = (exit_point - center).normalize
+      end
+
+      RaycastHit.new(
+        ray: ray,
+        entry_point: entry_point,
+        exit_point: exit_point,
+        entry_normal: entry_normal,
+        exit_normal: exit_normal,
+        collider: self
+      )
     end
 
     def inside?(point, tag: nil)

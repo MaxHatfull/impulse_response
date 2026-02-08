@@ -22,7 +22,7 @@ module Physics
   end
 
   def self.closest_raycast(ray, tag: nil)
-    raycast(ray, tag: tag).min_by(&:distance)
+    raycast(ray, tag: tag).min_by(&:entry_distance)
   end
 
   def self.colliders_at(point, tag: nil)
