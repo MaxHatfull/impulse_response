@@ -20,11 +20,21 @@ module Physics
     end
 
     def entry_distance
-      (@entry_point - @ray.start_point).magnitude
+      @entry_distance ||= begin
+        start_x, start_y = @ray.start_point[0], @ray.start_point[1]
+        dx = @entry_point[0] - start_x
+        dy = @entry_point[1] - start_y
+        Math.sqrt(dx * dx + dy * dy)
+      end
     end
 
     def exit_distance
-      (@exit_point - @ray.start_point).magnitude
+      @exit_distance ||= begin
+        start_x, start_y = @ray.start_point[0], @ray.start_point[1]
+        dx = @exit_point[0] - start_x
+        dy = @exit_point[1] - start_y
+        Math.sqrt(dx * dx + dy * dy)
+      end
     end
   end
 end
