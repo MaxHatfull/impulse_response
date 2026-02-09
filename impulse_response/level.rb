@@ -38,6 +38,20 @@ class Level
     Player.instance.reset(Vector[x, 0, z], rotation: rotation)
   end
 
+  def door(x:, z:, level_class:, radius: 2, clip: nil)
+    sound_source(x: x, z: z, clip: clip)
+
+    game_object = Engine::GameObject.create(
+      pos: Vector[x, 0, z],
+      components: [
+        Physics::CircleCollider.create(radius: radius),
+        PlayerTrigger.create(on_enter: -> { Map.instance.load_level(level_class) })
+      ]
+    )
+    game_object.parent = @level_root
+    game_object
+  end
+
   private
 
   def wall_material

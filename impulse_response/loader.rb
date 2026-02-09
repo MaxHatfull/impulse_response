@@ -3,6 +3,7 @@ require "singleton"
 
 # Load in dependency order
 require_relative "components/player_controller"
+require_relative "components/player_trigger"
 require_relative "components/sound_cast_source"
 require_relative "player"
 require_relative "scenery"
@@ -27,3 +28,4 @@ require_relative "sound_caster"
 require_relative "level"
 require_relative "levels/debug_level"
 require_relative "levels/introduction_level"
+require_relative "levels/cargo_bay_level"
