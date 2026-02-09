@@ -1,5 +1,5 @@
 class SoundPlayer
-  BOUNCE_LOSS = 1           # volume multiplier per bounce
+  BOUNCE_LOSS = 0.9         # volume multiplier per bounce
   SOUND_RANGE = 5           # distance for full volume
   DISTANCE_BUCKET_SIZE = 2  # meters per bucket
 
@@ -28,7 +28,7 @@ class SoundPlayer
     @right_volumes = volume_distribution(@right_hits)
 
     update_audio
-    print_debug
+    #print_debug
   end
 
   private
@@ -36,13 +36,13 @@ class SoundPlayer
   def setup_audio
     @left_audio = NativeAudio::AudioSource.new(@source.clip)
     @left_audio.play
-    @left_audio.set_pos(LEFT_ANGLE, 0)
+    @left_audio.set_pos(LEFT_ANGLE, 10)
     @left_audio.set_looping(true)
     @left_audio.set_reverb(room_size: 0.5, damping: 0.3, wet: 0.3, dry: 1.0)
 
     @right_audio = NativeAudio::AudioSource.new(@source.clip)
     @right_audio.play
-    @right_audio.set_pos(RIGHT_ANGLE, 0)
+    @right_audio.set_pos(RIGHT_ANGLE, 10)
     @right_audio.set_looping(true)
     @right_audio.set_reverb(room_size: 0.5, damping: 0.3, wet: 0.3, dry: 1.0)
   end
@@ -62,17 +62,28 @@ class SoundPlayer
   end
 
   def reverb_from_hits(hits)
-    return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 1.0 } if hits.empty?
+    return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 0.0 } if hits.empty?
 
-    total_volume = hits.sum { |h| hit_volume(h) }
-    return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 1.0 } if total_volume <= 0
+    direct_hits = hits.select { |h| h.total_bounces == 0 }
+    reflected_hits = hits.select { |h| h.total_bounces > 0 }
 
-    avg_bounces = hits.sum { |h| hit_volume(h) * h.total_bounces } / total_volume
+    direct_volume = direct_hits.sum { |h| hit_volume(h) }
+    reflected_volume = reflected_hits.sum { |h| hit_volume(h) }
+    total_volume = direct_volume + reflected_volume
+
+    return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 0.0 } if total_volume <= 0
+
+    avg_bounces = if reflected_hits.any?
+      reflected_hits.sum { |h| hit_volume(h) * h.total_bounces } / reflected_volume
+    else
+      0
+    end
 
     room_size = (avg_bounces / 5.0).clamp(0.0, 1.0)
-    wet = (avg_bounces / 3.0).clamp(0.0, 0.8)
+    wet = (reflected_volume / total_volume).clamp(0.0, 1.0)
+    dry = (direct_volume / total_volume).clamp(0.0, 1.0)
 
-    { room_size: room_size, damping: 0.3, wet: wet, dry: 1.0 }
+    { room_size: room_size, damping: 0.3, wet: wet, dry: dry }
   end
 
   def listener_pos
