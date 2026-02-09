@@ -1,5 +1,5 @@
 class SoundPlayer
-  BOUNCE_LOSS = 0.6 # volume multiplier per bounce
+  BOUNCE_LOSS = 0.4 # volume multiplier per bounce
   SOUND_RANGE = 10 # distance for full volume
   DISTANCE_BUCKET_SIZE = 5 # meters per bucket
 

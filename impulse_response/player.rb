@@ -32,8 +32,8 @@ class Player
     @game_object
   end
 
-  def reset(pos)
+  def reset(pos, rotation: 0)
     @game_object.pos = pos
-    @game_object.rotation = Engine::Quaternion.from_euler(Vector[0, 0, 0])
+    @game_object.rotation = Engine::Quaternion.from_euler(Vector[0, rotation, 0])
   end
 end
