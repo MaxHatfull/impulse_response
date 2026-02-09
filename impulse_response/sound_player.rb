@@ -1,34 +1,56 @@
 class SoundPlayer
-  BOUNCE_LOSS = 0.9         # volume multiplier per bounce
-  SOUND_RANGE = 5           # distance for full volume
-  DISTANCE_BUCKET_SIZE = 2  # meters per bucket
+  BOUNCE_LOSS = 0.6 # volume multiplier per bounce
+  SOUND_RANGE = 10 # distance for full volume
+  DISTANCE_BUCKET_SIZE = 5 # meters per bucket
 
   # audio
   LEFT_ANGLE = 270
   RIGHT_ANGLE = 90
 
   # debug output
-  MAX_VOLUME = 1            # bar max
-  BAR_WIDTH = 40            # bar width in chars
+  MAX_VOLUME = 1 # bar max
+  BAR_WIDTH = 40 # bar width in chars
 
   def initialize(source, listener)
     @source = source
     @listener = listener
-    @left_volumes = []
-    @right_volumes = []
+    @left_contributions = []
+    @right_contributions = []
 
     setup_audio
   end
 
   def update(hits)
     visible_hits = hits.select { |hit| has_line_of_sight?(hit) }
-    @left_hits, @right_hits = visible_hits.partition { |hit| hit_from_left?(hit) }
-
-    @left_volumes = volume_distribution(@left_hits)
-    @right_volumes = volume_distribution(@right_hits)
+    build_stereo_contributions(visible_hits)
 
     update_audio
-    #print_debug
+    print_debug
+  end
+
+  def build_stereo_contributions(hits)
+    @left_contributions = []
+    @right_contributions = []
+
+    hits.each do |hit|
+      volume = hit_volume(hit)
+      bounces = hit.total_bounces
+      left_pan, right_pan = stereo_pan(hit)
+
+      @left_contributions << { volume: volume * left_pan, bounces: bounces }
+      @right_contributions << { volume: volume * right_pan, bounces: bounces }
+    end
+  end
+
+  def stereo_pan(hit)
+    to_hit = hit.raycast_hit.entry_point - listener_pos
+    angle = Math.atan2(to_hit[1], to_hit[0]) - Math.atan2(forward_2d[1], forward_2d[0])
+
+    # right_pan: 0° (forward) = 0.5, 90° (right) = 1.0, 180° = 0.5, 270° (left) = 0.0
+    right_pan = 0.5 + 0.5 * Math.sin(angle)
+    left_pan = 1.0 - right_pan
+
+    [left_pan, right_pan]
   end
 
   private
@@ -48,40 +70,47 @@ class SoundPlayer
   end
 
   def update_audio
-    left_total = @left_volumes.sum
-    right_total = @right_volumes.sum
+    left_total = @left_contributions.sum { |c| c[:volume] }
+    right_total = @right_contributions.sum { |c| c[:volume] }
 
     @left_audio.set_volume((left_total * 128).clamp(0, 128).to_i)
     @right_audio.set_volume((right_total * 128).clamp(0, 128).to_i)
 
-    left_reverb = reverb_from_hits(@left_hits)
-    right_reverb = reverb_from_hits(@right_hits)
+    left_reverb = reverb_from_contributions(@left_contributions)
+    right_reverb = reverb_from_contributions(@right_contributions)
 
     @left_audio.set_reverb(**left_reverb)
     @right_audio.set_reverb(**right_reverb)
   end
 
-  def reverb_from_hits(hits)
-    return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 0.0 } if hits.empty?
+  def reverb_from_contributions(contributions)
+    return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 0.0 } if contributions.empty?
 
-    direct_hits = hits.select { |h| h.total_bounces == 0 }
-    reflected_hits = hits.select { |h| h.total_bounces > 0 }
+    grouped = contributions.group_by { |c| c[:bounces] }
 
-    direct_volume = direct_hits.sum { |h| hit_volume(h) }
-    reflected_volume = reflected_hits.sum { |h| hit_volume(h) }
-    total_volume = direct_volume + reflected_volume
+    total_volume = 0.0
+    weighted_dry = 0.0
+    weighted_wet = 0.0
+    weighted_bounces = 0.0
+
+    grouped.each do |bounce_count, group|
+      group_volume = group.sum { |c| c[:volume] }
+      total_volume += group_volume
+
+      dry_weight = 1.0 / (bounce_count + 1)
+      wet_weight = bounce_count.to_f / (bounce_count + 1)
+
+      weighted_dry += group_volume * dry_weight
+      weighted_wet += group_volume * wet_weight
+      weighted_bounces += group_volume * bounce_count
+    end
 
     return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 0.0 } if total_volume <= 0
 
-    avg_bounces = if reflected_hits.any?
-      reflected_hits.sum { |h| hit_volume(h) * h.total_bounces } / reflected_volume
-    else
-      0
-    end
-
-    room_size = (avg_bounces / 5.0).clamp(0.0, 1.0)
-    wet = (reflected_volume / total_volume).clamp(0.0, 1.0)
-    dry = (direct_volume / total_volume).clamp(0.0, 1.0)
+    avg_bounces = weighted_bounces / total_volume
+    room_size = (Math.sqrt(avg_bounces) / 20.0).clamp(0.0, 1.0)
+    dry = (weighted_dry / total_volume).clamp(0.0, 1.0)
+    wet = (weighted_wet / total_volume).clamp(0.0, 1.0)
 
     { room_size: room_size, damping: 0.3, wet: wet, dry: dry }
   end
@@ -117,8 +146,8 @@ class SoundPlayer
 
     ray = Physics::Ray.new(start_point: listener_pos, direction: direction.normalize, length: distance)
     closest_wall = Physics.raycast(ray)
-      .select { |h| h.collider.tags.include?(:wall) }
-      .min_by(&:entry_distance)
+                          .select { |h| h.collider.tags.include?(:wall) }
+                          .min_by(&:entry_distance)
     closest_wall.nil? || closest_wall.entry_distance >= distance - 0.001
   end
 
@@ -141,9 +170,18 @@ class SoundPlayer
 
   def print_debug
     puts "LEFT:"
-    print_volume_distribution(@left_volumes)
+    print_volume_by_bounces(@left_contributions)
     puts "RIGHT:"
-    print_volume_distribution(@right_volumes)
+    print_volume_by_bounces(@right_contributions)
+  end
+
+  def print_volume_by_bounces(contributions)
+    grouped = contributions.group_by { |c| c[:bounces] }
+    (0..10).each do |bounce_count|
+      group = grouped[bounce_count] || []
+      vol = group.sum { |c| c[:volume] }
+      print_volume_bar("#{bounce_count} bounces", vol)
+    end
   end
 
   def print_volume_bar(label, volume)

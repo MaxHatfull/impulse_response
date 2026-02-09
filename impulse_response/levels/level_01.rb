@@ -7,16 +7,16 @@ class Level01
     map.wall(x: 49, z: -24.5, width: 1, length: 50)    # right
 
     # Interior walls
-    map.wall(x: 6, z: -2, width: 1, length: 1)
-    map.wall(x: 14, z: -3, width: 1, length: 1)
-    map.wall(x: 3, z: -6, width: 1, length: 4)
-    map.wall(x: 12, z: -5, width: 1, length: 5)
-    map.wall(x: 17, z: -10, width: 1, length: 1)
-    map.wall(x: 5, z: -12, width: 10, length: 1)
     map.wall(x: 10, z: -15, width: 1, length: 1)
+    # map.wall(x: 14, z: -3, width: 1, length: 1)
+    # map.wall(x: 3, z: -6, width: 1, length: 4)
+    # map.wall(x: 12, z: -5, width: 1, length: 5)
+    # map.wall(x: 17, z: -10, width: 1, length: 1)
+    # map.wall(x: 5, z: -12, width: 10, length: 1)
+    # map.wall(x: 10, z: -15, width: 1, length: 1)
 
     # Sound source
-    sound_source_pos = Vector[5, 0.5, -5]
+    sound_source_pos = Vector[10, 0.5, -5]
     Engine::GameObject.create(
       pos: sound_source_pos,
       components: [
