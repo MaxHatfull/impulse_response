@@ -28,6 +28,11 @@ class SoundPlayer
     print_debug
   end
 
+  def stop
+    @left_audio.stop
+    @right_audio.stop
+  end
+
   def build_stereo_contributions(hits)
     @left_contributions = []
     @right_contributions = []

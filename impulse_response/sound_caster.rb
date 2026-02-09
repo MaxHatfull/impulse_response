@@ -8,6 +8,7 @@ class SoundCaster
     @max_distance = length
     @beam_strength = volume / beam_count.to_f
     @clip = clip
+    @known_listeners = Set.new
   end
 
   def cast_beams(start:)
@@ -67,13 +68,29 @@ class SoundCaster
     listener_hits
   end
 
+  def destroy
+    @known_listeners.each { |listener| listener.remove_source(self) }
+  end
+
   private
 
   def notify_listeners(listener_hits)
+    current_listeners = Set.new
+
     listener_hits.each do |game_object, hits|
       listener = game_object.component(SoundListener)
-      listener&.on_sound_hits(self, hits)
+      next unless listener
+
+      current_listeners.add(listener)
+      listener.on_sound_hits(self, hits)
     end
+
+    # Remove sources for listeners no longer in range
+    (@known_listeners - current_listeners).each do |listener|
+      listener.remove_source(self)
+    end
+
+    @known_listeners = current_listeners
   end
 
   def has_tag?(hit, tag)
