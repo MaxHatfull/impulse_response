@@ -25,7 +25,7 @@ class SoundPlayer
     build_stereo_contributions(visible_hits)
 
     update_audio
-    print_debug
+    # print_debug
   end
 
   def stop

@@ -38,8 +38,8 @@ class Level
     Player.instance.reset(Vector[x, 0, z], rotation: rotation)
   end
 
-  def door(x:, z:, level_class:, radius: 2, clip: nil)
-    sound_source(x: x, z: z, clip: clip)
+  def door(x:, z:, level_class:, radius: 2)
+    sound_source(x: x, z: z, clip: "impulse_response/assets/sci_fi_audio/2 Sci Fi Sound.wav")
 
     game_object = Engine::GameObject.create(
       pos: Vector[x, 0, z],

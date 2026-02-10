@@ -7,7 +7,7 @@ class IntroductionLevel < Level
     wall(x: 2.5, z: -30, width: 4, length: 1)     # front wall (behind sound)
 
     # Door to cargo bay
-    door(x: 2.5, z: -28, level_class: CargoBayLevel, clip: "impulse_response/assets/sci_fi_audio/2 Sci Fi Sound.wav")
+    door(x: 2.5, z: -28, level_class: CargoBayLevel)
 
     # Player spawn at near end
     player_spawn(x: 2.5, z: -2, rotation: 180)
