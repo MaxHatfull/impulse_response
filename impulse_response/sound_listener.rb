@@ -7,4 +7,9 @@ class SoundListener < Engine::Component
     @sound_players[source] ||= SoundPlayer.new(source, self)
     @sound_players[source].update(hits)
   end
+
+  def remove_source(source)
+    player = @sound_players.delete(source)
+    player&.stop
+  end
 end

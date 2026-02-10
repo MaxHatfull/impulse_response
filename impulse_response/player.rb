@@ -9,8 +9,8 @@ class Player
       pos: Vector[0, 0, 0],
       components: [
         PlayerController.create(move_speed: 5.0, look_sensitivity: 0.3),
-        Physics::CircleCollider.create(radius: 0.5),
-        Physics::CircleCollider.create(radius: 1, tags: [:listener]),
+        Physics::CircleCollider.create(radius: 0.5, tags: [:player]),
+        Physics::CircleCollider.create(radius: 2, tags: [:listener]),
         SoundListener.create
       ]
     )
@@ -32,8 +32,8 @@ class Player
     @game_object
   end
 
-  def reset(pos)
+  def reset(pos, rotation: 0)
     @game_object.pos = pos
-    @game_object.rotation = Engine::Quaternion.from_euler(Vector[0, 0, 0])
+    @game_object.rotation = Engine::Quaternion.from_euler(Vector[0, rotation, 0])
   end
 end

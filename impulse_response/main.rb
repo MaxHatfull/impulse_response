@@ -9,5 +9,5 @@ Engine.start do
 
   Player.instance.spawn
   Scenery.instance.create_ground
-  Map.instance.load_level(Level01)
+  Map.instance.load_level(IntroductionLevel)
 end

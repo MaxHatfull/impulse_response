@@ -15,4 +15,8 @@ class SoundCastSource < Engine::Component
     pos = game_object.pos
     @caster.cast_beams(start: Vector[pos[0], pos[2]])
   end
+
+  def destroy
+    @caster.destroy
+  end
 end
