@@ -18,14 +18,14 @@ class Level
     game_object
   end
 
-  def sound_source(x:, z:, clip: nil, beam_length: 40, beam_count: 128, volume: 10)
+  def sound_source(x:, z:, clip: nil, beam_length: 40, beam_count: 128, volume: 10, loop: true, play_on_start: true)
     pos = Vector[x, 0.5, z]
     game_object = Engine::GameObject.create(
       pos: pos,
       components: [
         SoundCastSource.create(
           beam_length: beam_length, beam_count: beam_count, volume: volume,
-          clip_path: clip
+          clip_path: clip, loop: loop, play_on_start: play_on_start
         )
       ]
     )
@@ -53,13 +53,13 @@ class Level
   end
 
   def terminal(x:, z:)
-    sound_source(x: x, z: z, clip: "impulse_response/assets/audio/computerNoise_000.wav", volume: 3)
+    source = sound_source(x: x, z: z, clip: "impulse_response/assets/audio/computerNoise_000.wav", volume: 0.2)
 
     game_object = Engine::GameObject.create(
       pos: Vector[x, 0, z],
       components: [
         Physics::CircleCollider.create(radius: 2),
-        Interacter.create(on_interact: -> { puts "bleep bloop" })
+        Interacter.create(on_interact: -> { source.component(SoundCastSource).stop })
       ]
     )
     game_object.parent = @level_root

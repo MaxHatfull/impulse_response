@@ -1,5 +1,5 @@
 class SoundCastSource < Engine::Component
-  serialize :beam_length, :beam_count, :volume, :clip_path
+  serialize :beam_length, :beam_count, :volume, :clip_path, :loop, :play_on_start
 
   def start
     clip = NativeAudio::Clip.new(@clip_path || "impulse_response/assets/audio/test.wav")
@@ -7,7 +7,9 @@ class SoundCastSource < Engine::Component
       beam_count: @beam_count,
       length: @beam_length,
       volume: @volume || 1.0,
-      clip: clip
+      clip: clip,
+      loop: @loop.nil? ? true : @loop,
+      play_on_start: @play_on_start.nil? ? true : @play_on_start
     )
   end
 
@@ -18,5 +20,13 @@ class SoundCastSource < Engine::Component
 
   def destroy
     @caster.destroy
+  end
+
+  def play
+    @caster.play
+  end
+
+  def stop
+    @caster.stop
   end
 end

@@ -16,8 +16,9 @@ class SoundPlayer
     @listener = listener
     @left_contributions = []
     @right_contributions = []
-
-    setup_audio
+    @left_audio = NativeAudio::AudioSource.new(@source.clip)
+    @right_audio = NativeAudio::AudioSource.new(@source.clip)
+    play
   end
 
   def update(hits)
@@ -31,6 +32,17 @@ class SoundPlayer
   def stop
     @left_audio.stop
     @right_audio.stop
+  end
+
+  def play
+    @left_audio.play
+    @right_audio.play
+
+    @left_audio.set_pos(LEFT_ANGLE, 10)
+    @left_audio.set_looping(@source.loop)
+
+    @right_audio.set_pos(RIGHT_ANGLE, 10)
+    @right_audio.set_looping(@source.loop)
   end
 
   def build_stereo_contributions(hits)
@@ -59,20 +71,6 @@ class SoundPlayer
   end
 
   private
-
-  def setup_audio
-    @left_audio = NativeAudio::AudioSource.new(@source.clip)
-    @left_audio.play
-    @left_audio.set_pos(LEFT_ANGLE, 10)
-    @left_audio.set_looping(true)
-    @left_audio.set_reverb(room_size: 0.5, damping: 0.3, wet: 0.3, dry: 1.0)
-
-    @right_audio = NativeAudio::AudioSource.new(@source.clip)
-    @right_audio.play
-    @right_audio.set_pos(RIGHT_ANGLE, 10)
-    @right_audio.set_looping(true)
-    @right_audio.set_reverb(room_size: 0.5, damping: 0.3, wet: 0.3, dry: 1.0)
-  end
 
   def update_audio
     left_total = @left_contributions.sum { |c| c[:volume] }
