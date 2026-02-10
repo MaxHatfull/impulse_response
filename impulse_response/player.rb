@@ -36,4 +36,12 @@ class Player
     @game_object.pos = pos
     @game_object.rotation = Engine::Quaternion.from_euler(Vector[0, rotation, 0])
   end
+
+  def disable_controls
+    @game_object.component(PlayerController).disable
+  end
+
+  def enable_controls
+    @game_object.component(PlayerController).enable
+  end
 end

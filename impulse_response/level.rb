@@ -52,14 +52,25 @@ class Level
     game_object
   end
 
-  def terminal(x:, z:)
-    source = sound_source(x: x, z: z, clip: "impulse_response/assets/audio/computerNoise_000.wav", volume: 0.2)
+  def terminal(x:, z:, options: [], welcome_clip: nil)
+    ambient_source = sound_source(x: x, z: z, clip: "impulse_response/assets/audio/basic_audio/computerNoise_000.wav", volume: 0.2)
+      .component(SoundCastSource)
+    terminal_output_source = sound_source(x: x, z: z, clip: nil, loop: false, play_on_start: false)
+      .component(SoundCastSource)
+
+    terminal_controls = TerminalControls.create(
+      ambient_source: ambient_source,
+      terminal_output_source: terminal_output_source,
+      options: options,
+      welcome_clip: welcome_clip
+    )
 
     game_object = Engine::GameObject.create(
       pos: Vector[x, 0, z],
       components: [
         Physics::CircleCollider.create(radius: 2),
-        Interacter.create(on_interact: -> { source.component(SoundCastSource).stop })
+        Interacter.create(on_interact: -> { terminal_controls.open }),
+        terminal_controls
       ]
     )
     game_object.parent = @level_root

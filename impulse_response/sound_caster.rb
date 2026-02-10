@@ -87,6 +87,11 @@ class SoundCaster
     @known_listeners.each { |listener| listener.stop_source(self) }
   end
 
+  def set_clip(clip)
+    @clip = clip
+    @known_listeners.each { |listener| listener.set_clip(self, clip) }
+  end
+
   private
 
   def notify_listeners(listener_hits)

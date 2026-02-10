@@ -36,13 +36,25 @@ class SoundPlayer
 
   def play
     @left_audio.play
+    @left_audio.set_volume(0)
     @right_audio.play
+    @right_audio.set_volume(0)
 
     @left_audio.set_pos(LEFT_ANGLE, 10)
     @left_audio.set_looping(@source.loop)
 
     @right_audio.set_pos(RIGHT_ANGLE, 10)
     @right_audio.set_looping(@source.loop)
+  end
+
+  def set_clip(clip)
+    @left_audio.stop
+    @right_audio.stop
+
+    @left_audio = NativeAudio::AudioSource.new(clip)
+    @right_audio = NativeAudio::AudioSource.new(clip)
+
+    play
   end
 
   def build_stereo_contributions(hits)

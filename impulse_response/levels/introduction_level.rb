@@ -7,7 +7,21 @@ class IntroductionLevel < Level
     wall(x: 2.5, z: -30, width: 4, length: 1)     # front wall (behind sound)
 
     # Terminal halfway along corridor
-    terminal(x: 2.5, z: -15)
+    terminal(
+      x: 2.5,
+      z: -15,
+      welcome_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Welcome.wav"),
+      options: [
+        {
+          menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Emergency Cryopod override.wav"),
+          on_select: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Emergency CryoPod Override selected.wav")
+        },
+        {
+          menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Health Check.wav"),
+          on_select: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Health Check completed.wav")
+        }
+      ]
+    )
 
     # Door to cargo bay
     door(x: 2.5, z: -28, level_class: CargoBayLevel)

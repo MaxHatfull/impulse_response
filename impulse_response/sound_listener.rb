@@ -20,4 +20,8 @@ class SoundListener < Engine::Component
   def stop_source(source)
     @sound_players[source]&.stop
   end
+
+  def set_clip(source, clip)
+    @sound_players[source]&.set_clip(clip)
+  end
 end
