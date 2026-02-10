@@ -13,6 +13,15 @@ class IntroductionLevel < Level
       welcome_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Welcome.wav"),
       options: [
         {
+          menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Ship Status.wav"),
+        },
+        {
+          menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Crew Status.wav"),
+        },
+        {
+          menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/CryoPod Status.wav"),
+        },
+        {
           menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Emergency Cryopod override.wav"),
           on_select: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Emergency CryoPod Override selected.wav")
         },
