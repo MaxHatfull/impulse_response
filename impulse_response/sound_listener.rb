@@ -12,4 +12,16 @@ class SoundListener < Engine::Component
     player = @sound_players.delete(source)
     player&.stop
   end
+
+  def play_source(source)
+    @sound_players[source]&.play
+  end
+
+  def stop_source(source)
+    @sound_players[source]&.stop
+  end
+
+  def set_clip(source, clip)
+    @sound_players[source]&.set_clip(clip)
+  end
 end

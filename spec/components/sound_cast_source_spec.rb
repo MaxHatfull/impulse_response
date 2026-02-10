@@ -8,7 +8,7 @@ RSpec.describe SoundCastSource do
   describe "#start" do
     it "creates a SoundCaster with correct parameters" do
       expect(SoundCaster).to receive(:new)
-        .with(beam_count: 8, length: 20, volume: 1.0, clip: mock_clip)
+        .with(beam_count: 8, length: 20, volume: 1.0, clip: mock_clip, loop: true, play_on_start: true)
         .and_call_original
 
       source = SoundCastSource.create(beam_length: 20, beam_count: 8)

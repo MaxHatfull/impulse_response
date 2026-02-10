@@ -94,6 +94,52 @@ RSpec.describe SoundCaster do
       sound_caster.cast_beams(start:)
     end
 
+    context "when play_on_start is false" do
+      let(:sound_caster) { SoundCaster.new(beam_count: 8, length: 10, volume: 1.0, clip: nil, play_on_start: false) }
+
+      it "does not cast beams" do
+        start = Vector[0, 0]
+
+        expect(sound_caster).not_to receive(:cast_beam)
+
+        sound_caster.cast_beams(start:)
+      end
+
+      it "casts beams after play is called" do
+        start = Vector[0, 0]
+
+        sound_caster.play
+
+        expect(sound_caster).to receive(:cast_beam).exactly(8).times.and_call_original
+
+        sound_caster.cast_beams(start:)
+      end
+    end
+
+    context "when stop is called" do
+      it "does not cast beams after stop" do
+        start = Vector[0, 0]
+
+        sound_caster.cast_beams(start:)  # should work initially
+        sound_caster.stop
+
+        expect(sound_caster).not_to receive(:cast_beam)
+
+        sound_caster.cast_beams(start:)
+      end
+
+      it "resumes casting beams after play is called again" do
+        start = Vector[0, 0]
+
+        sound_caster.stop
+        sound_caster.play
+
+        expect(sound_caster).to receive(:cast_beam).exactly(8).times.and_call_original
+
+        sound_caster.cast_beams(start:)
+      end
+    end
+
     it "casts beams in evenly spaced directions" do
       start = Vector[0, 0]
 

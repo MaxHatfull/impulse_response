@@ -1,10 +1,24 @@
 class PlayerController < Engine::Component
   serialize :move_speed, :look_sensitivity
 
+  def awake
+    @enabled = true
+  end
+
   def update(delta_time)
+    return unless @enabled
+
     handle_look
     handle_movement(delta_time)
     resolve_collisions
+  end
+
+  def enable
+    @enabled = true
+  end
+
+  def disable
+    @enabled = false
   end
 
   private

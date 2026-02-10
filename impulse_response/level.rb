@@ -18,14 +18,14 @@ class Level
     game_object
   end
 
-  def sound_source(x:, z:, clip: nil, beam_length: 40, beam_count: 128, volume: 10)
+  def sound_source(x:, z:, clip: nil, beam_length: 40, beam_count: 128, volume: 10, loop: true, play_on_start: true)
     pos = Vector[x, 0.5, z]
     game_object = Engine::GameObject.create(
       pos: pos,
       components: [
         SoundCastSource.create(
           beam_length: beam_length, beam_count: beam_count, volume: volume,
-          clip_path: clip
+          clip_path: clip, loop: loop, play_on_start: play_on_start
         )
       ]
     )
@@ -38,14 +38,39 @@ class Level
     Player.instance.reset(Vector[x, 0, z], rotation: rotation)
   end
 
-  def door(x:, z:, level_class:, radius: 2, clip: nil)
-    sound_source(x: x, z: z, clip: clip)
+  def door(x:, z:, level_class:, radius: 2)
+    sound_source(x: x, z: z, clip: "impulse_response/assets/sci_fi_audio/2 Sci Fi Sound.wav")
 
     game_object = Engine::GameObject.create(
       pos: Vector[x, 0, z],
       components: [
         Physics::CircleCollider.create(radius: radius),
         PlayerTrigger.create(on_enter: -> { Map.instance.load_level(level_class) })
+      ]
+    )
+    game_object.parent = @level_root
+    game_object
+  end
+
+  def terminal(x:, z:, options: [], welcome_clip: nil)
+    ambient_source = sound_source(x: x, z: z, clip: "impulse_response/assets/audio/basic_audio/computerNoise_000.wav", volume: 0.2)
+      .component(SoundCastSource)
+    terminal_output_source = sound_source(x: x, z: z, clip: nil, loop: false, play_on_start: false)
+      .component(SoundCastSource)
+
+    terminal_controls = TerminalControls.create(
+      ambient_source: ambient_source,
+      terminal_output_source: terminal_output_source,
+      options: options,
+      welcome_clip: welcome_clip
+    )
+
+    game_object = Engine::GameObject.create(
+      pos: Vector[x, 0, z],
+      components: [
+        Physics::CircleCollider.create(radius: 2),
+        Interacter.create(on_interact: -> { terminal_controls.open }),
+        terminal_controls
       ]
     )
     game_object.parent = @level_root

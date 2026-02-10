@@ -6,8 +6,40 @@ class IntroductionLevel < Level
     wall(x: 2.5, z: 0, width: 4, length: 1)       # back wall (behind player)
     wall(x: 2.5, z: -30, width: 4, length: 1)     # front wall (behind sound)
 
-    # Door to cargo bay
-    door(x: 2.5, z: -28, level_class: CargoBayLevel, clip: "impulse_response/assets/sci_fi_audio/2 Sci Fi Sound.wav")
+    level = self
+    door_created = false
+
+    # Terminal halfway along corridor
+    terminal(
+      x: 2.5,
+      z: -15,
+      welcome_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Welcome.wav"),
+      options: [
+        {
+          menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Ship Status.wav"),
+        },
+        {
+          menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Crew Status.wav"),
+        },
+        {
+          menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/CryoPod Status.wav"),
+        },
+        {
+          menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Emergency Cryopod override.wav"),
+          on_select_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Emergency CryoPod Override selected.wav")
+        },
+        {
+          menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Health Check.wav"),
+          on_select_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Health Check completed.wav"),
+          on_select: -> {
+            unless door_created
+              level.door(x: 2.5, z: -28, level_class: CargoBayLevel)
+              door_created = true
+            end
+          }
+        }
+      ]
+    )
 
     # Player spawn at near end
     player_spawn(x: 2.5, z: -2, rotation: 180)

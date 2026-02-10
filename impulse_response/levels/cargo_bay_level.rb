@@ -14,7 +14,7 @@ class CargoBayLevel < Level
     end
 
     # Door back to intro
-    door(x: 27, z: -28, level_class: IntroductionLevel, clip: "impulse_response/assets/sci_fi_audio/2 Sci Fi Sound.wav")
+    door(x: 27, z: -28, level_class: IntroductionLevel)
 
     # Player spawn at near corner
     player_spawn(x: 3, z: -3, rotation: 225)

@@ -1,17 +1,22 @@
 class SoundCaster
   EPSILON = 0.001
 
-  attr_reader :max_distance, :beam_strength, :clip
+  attr_reader :max_distance, :beam_strength, :clip, :loop, :play_on_start
 
-  def initialize(beam_count:, length:, volume: 1.0, clip:)
+  def initialize(beam_count:, length:, volume: 1.0, clip:, loop: true, play_on_start: true)
     @beam_count = beam_count
     @max_distance = length
     @beam_strength = volume / beam_count.to_f
     @clip = clip
+    @loop = loop
+    @play_on_start = play_on_start
+    @playing = play_on_start
     @known_listeners = Set.new
   end
 
   def cast_beams(start:)
+    return unless @playing
+
     all_hits = Hash.new { |h, k| h[k] = [] }
 
     @beam_count.times do |i|
@@ -70,6 +75,21 @@ class SoundCaster
 
   def destroy
     @known_listeners.each { |listener| listener.remove_source(self) }
+  end
+
+  def play
+    @playing = true
+    @known_listeners.each { |listener| listener.play_source(self) }
+  end
+
+  def stop
+    @playing = false
+    @known_listeners.each { |listener| listener.stop_source(self) }
+  end
+
+  def set_clip(clip)
+    @clip = clip
+    @known_listeners.each { |listener| listener.set_clip(self, clip) }
   end
 
   private
