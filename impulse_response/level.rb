@@ -52,6 +52,20 @@ class Level
     game_object
   end
 
+  def terminal(x:, z:)
+    sound_source(x: x, z: z, clip: "impulse_response/assets/audio/computerNoise_000.wav", volume: 3)
+
+    game_object = Engine::GameObject.create(
+      pos: Vector[x, 0, z],
+      components: [
+        Physics::CircleCollider.create(radius: 2),
+        Interacter.create(on_interact: -> { puts "bleep bloop" })
+      ]
+    )
+    game_object.parent = @level_root
+    game_object
+  end
+
   private
 
   def wall_material
