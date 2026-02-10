@@ -11,17 +11,37 @@ class TerminalControls < Engine::Component
 
     close if Engine::Input.key_down?(Engine::Input::KEY_Q)
 
+    handle_menu_input if @state == :menu
+
     return if playing?
 
-    if @state == :welcome
+    if @state == :welcome || @state == :selected
       @state = :menu
-      play_clip(@options.first[:menu_item]) if @options.any?
+      play_clip(current_option[:menu_item])
     end
+  end
+
+  def handle_menu_input
+    if Engine::Input.key_down?(Engine::Input::KEY_E)
+      @state = :selected
+      play_clip(current_option[:on_select])
+    elsif Engine::Input.key_down?(Engine::Input::KEY_W)
+      @current_menu_index = (@current_menu_index - 1) % @options.length
+      play_clip(current_option[:menu_item])
+    elsif Engine::Input.key_down?(Engine::Input::KEY_S)
+      @current_menu_index = (@current_menu_index + 1) % @options.length
+      play_clip(current_option[:menu_item])
+    end
+  end
+
+  def current_option
+    @options[@current_menu_index]
   end
 
   def open
     @open = true
     @state = :welcome
+    @current_menu_index = 0
     @ambient_source.stop
     Player.instance.disable_controls
     play_clip(@welcome_clip) if @welcome_clip

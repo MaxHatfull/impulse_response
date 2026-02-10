@@ -39,9 +39,11 @@ class Player
 
   def disable_controls
     @game_object.component(PlayerController).disable
+    Interacter.disable_all
   end
 
   def enable_controls
     @game_object.component(PlayerController).enable
+    Interacter.enable_all
   end
 end
