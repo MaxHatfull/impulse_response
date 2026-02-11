@@ -45,47 +45,20 @@ module Physics
       local_start = to_local_space(ray.start_point)
       local_dir = direction_to_local_space(ray.direction)
 
-      min_x = -half_width
-      max_x = half_width
-      min_y = -half_height
-      max_y = half_height
+      hit = RectUtils.slab_intersection(
+        min_x: -half_width, min_y: -half_height,
+        max_x: half_width, max_y: half_height,
+        ray_start: local_start, ray_dir: local_dir, ray_length: ray.length
+      )
+      return nil unless hit
 
-      # t refers to units along the ray
-      if local_dir[0] != 0.0
-        t_min_x = (min_x - local_start[0]) / local_dir[0]
-        t_max_x = (max_x - local_start[0]) / local_dir[0]
-        t_min_x, t_max_x = t_max_x, t_min_x if t_min_x > t_max_x
-      else
-        return nil if local_start[0] < min_x || local_start[0] > max_x
-        t_min_x = -Float::INFINITY
-        t_max_x = Float::INFINITY
-      end
-
-      if local_dir[1] != 0.0
-        t_min_y = (min_y - local_start[1]) / local_dir[1]
-        t_max_y = (max_y - local_start[1]) / local_dir[1]
-        t_min_y, t_max_y = t_max_y, t_min_y if t_min_y > t_max_y
-      else
-        return nil if local_start[1] < min_y || local_start[1] > max_y
-        t_min_y = -Float::INFINITY
-        t_max_y = Float::INFINITY
-      end
-
-      t_enter = [t_min_x, t_min_y].max
-      t_exit = [t_max_x, t_max_y].min
-
-      # Track which axis determined entry/exit for normal calculation
-      entry_axis = t_enter == t_min_x ? :x : :y
-      exit_axis = t_exit == t_max_x ? :x : :y
-
-      return nil if t_enter > t_exit
-      return nil if t_exit < 0
+      t_enter = hit[:t_enter]
+      t_exit = hit[:t_exit]
+      entry_axis = hit[:entry_axis]
+      exit_axis = hit[:exit_axis]
 
       # Check if ray starts inside
       starts_inside = t_enter < 0
-
-      # Ray is too short to reach entry point
-      return nil if !starts_inside && t_enter > ray.length
 
       if starts_inside
         entry_point = ray.start_point
