@@ -6,7 +6,7 @@ module Physics
         half_h = rect.height / 2.0
 
         # Transform circle center to rect's local space
-        local_circle_center = to_local_space(circle.center, rect)
+        local_circle_center = RectUtils.to_local_space(circle.center, center: rect.center, rotation: rect.rotation)
 
         closest_x = clamp(local_circle_center[0], -half_w, half_w)
         closest_y = clamp(local_circle_center[1], -half_h, half_h)
@@ -25,7 +25,7 @@ module Physics
         penetration = circle.radius - distance
         local_normal = -to_circle / distance
         # Transform normal back to world space
-        normal = direction_to_world_space(local_normal, rect)
+        normal = RectUtils.direction_to_world_space(local_normal, rotation: rect.rotation)
         contact_point = circle.center + normal * circle.radius
 
         Collision.new(
@@ -39,26 +39,6 @@ module Physics
 
       def self.clamp(value, min, max)
         [[value, min].max, max].min
-      end
-
-      def self.to_local_space(point, rect)
-        return point - rect.center if rect.rotation == 0
-
-        dx = point[0] - rect.center[0]
-        dy = point[1] - rect.center[1]
-        cos_r = Math.cos(-rect.rotation)
-        sin_r = Math.sin(-rect.rotation)
-
-        Vector[dx * cos_r - dy * sin_r, dx * sin_r + dy * cos_r]
-      end
-
-      def self.direction_to_world_space(dir, rect)
-        return dir if rect.rotation == 0
-
-        cos_r = Math.cos(rect.rotation)
-        sin_r = Math.sin(rect.rotation)
-
-        Vector[dir[0] * cos_r - dir[1] * sin_r, dir[0] * sin_r + dir[1] * cos_r]
       end
 
       def self.check_center_inside(circle, rect, half_w, half_h, local_center)
@@ -83,7 +63,7 @@ module Physics
           penetration = dy_top + circle.radius
         end
 
-        normal = direction_to_world_space(local_normal, rect)
+        normal = RectUtils.direction_to_world_space(local_normal, rotation: rect.rotation)
         contact_point = circle.center + normal * circle.radius
 
         Collision.new(

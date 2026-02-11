@@ -1,5 +1,35 @@
 module Physics
   module RectUtils
+    # Transform a point from world space to local space (centered at origin, no rotation)
+    def self.to_local_space(point, center:, rotation:)
+      dx = point[0] - center[0]
+      dy = point[1] - center[1]
+
+      return Vector[dx, dy] if rotation == 0
+
+      cos_r = Math.cos(-rotation)
+      sin_r = Math.sin(-rotation)
+      Vector[dx * cos_r - dy * sin_r, dx * sin_r + dy * cos_r]
+    end
+
+    # Transform a direction from world space to local space
+    def self.direction_to_local_space(dir, rotation:)
+      return dir if rotation == 0
+
+      cos_r = Math.cos(-rotation)
+      sin_r = Math.sin(-rotation)
+      Vector[dir[0] * cos_r - dir[1] * sin_r, dir[0] * sin_r + dir[1] * cos_r]
+    end
+
+    # Transform a direction from local space to world space
+    def self.direction_to_world_space(dir, rotation:)
+      return dir if rotation == 0
+
+      cos_r = Math.cos(rotation)
+      sin_r = Math.sin(rotation)
+      Vector[dir[0] * cos_r - dir[1] * sin_r, dir[0] * sin_r + dir[1] * cos_r]
+    end
+
     # Slab intersection algorithm for axis-aligned rectangles
     # Returns nil if no intersection, otherwise returns a hash with:
     #   t_enter: distance along ray to entry point (negative if ray starts inside)

@@ -27,7 +27,7 @@ module Physics
         Vector[half_width, -half_height],
         Vector[half_width, half_height],
         Vector[-half_width, half_height]
-      ].map { |corner| direction_to_world_space(corner) }
+      ].map { |corner| RectUtils.direction_to_world_space(corner, rotation: rotation) }
 
       xs = corners.map { |c| c[0] }
       ys = corners.map { |c| c[1] }
@@ -42,8 +42,8 @@ module Physics
       half_height = @height / 2.0
 
       # Transform ray to local space (centered at origin, no rotation)
-      local_start = to_local_space(ray.start_point)
-      local_dir = direction_to_local_space(ray.direction)
+      local_start = RectUtils.to_local_space(ray.start_point, center: center, rotation: rotation)
+      local_dir = RectUtils.direction_to_local_space(ray.direction, rotation: rotation)
 
       hit = RectUtils.slab_intersection(
         min_x: -half_width, min_y: -half_height,
@@ -70,7 +70,7 @@ module Physics
         else
           Vector[0, local_dir[1] > 0 ? -1 : 1]
         end
-        entry_normal = direction_to_world_space(local_entry_normal)
+        entry_normal = RectUtils.direction_to_world_space(local_entry_normal, rotation: rotation)
       end
 
       # Check if ray ends inside
@@ -86,7 +86,7 @@ module Physics
         else
           Vector[0, local_dir[1] > 0 ? 1 : -1]
         end
-        exit_normal = direction_to_world_space(local_exit_normal)
+        exit_normal = RectUtils.direction_to_world_space(local_exit_normal, rotation: rotation)
       end
 
       RaycastHit.new(
@@ -105,43 +105,12 @@ module Physics
       half_width = @width / 2.0
       half_height = @height / 2.0
 
-      local_point = to_local_space(point)
+      local_point = RectUtils.to_local_space(point, center: center, rotation: rotation)
 
       local_point[0] > -half_width &&
         local_point[0] < half_width &&
         local_point[1] > -half_height &&
         local_point[1] < half_height
-    end
-
-    private
-
-    def to_local_space(point)
-      return point - center if rotation == 0
-
-      dx = point[0] - center[0]
-      dy = point[1] - center[1]
-      cos_r = Math.cos(-rotation)
-      sin_r = Math.sin(-rotation)
-
-      Vector[dx * cos_r - dy * sin_r, dx * sin_r + dy * cos_r]
-    end
-
-    def direction_to_local_space(dir)
-      return dir if rotation == 0
-
-      cos_r = Math.cos(-rotation)
-      sin_r = Math.sin(-rotation)
-
-      Vector[dir[0] * cos_r - dir[1] * sin_r, dir[0] * sin_r + dir[1] * cos_r]
-    end
-
-    def direction_to_world_space(dir)
-      return dir if rotation == 0
-
-      cos_r = Math.cos(rotation)
-      sin_r = Math.sin(rotation)
-
-      Vector[dir[0] * cos_r - dir[1] * sin_r, dir[0] * sin_r + dir[1] * cos_r]
     end
   end
 end

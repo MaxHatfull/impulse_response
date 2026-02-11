@@ -54,7 +54,6 @@ class Level
   end
 
   def terminal(x:, z:, options: [], welcome_clip: nil)
-    return
     ambient_source = sound_source(x: x, z: z, clip: "impulse_response/assets/audio/basic_audio/computerNoise_000.wav", volume: 0.2)
       .component(SoundCastSource)
     terminal_output_source = sound_source(x: x, z: z, clip: nil, loop: false, play_on_start: false)
