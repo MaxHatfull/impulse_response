@@ -30,7 +30,7 @@ class IntroductionLevel < Level
           on_select_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Health Check completed.wav"),
           on_select: -> {
             unless door_created
-              level.door(x: 0, z: -8, level_class: CargoBayLevel)
+              level.door(x: 0, z: -8, level_class: Level0Corridor)
               door_created = true
             end
           }
