@@ -7,7 +7,7 @@ RSpec.describe Physics::RectCollider do
 
     it "can be set to a custom value" do
       rect = create_rect(center: Vector[0, 0], width: 2, height: 2, rotation: Math::PI / 4)
-      expect(rect.rotation).to eq(Math::PI / 4)
+      expect(rect.rotation).to be_within(0.0001).of(Math::PI / 4)
     end
   end
 

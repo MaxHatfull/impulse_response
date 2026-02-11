@@ -1,11 +1,19 @@
 module Physics
   class RectCollider < Collider
-    serialize :width, :height, :rotation
-    attr_reader :width, :height, :rotation
+    serialize :width, :height
+    attr_reader :width, :height
 
-    def start
-      @rotation ||= 0
-      super
+    def rotation
+      # Get Y rotation from game object's euler angles (in radians)
+      euler = game_object.euler_angles
+      y_rotation = euler[1]
+
+      # Handle gimbal lock: when X and Z are ±180°, adjust Y rotation
+      if euler[0].abs > 90 || euler[2].abs > 90
+        y_rotation = 180 - y_rotation
+      end
+
+      y_rotation * Math::PI / 180
     end
 
     def compute_aabb
@@ -13,27 +21,18 @@ module Physics
       half_height = @height / 2.0
       cx, cy = center[0], center[1]
 
-      if @rotation == 0
-        AABB.new(cx - half_width, cy - half_height, cx + half_width, cy + half_height)
-      else
-        cos_r = Math.cos(@rotation)
-        sin_r = Math.sin(@rotation)
+      # Transform local corners to world space
+      corners = [
+        Vector[-half_width, -half_height],
+        Vector[half_width, -half_height],
+        Vector[half_width, half_height],
+        Vector[-half_width, half_height]
+      ].map { |corner| direction_to_world_space(corner) }
 
-        # Calculate rotated corner offsets
-        corners = [
-          [-half_width, -half_height],
-          [half_width, -half_height],
-          [half_width, half_height],
-          [-half_width, half_height]
-        ].map do |lx, ly|
-          [lx * cos_r - ly * sin_r, lx * sin_r + ly * cos_r]
-        end
+      xs = corners.map { |c| c[0] }
+      ys = corners.map { |c| c[1] }
 
-        xs = corners.map(&:first)
-        ys = corners.map(&:last)
-
-        AABB.new(cx + xs.min, cy + ys.min, cx + xs.max, cy + ys.max)
-      end
+      AABB.new(cx + xs.min, cy + ys.min, cx + xs.max, cy + ys.max)
     end
 
     def raycast(ray, tag: nil)
@@ -144,30 +143,30 @@ module Physics
     private
 
     def to_local_space(point)
-      return point - center if @rotation == 0
+      return point - center if rotation == 0
 
       dx = point[0] - center[0]
       dy = point[1] - center[1]
-      cos_r = Math.cos(-@rotation)
-      sin_r = Math.sin(-@rotation)
+      cos_r = Math.cos(-rotation)
+      sin_r = Math.sin(-rotation)
 
       Vector[dx * cos_r - dy * sin_r, dx * sin_r + dy * cos_r]
     end
 
     def direction_to_local_space(dir)
-      return dir if @rotation == 0
+      return dir if rotation == 0
 
-      cos_r = Math.cos(-@rotation)
-      sin_r = Math.sin(-@rotation)
+      cos_r = Math.cos(-rotation)
+      sin_r = Math.sin(-rotation)
 
       Vector[dir[0] * cos_r - dir[1] * sin_r, dir[0] * sin_r + dir[1] * cos_r]
     end
 
     def direction_to_world_space(dir)
-      return dir if @rotation == 0
+      return dir if rotation == 0
 
-      cos_r = Math.cos(@rotation)
-      sin_r = Math.sin(@rotation)
+      cos_r = Math.cos(rotation)
+      sin_r = Math.sin(rotation)
 
       Vector[dir[0] * cos_r - dir[1] * sin_r, dir[0] * sin_r + dir[1] * cos_r]
     end

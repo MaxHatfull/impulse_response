@@ -13,7 +13,7 @@ class Level
       scale: Vector[width, height, length],
       rotation: Vector[0, rotation, 0],
       material: wall_material,
-      components: [Physics::RectCollider.create(width: width, height: length, rotation: rotation * Math::PI / 180, tags: [:wall])]
+      components: [Physics::RectCollider.create(width: width, height: length, tags: [:wall])]
     )
     game_object.parent = @level_root
     game_object
