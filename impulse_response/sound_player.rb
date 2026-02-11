@@ -107,7 +107,7 @@ class SoundPlayer
 
     room_size = contributions.sum { |c|
       c[:volume] * Math.sqrt(c[:distance]) * 0.05
-    }.clamp(0.0, 0.8)
+    }.clamp(0.0, 0.5)
 
     dry = contributions.select { |c| c[:bounces] <= 1 }.sum { |c| c[:volume] }
     wet = contributions.select { |c| c[:bounces] > 1 }.sum { |c| c[:volume] }
@@ -115,7 +115,10 @@ class SoundPlayer
     dry = (dry / total_volume).clamp(0.0, 1.0)
     wet = (wet / total_volume).clamp(0.0, 1.0)
 
-    { room_size: room_size, damping: 0.3, wet: wet, dry: dry }
+    avg_distance = contributions.sum { |c| c[:volume] * c[:distance] } / total_volume
+    damping = (avg_distance / max_distance * 0.5).clamp(0.0, 0.5)
+
+    { room_size: room_size, damping: damping, wet: wet, dry: dry }
   end
 
   def listener_pos
