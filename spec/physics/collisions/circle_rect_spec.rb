@@ -102,5 +102,56 @@ RSpec.describe Physics::Collisions::CircleRect do
       expect(result.contact_point[0]).to be_within(0.001).of(1)
       expect(result.contact_point[1]).to be_within(0.001).of(0)
     end
+
+    context "with rotated rect" do
+      it "returns nil when circle misses rotated rect" do
+        # 4x2 rect rotated 90 degrees (becomes 2x4)
+        # Circle at (2, 0) with radius 0.5 would hit unrotated but misses rotated
+        circle = create_circle(center: Vector[2, 0], radius: 0.5)
+        rect = create_rect(center: Vector[0, 0], width: 4, height: 2, rotation: Math::PI / 2)
+
+        result = Physics::Collisions::CircleRect.check(circle, rect)
+
+        # Rotated rect only extends from x=-1 to x=1, circle at x=2 misses
+        expect(result).to be_nil
+      end
+
+      it "returns collision when circle hits rotated rect" do
+        # 4x2 rect rotated 90 degrees (becomes 2x4)
+        circle = create_circle(center: Vector[1.5, 0], radius: 1)
+        rect = create_rect(center: Vector[0, 0], width: 4, height: 2, rotation: Math::PI / 2)
+
+        result = Physics::Collisions::CircleRect.check(circle, rect)
+
+        # Circle at x=1.5 with radius 1 overlaps rect edge at x=1
+        expect(result).to be_a(Physics::Collision)
+        expect(result.penetration).to be_within(0.001).of(0.5)
+      end
+
+      it "returns correct normal for rotated rect" do
+        # 4x2 rect rotated 90 degrees (becomes 2x4)
+        circle = create_circle(center: Vector[1.5, 0], radius: 1)
+        rect = create_rect(center: Vector[0, 0], width: 4, height: 2, rotation: Math::PI / 2)
+
+        result = Physics::Collisions::CircleRect.check(circle, rect)
+
+        # Normal points from circle toward rect (the penetration direction)
+        # Circle is to the right, rect is to the left, so normal points left
+        expect(result.normal[0]).to be_within(0.001).of(-1)
+        expect(result.normal[1]).to be_within(0.001).of(0)
+      end
+
+      it "handles 45-degree rotated rect" do
+        # 4x2 rect rotated 45 degrees
+        # Circle at (2, 2) would miss unrotated rect but hits rotated
+        circle = create_circle(center: Vector[1.2, 1.2], radius: 0.5)
+        rect = create_rect(center: Vector[0, 0], width: 4, height: 2, rotation: Math::PI / 4)
+
+        result = Physics::Collisions::CircleRect.check(circle, rect)
+
+        # The rotated rect extends diagonally, circle should hit
+        expect(result).to be_a(Physics::Collision)
+      end
+    end
   end
 end
