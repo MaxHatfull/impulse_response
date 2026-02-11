@@ -64,10 +64,11 @@ class SoundPlayer
     hits.each do |hit|
       volume = hit_volume(hit)
       bounces = hit.total_bounces
+      distance = hit.travel_distance
       left_pan, right_pan = stereo_pan(hit)
 
-      @left_contributions << { volume: volume * left_pan, bounces: bounces }
-      @right_contributions << { volume: volume * right_pan, bounces: bounces }
+      @left_contributions << { volume: volume * left_pan, bounces: bounces, distance: distance }
+      @right_contributions << { volume: volume * right_pan, bounces: bounces, distance: distance }
     end
   end
 
@@ -101,29 +102,16 @@ class SoundPlayer
   def reverb_from_contributions(contributions)
     return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 0.0 } if contributions.empty?
 
-    grouped = contributions.group_by { |c| c[:bounces] }
-
-    total_volume = 0.0
-    weighted_dry = 0.0
-    weighted_wet = 0.0
-    weighted_bounces = 0.0
-
-    grouped.each do |bounce_count, group|
-      group_volume = group.sum { |c| c[:volume] }
-      total_volume += group_volume
-
-      dry_weight = 1.0 / (bounce_count + 1)
-      wet_weight = bounce_count.to_f / (bounce_count + 1)
-
-      weighted_dry += group_volume * dry_weight
-      weighted_wet += group_volume * wet_weight
-      weighted_bounces += group_volume * bounce_count
-    end
-
+    total_volume = contributions.sum { |c| c[:volume] }
     return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 0.0 } if total_volume <= 0
 
-    avg_bounces = weighted_bounces / total_volume
-    room_size = (Math.sqrt(avg_bounces) / 20.0).clamp(0.0, 1.0)
+    room_size = contributions.sum { |c|
+      c[:volume] * c[:bounces] * Math.sqrt(c[:distance]) / Math.sqrt(max_distance) * 0.2
+    }.clamp(0.0, 1.0)
+
+    weighted_dry = contributions.sum { |c| c[:volume] / (c[:bounces] + 1) }
+    weighted_wet = contributions.sum { |c| c[:volume] * c[:bounces] / (c[:bounces] + 1) }
+
     dry = (weighted_dry / total_volume).clamp(0.0, 1.0)
     wet = (weighted_wet / total_volume).clamp(0.0, 1.0)
 
