@@ -1,5 +1,10 @@
 class SoundListener < Engine::Component
+  class << self
+    attr_accessor :instance
+  end
+
   def awake
+    SoundListener.instance = self
     @sound_players = {}
   end
 
@@ -21,7 +26,7 @@ class SoundListener < Engine::Component
     @sound_players[source]&.stop
   end
 
-  def set_clip(source, clip)
-    @sound_players[source]&.set_clip(clip)
+  def clip_changed(source)
+    @sound_players[source]&.clip_changed
   end
 end

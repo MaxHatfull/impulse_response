@@ -1,22 +1,12 @@
 class SoundCaster
   EPSILON = 0.001
 
-  attr_reader :max_distance, :beam_strength, :clip, :loop, :play_on_start
-
-  def initialize(beam_count:, length:, volume: 1.0, clip:, loop: true, play_on_start: true)
+  def initialize(beam_count:, max_distance:)
     @beam_count = beam_count
-    @max_distance = length
-    @beam_strength = volume / beam_count.to_f
-    @clip = clip
-    @loop = loop
-    @play_on_start = play_on_start
-    @playing = play_on_start
-    @known_listeners = Set.new
+    @max_distance = max_distance
   end
 
   def cast_beams(start:)
-    return unless @playing
-
     all_hits = Hash.new { |h, k| h[k] = [] }
 
     @beam_count.times do |i|
@@ -27,7 +17,7 @@ class SoundCaster
       end
     end
 
-    notify_listeners(all_hits)
+    all_hits.values.flatten
   end
 
   def cast_beam(start:, direction:)
@@ -73,45 +63,7 @@ class SoundCaster
     listener_hits
   end
 
-  def destroy
-    @known_listeners.each { |listener| listener.remove_source(self) }
-  end
-
-  def play
-    @playing = true
-    @known_listeners.each { |listener| listener.play_source(self) }
-  end
-
-  def stop
-    @playing = false
-    @known_listeners.each { |listener| listener.stop_source(self) }
-  end
-
-  def set_clip(clip)
-    @clip = clip
-    @known_listeners.each { |listener| listener.set_clip(self, clip) }
-  end
-
   private
-
-  def notify_listeners(listener_hits)
-    current_listeners = Set.new
-
-    listener_hits.each do |game_object, hits|
-      listener = game_object.component(SoundListener)
-      next unless listener
-
-      current_listeners.add(listener)
-      listener.on_sound_hits(self, hits)
-    end
-
-    # Remove sources for listeners no longer in range
-    (@known_listeners - current_listeners).each do |listener|
-      listener.remove_source(self)
-    end
-
-    @known_listeners = current_listeners
-  end
 
   def has_tag?(hit, tag)
     hit.collider.tags.include?(tag)

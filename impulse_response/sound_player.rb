@@ -47,12 +47,12 @@ class SoundPlayer
     @right_audio.set_looping(@source.loop)
   end
 
-  def set_clip(clip)
+  def clip_changed
     @left_audio.stop
     @right_audio.stop
 
-    @left_audio = NativeAudio::AudioSource.new(clip)
-    @right_audio = NativeAudio::AudioSource.new(clip)
+    @left_audio = NativeAudio::AudioSource.new(@source.clip)
+    @right_audio = NativeAudio::AudioSource.new(@source.clip)
 
     play
   end
