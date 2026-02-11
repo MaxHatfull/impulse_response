@@ -11,6 +11,7 @@ class PlayerController < Engine::Component
     handle_look
     handle_movement(delta_time)
     resolve_collisions
+    handle_click
   end
 
   def enable
@@ -56,5 +57,11 @@ class PlayerController < Engine::Component
 
   def collider
     @collider ||= game_object.component(Physics::CircleCollider)
+  end
+
+  def handle_click
+    return unless Engine::Input.key_down?(Engine::Input::KEY_SPACE)
+
+    game_object.component(SoundCastSource)&.play
   end
 end
