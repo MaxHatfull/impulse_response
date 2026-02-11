@@ -1,5 +1,6 @@
 class SoundCaster
   EPSILON = 0.001
+  MAX_BOUNCES = 5
 
   def initialize(beam_count:, max_distance:)
     @beam_count = beam_count
@@ -7,42 +8,34 @@ class SoundCaster
   end
 
   def cast_beams(start:)
-    all_hits = Hash.new { |h, k| h[k] = [] }
-
-    @beam_count.times do |i|
+    @beam_count.times.flat_map do |i|
       angle = i * Math::PI / (@beam_count / 2.0)
       direction = rotate_direction(Vector[0, 1], angle)
-      cast_beam(start:, direction:).each do |game_object, hits|
-        all_hits[game_object].concat(hits)
-      end
+      cast_beam(start:, direction:)
     end
-
-    all_hits.values.flatten
   end
 
   def cast_beam(start:, direction:)
-    listener_hits = Hash.new { |h, k| h[k] = [] }
+    hits = []
     current_pos = start
     current_dir = direction.normalize
     remaining_length = @max_distance
     distance_traveled = 0
     bounce_count = 0
 
-    while remaining_length > 0
+    while remaining_length > 0 && bounce_count < MAX_BOUNCES
       ray = Physics::Ray.new(start_point: current_pos, direction: current_dir, length: remaining_length)
-      hits = Physics.raycast(ray)
+      raycast_hits = Physics.raycast(ray)
 
-      wall_hit = hits.select { |h| has_tag?(h, :wall) }.min_by(&:entry_distance)
+      wall_hit = raycast_hits.select { |h| has_tag?(h, :wall) }.min_by(&:entry_distance)
       max_distance = wall_hit ? wall_hit.entry_distance : remaining_length
 
-      hits.select { |h| has_tag?(h, :listener) && h.entry_distance < max_distance && coming_towards?(h, current_dir) }.each do |h|
-        sound_hit = SoundHit.new(
+      raycast_hits.select { |h| has_tag?(h, :listener) && h.entry_distance < max_distance && coming_towards?(h, current_dir) }.each do |h|
+        hits << SoundHit.new(
           raycast_hit: h,
           travel_distance: distance_traveled + h.entry_distance,
           total_bounces: bounce_count
         )
-        game_object = h.collider.game_object
-        listener_hits[game_object] << sound_hit
       end
 
       if wall_hit && wall_hit.entry_distance < remaining_length && wall_hit.entry_distance > EPSILON
@@ -60,7 +53,7 @@ class SoundCaster
       end
     end
 
-    listener_hits
+    hits
   end
 
   private
