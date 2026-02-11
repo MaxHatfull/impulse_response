@@ -23,6 +23,14 @@ class SoundCastSource < Engine::Component
   def update(delta_t)
     return unless @playing
 
+    if !@loop && @play_time
+      @play_time += delta_t
+      if @play_time >= @clip.duration
+        stop
+        return
+      end
+    end
+
     pos = game_object.pos
     hits = @caster.cast_beams(start: Vector[pos[0], pos[2]])
     SoundListener.instance&.on_sound_hits(self, hits)
@@ -34,11 +42,13 @@ class SoundCastSource < Engine::Component
 
   def play
     @playing = true
+    @play_time = 0
     SoundListener.instance&.play_source(self)
   end
 
   def stop
     @playing = false
+    @play_time = nil
     SoundListener.instance&.stop_source(self)
   end
 
