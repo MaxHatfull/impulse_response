@@ -11,7 +11,15 @@ class Player
         PlayerController.create(move_speed: 5.0, look_sensitivity: 0.3),
         Physics::CircleCollider.create(radius: 0.5, tags: [:player]),
         Physics::CircleCollider.create(radius: 2, tags: [:listener]),
-        SoundListener.create
+        SoundListener.create,
+        SoundCastSource.create(
+          clip_path: "impulse_response/assets/audio/clicks/DullClick2.wav",
+          beam_count: 64,
+          beam_length: 50,
+          volume: 40.0,
+          loop: false,
+          play_on_start: false
+        )
       ]
     )
 

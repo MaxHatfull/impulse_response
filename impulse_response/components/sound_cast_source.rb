@@ -1,36 +1,59 @@
 class SoundCastSource < Engine::Component
   serialize :beam_length, :beam_count, :volume, :clip_path, :loop, :play_on_start
 
+  attr_reader :clip, :max_distance
+
   def start
-    clip = NativeAudio::Clip.new(@clip_path || "impulse_response/assets/audio/basic_audio/test.wav")
-    @caster = SoundCaster.new(
-      beam_count: @beam_count,
-      length: @beam_length,
-      volume: @volume || 1.0,
-      clip: clip,
-      loop: @loop.nil? ? true : @loop,
-      play_on_start: @play_on_start.nil? ? true : @play_on_start
-    )
+    @clip = NativeAudio::Clip.new(@clip_path || "impulse_response/assets/audio/basic_audio/test.wav")
+    @volume ||= 1.0
+    @loop = true if @loop.nil?
+    @playing = @play_on_start.nil? ? true : @play_on_start
+    @max_distance = @beam_length
+    @caster = SoundCaster.new(beam_count: @beam_count, max_distance: @max_distance)
+  end
+
+  def loop
+    @loop
+  end
+
+  def beam_strength
+    @volume / @beam_count.to_f
   end
 
   def update(delta_t)
+    return unless @playing
+
+    if !@loop && @play_time
+      @play_time += delta_t
+      if @play_time >= @clip.duration
+        stop
+        return
+      end
+    end
+
     pos = game_object.pos
-    @caster.cast_beams(start: Vector[pos[0], pos[2]])
+    hits = @caster.cast_beams(start: Vector[pos[0], pos[2]])
+    SoundListener.instance&.on_sound_hits(self, hits)
   end
 
   def destroy
-    @caster.destroy
+    SoundListener.instance&.remove_source(self)
   end
 
   def play
-    @caster.play
+    @playing = true
+    @play_time = 0
+    SoundListener.instance&.play_source(self)
   end
 
   def stop
-    @caster.stop
+    @playing = false
+    @play_time = nil
+    SoundListener.instance&.stop_source(self)
   end
 
   def set_clip(clip)
-    @caster.set_clip(clip)
+    @clip = clip
+    SoundListener.instance&.clip_changed(self)
   end
 end
