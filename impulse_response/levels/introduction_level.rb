@@ -6,10 +6,10 @@ class IntroductionLevel < Level
     level = self
     door_created = false
 
-    # Terminal on one side of the octagon
+    # Terminal in center of the octagon
     terminal(
       x: 0,
-      z: -6,
+      z: 0,
       welcome_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Welcome.wav"),
       options: [
         {
@@ -30,7 +30,7 @@ class IntroductionLevel < Level
           on_select_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Health Check completed.wav"),
           on_select: -> {
             unless door_created
-              level.door(x: 0, z: 8, level_class: CargoBayLevel)
+              level.door(x: 0, z: -8, level_class: CargoBayLevel)
               door_created = true
             end
           }
@@ -38,8 +38,8 @@ class IntroductionLevel < Level
       ]
     )
 
-    # Player spawn in center
-    player_spawn(x: 0, z: 0, rotation: 0)
+    # Player spawn near wall, facing terminal
+    player_spawn(x: 0, z: 8, rotation: 180)
   end
 
   private

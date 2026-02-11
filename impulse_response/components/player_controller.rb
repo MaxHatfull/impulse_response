@@ -60,7 +60,8 @@ class PlayerController < Engine::Component
   end
 
   def handle_click
-    return unless Engine::Input.key_down?(Engine::Input::KEY_SPACE)
+    return unless Engine::Input.key_down?(Engine::Input::KEY_SPACE) ||
+      Engine::Input.key_down?(Engine::Input::MOUSE_BUTTON_LEFT)
 
     game_object.component(SoundCastSource)&.play
   end
