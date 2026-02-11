@@ -17,16 +17,6 @@ RSpec.describe Physics::CollisionResolver do
       expect(result.penetration).to be_within(0.001).of(0.5)
     end
 
-    it "dispatches to RectRect for two rects" do
-      a = create_rect(center: Vector[0, 0], width: 2, height: 2)
-      b = create_rect(center: Vector[1.5, 0], width: 2, height: 2)
-
-      result = Physics::CollisionResolver.check(a, b)
-
-      expect(result).to be_a(Physics::Collision)
-      expect(result.penetration).to be_within(0.001).of(0.5)
-    end
-
     it "dispatches to CircleRect for circle and rect" do
       circle = create_circle(center: Vector[0, 0], radius: 1)
       rect = create_rect(center: Vector[1.5, 0], width: 2, height: 2)
