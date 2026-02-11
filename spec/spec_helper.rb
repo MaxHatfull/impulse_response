@@ -23,8 +23,11 @@ module ColliderHelpers
     collider
   end
 
-  def create_rect(center:, width:, height:, tags: [])
-    go = Engine::GameObject.create(pos: Vector[center[0], 0, center[1]])
+  def create_rect(center:, width:, height:, rotation: 0, tags: [])
+    go = Engine::GameObject.create(
+      pos: Vector[center[0], 0, center[1]],
+      rotation: Vector[0, rotation * 180 / Math::PI, 0]  # Convert radians to degrees for game object
+    )
     collider = Physics::RectCollider.create(width: width, height: height, tags: tags, game_object: go)
     collider.start  # Simulate engine lifecycle for tests
     collider

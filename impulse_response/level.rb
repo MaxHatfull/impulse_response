@@ -7,10 +7,11 @@ class Level
     raise NotImplementedError, "Subclasses must implement #create"
   end
 
-  def wall(x:, z:, width:, length:, height: 1)
+  def wall(x:, z:, width:, length:, height: 1, rotation: 0)
     game_object = Engine::StandardObjects::Cube.create(
       pos: Vector[x, height / 2.0, z],
       scale: Vector[width, height, length],
+      rotation: Vector[0, rotation, 0],
       material: wall_material,
       components: [Physics::RectCollider.create(width: width, height: length, tags: [:wall])]
     )

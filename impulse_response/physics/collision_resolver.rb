@@ -2,7 +2,6 @@ module Physics
   class CollisionResolver
     HANDLERS = {
       [CircleCollider, CircleCollider] => Collisions::CircleCircle,
-      [RectCollider, RectCollider] => Collisions::RectRect,
       [CircleCollider, RectCollider] => Collisions::CircleRect
     }.freeze
 

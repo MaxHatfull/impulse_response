@@ -3,11 +3,36 @@ module Physics
     serialize :width, :height
     attr_reader :width, :height
 
+    def rotation
+      # Get Y rotation from game object's euler angles (in radians)
+      euler = game_object.euler_angles
+      y_rotation = euler[1]
+
+      # Handle gimbal lock: when X and Z are ±180°, adjust Y rotation
+      if euler[0].abs > 90 || euler[2].abs > 90
+        y_rotation = 180 - y_rotation
+      end
+
+      y_rotation * Math::PI / 180
+    end
+
     def compute_aabb
       half_width = @width / 2.0
       half_height = @height / 2.0
       cx, cy = center[0], center[1]
-      AABB.new(cx - half_width, cy - half_height, cx + half_width, cy + half_height)
+
+      # Transform local corners to world space
+      corners = [
+        Vector[-half_width, -half_height],
+        Vector[half_width, -half_height],
+        Vector[half_width, half_height],
+        Vector[-half_width, half_height]
+      ].map { |corner| RectUtils.direction_to_world_space(corner, rotation: rotation) }
+
+      xs = corners.map { |c| c[0] }
+      ys = corners.map { |c| c[1] }
+
+      AABB.new(cx + xs.min, cy + ys.min, cx + xs.max, cy + ys.max)
     end
 
     def raycast(ray, tag: nil)
@@ -16,61 +41,36 @@ module Physics
       half_width = @width / 2.0
       half_height = @height / 2.0
 
-      min_x = center[0] - half_width
-      max_x = center[0] + half_width
-      min_y = center[1] - half_height
-      max_y = center[1] + half_height
+      # Transform ray to local space (centered at origin, no rotation)
+      local_start = RectUtils.to_local_space(ray.start_point, center: center, rotation: rotation)
+      local_dir = RectUtils.direction_to_local_space(ray.direction, rotation: rotation)
 
-      # t refers to units along the ray
-      entry_axis = nil
-      exit_axis = nil
+      hit = RectUtils.slab_intersection(
+        min_x: -half_width, min_y: -half_height,
+        max_x: half_width, max_y: half_height,
+        ray_start: local_start, ray_dir: local_dir, ray_length: ray.length
+      )
+      return nil unless hit
 
-      if ray.direction[0] != 0.0
-        t_min_x = (min_x - ray.start_point[0]) / ray.direction[0]
-        t_max_x = (max_x - ray.start_point[0]) / ray.direction[0]
-        t_min_x, t_max_x = t_max_x, t_min_x if t_min_x > t_max_x
-      else
-        return nil if ray.start_point[0] < min_x || ray.start_point[0] > max_x
-        t_min_x = -Float::INFINITY
-        t_max_x = Float::INFINITY
-      end
-
-      if ray.direction[1] != 0.0
-        t_min_y = (min_y - ray.start_point[1]) / ray.direction[1]
-        t_max_y = (max_y - ray.start_point[1]) / ray.direction[1]
-        t_min_y, t_max_y = t_max_y, t_min_y if t_min_y > t_max_y
-      else
-        return nil if ray.start_point[1] < min_y || ray.start_point[1] > max_y
-        t_min_y = -Float::INFINITY
-        t_max_y = Float::INFINITY
-      end
-
-      t_enter = [t_min_x, t_min_y].max
-      t_exit = [t_max_x, t_max_y].min
-
-      # Track which axis determined entry/exit for normal calculation
-      entry_axis = t_enter == t_min_x ? :x : :y
-      exit_axis = t_exit == t_max_x ? :x : :y
-
-      return nil if t_enter > t_exit
-      return nil if t_exit < 0
+      t_enter = hit[:t_enter]
+      t_exit = hit[:t_exit]
+      entry_axis = hit[:entry_axis]
+      exit_axis = hit[:exit_axis]
 
       # Check if ray starts inside
       starts_inside = t_enter < 0
-
-      # Ray is too short to reach entry point
-      return nil if !starts_inside && t_enter > ray.length
 
       if starts_inside
         entry_point = ray.start_point
         entry_normal = nil
       else
         entry_point = ray.start_point + ray.direction * t_enter
-        entry_normal = if entry_axis == :x
-          Vector[ray.direction[0] > 0 ? -1 : 1, 0]
+        local_entry_normal = if entry_axis == :x
+          Vector[local_dir[0] > 0 ? -1 : 1, 0]
         else
-          Vector[0, ray.direction[1] > 0 ? -1 : 1]
+          Vector[0, local_dir[1] > 0 ? -1 : 1]
         end
+        entry_normal = RectUtils.direction_to_world_space(local_entry_normal, rotation: rotation)
       end
 
       # Check if ray ends inside
@@ -81,11 +81,12 @@ module Physics
         exit_normal = nil
       else
         exit_point = ray.start_point + ray.direction * t_exit
-        exit_normal = if exit_axis == :x
-          Vector[ray.direction[0] > 0 ? 1 : -1, 0]
+        local_exit_normal = if exit_axis == :x
+          Vector[local_dir[0] > 0 ? 1 : -1, 0]
         else
-          Vector[0, ray.direction[1] > 0 ? 1 : -1]
+          Vector[0, local_dir[1] > 0 ? 1 : -1]
         end
+        exit_normal = RectUtils.direction_to_world_space(local_exit_normal, rotation: rotation)
       end
 
       RaycastHit.new(
@@ -104,10 +105,12 @@ module Physics
       half_width = @width / 2.0
       half_height = @height / 2.0
 
-      point[0] > center[0] - half_width &&
-        point[0] < center[0] + half_width &&
-        point[1] > center[1] - half_height &&
-        point[1] < center[1] + half_height
+      local_point = RectUtils.to_local_space(point, center: center, rotation: rotation)
+
+      local_point[0] > -half_width &&
+        local_point[0] < half_width &&
+        local_point[1] > -half_height &&
+        local_point[1] < half_height
     end
   end
 end

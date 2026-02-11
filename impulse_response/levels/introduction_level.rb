@@ -1,18 +1,15 @@
 class IntroductionLevel < Level
   def create
-    # Corridor walls (4m wide, 30m long)
-    wall(x: 0, z: -15, width: 1, length: 30)      # left wall
-    wall(x: 5, z: -15, width: 1, length: 30)      # right wall
-    wall(x: 2.5, z: 0, width: 4, length: 1)       # back wall (behind player)
-    wall(x: 2.5, z: -30, width: 4, length: 1)     # front wall (behind sound)
+    # Octagon room - radius 10m, centered at origin
+    octagon_walls(center_x: 0, center_z: 0, radius: 10)
 
     level = self
     door_created = false
 
-    # Terminal halfway along corridor
+    # Terminal on one side of the octagon
     terminal(
-      x: 2.5,
-      z: -15,
+      x: 0,
+      z: -6,
       welcome_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Welcome.wav"),
       options: [
         {
@@ -33,7 +30,7 @@ class IntroductionLevel < Level
           on_select_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Health Check completed.wav"),
           on_select: -> {
             unless door_created
-              level.door(x: 2.5, z: -28, level_class: CargoBayLevel)
+              level.door(x: 0, z: 8, level_class: CargoBayLevel)
               door_created = true
             end
           }
@@ -41,7 +38,31 @@ class IntroductionLevel < Level
       ]
     )
 
-    # Player spawn at near end
-    player_spawn(x: 2.5, z: -2, rotation: 180)
+    # Player spawn in center
+    player_spawn(x: 0, z: 0, rotation: 0)
+  end
+
+  private
+
+  def octagon_walls(center_x:, center_z:, radius:)
+    # Regular octagon: 8 walls at 45° increments
+    # Wall center is at distance r * cos(π/8) from center
+    # Wall length is 2 * r * sin(π/8)
+    wall_distance = radius * Math.cos(Math::PI / 8)
+    wall_length = 2 * radius * Math.sin(Math::PI / 8)
+
+    8.times do |i|
+      angle = i * 45  # degrees
+      angle_rad = angle * Math::PI / 180
+
+      # Wall center position
+      wall_x = center_x + wall_distance * Math.sin(angle_rad)
+      wall_z = center_z - wall_distance * Math.cos(angle_rad)
+
+      # Wall rotation: perpendicular to radial direction
+      wall_rotation = angle
+
+      wall(x: wall_x, z: wall_z, width: wall_length, length: 1, rotation: wall_rotation)
+    end
   end
 end
