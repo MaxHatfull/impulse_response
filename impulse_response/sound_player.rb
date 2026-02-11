@@ -1,5 +1,5 @@
 class SoundPlayer
-  BOUNCE_LOSS = 0.4 # volume multiplier per bounce
+  BOUNCE_LOSS = 0.3 # volume multiplier per bounce
   SOUND_RANGE = 10 # distance for full volume
   DISTANCE_BUCKET_SIZE = 5 # meters per bucket
 
@@ -106,14 +106,14 @@ class SoundPlayer
     return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 0.0 } if total_volume <= 0
 
     room_size = contributions.sum { |c|
-      c[:volume] * c[:bounces] * Math.sqrt(c[:distance]) / Math.sqrt(max_distance) * 0.2
-    }.clamp(0.0, 1.0)
+      c[:volume] * Math.sqrt(c[:distance]) * 0.05
+    }.clamp(0.0, 0.8)
 
-    weighted_dry = contributions.sum { |c| c[:volume] / (c[:bounces] + 1) }
-    weighted_wet = contributions.sum { |c| c[:volume] * c[:bounces] / (c[:bounces] + 1) }
+    dry = contributions.select { |c| c[:bounces] <= 1 }.sum { |c| c[:volume] }
+    wet = contributions.select { |c| c[:bounces] > 1 }.sum { |c| c[:volume] }
 
-    dry = (weighted_dry / total_volume).clamp(0.0, 1.0)
-    wet = (weighted_wet / total_volume).clamp(0.0, 1.0)
+    dry = (dry / total_volume).clamp(0.0, 1.0)
+    wet = (wet / total_volume).clamp(0.0, 1.0)
 
     { room_size: room_size, damping: 0.3, wet: wet, dry: dry }
   end

@@ -14,9 +14,9 @@ class Player
         SoundListener.create,
         SoundCastSource.create(
           clip_path: "impulse_response/assets/audio/clicks/DullClick2.wav",
-          beam_count: 36,
+          beam_count: 64,
           beam_length: 50,
-          volume: 30.0,
+          volume: 40.0,
           loop: false,
           play_on_start: false
         )
