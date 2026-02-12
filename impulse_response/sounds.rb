@@ -25,5 +25,9 @@ module Sounds
     def debug_5
       @debug_5 ||= NativeAudio::Clip.new("impulse_response/assets/sci_fi_audio/5 Sci Fi Sound.wav")
     end
+
+    def interacter_enter
+      @interacter_enter ||= NativeAudio::Clip.new("#{BASE_PATH}/clicks/SharpClick2.wav")
+    end
   end
 end

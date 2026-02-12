@@ -17,7 +17,7 @@ class Player
 
     @tap_source = Engine::GameObject.create(
       name: "TapSource",
-      pos: Vector[0, 0, -1],
+      pos: Vector[0, 0, 0.5],
       parent: @game_object,
       components: [
         TapController.create,
