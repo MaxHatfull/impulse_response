@@ -23,7 +23,7 @@ class Level
     game_object
   end
 
-  def sound_source(x:, z:, clip: nil, beam_length: 40, beam_count: 128, volume: 10, loop: true, play_on_start: true)
+  def sound_source(x:, z:, clip: nil, beam_length: 40, beam_count: 64, volume: 10, loop: true, play_on_start: true)
     pos = Vector[x, 0.5, z]
     game_object = Engine::GameObject.create(
       pos: pos,
@@ -50,7 +50,7 @@ class Level
       pos: Vector[x, 0, z],
       components: [
         Physics::CircleCollider.create(radius: radius),
-        PlayerTrigger.create(on_enter: -> { Map.instance.load_level(level_class) })
+        Interacter.create(on_interact: -> { Map.instance.load_level(level_class) })
       ]
     )
     game_object.parent = @level_root
