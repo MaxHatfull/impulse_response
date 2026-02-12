@@ -7,6 +7,7 @@ class TerminalControls < Engine::Component
     @open = false
     @state = :idle
     @powered = true if @powered.nil?
+    update_ambient_pitch
   end
 
   def update(delta_time)
@@ -65,12 +66,18 @@ class TerminalControls < Engine::Component
 
   def power_on
     @powered = true
-    @ambient_source.play
+    update_ambient_pitch
   end
 
   def power_off
     @powered = false
-    @ambient_source.stop
+    update_ambient_pitch
+  end
+
+  def update_ambient_pitch
+    return unless @ambient_source
+
+    @ambient_source.set_pitch(@powered ? 1.0 : 0.5)
   end
 
   def play_clip(clip)

@@ -17,7 +17,7 @@ class CircuitPanel < Engine::Component
 
     process_clip_queue unless playing?
 
-    handle_menu_input if @state == :menu && !playing?
+    handle_menu_input if @state == :menu
 
     return if playing?
 
@@ -40,12 +40,14 @@ class CircuitPanel < Engine::Component
   end
 
   def announce_current_device
+    interrupt
     device = current_device[:device]
     status_clip = device.powered ? Sounds::CircuitPanel.powered : Sounds::CircuitPanel.unpowered
     queue_clips(current_device[:name_audio], status_clip)
   end
 
   def toggle_current_device
+    interrupt
     device = current_device[:device]
     @state = :toggled
 
@@ -115,5 +117,10 @@ class CircuitPanel < Engine::Component
 
   def playing?
     @clip_end_time && Time.now < @clip_end_time
+  end
+
+  def interrupt
+    @clip_queue = []
+    @clip_end_time = nil
   end
 end

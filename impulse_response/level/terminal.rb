@@ -1,7 +1,7 @@
 class Level
   class Terminal
     def self.create(parent:, x:, z:, options: [], welcome_clip: nil, powered: true)
-      ambient_source = Level::SoundSource.create(parent: parent, x: x, z: z, clip: Sounds.terminal, volume: 0.2, play_on_start: powered)
+      ambient_source = Level::SoundSource.create(parent: parent, x: x, z: z, clip: Sounds.terminal, volume: 0.2)
         .component(SoundCastSource)
       terminal_output_source = Level::SoundSource.create(parent: parent, x: x, z: z, clip: nil, beam_length: 10, beam_count: 60, loop: false, play_on_start: false)
         .component(SoundCastSource)
