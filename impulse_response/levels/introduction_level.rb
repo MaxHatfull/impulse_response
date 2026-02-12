@@ -1,4 +1,10 @@
 class IntroductionLevel < Level
+  # Octagon with radius 10 centered at origin
+  # Adding ~5m padding
+  def bounds
+    Physics::AABB.new(-15, -15, 15, 15)
+  end
+
   def create
     # Octagon room - radius 10m, centered at origin
     octagon_walls(center_x: 0, center_z: 0, radius: 10)

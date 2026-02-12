@@ -4,7 +4,6 @@ class SoundCastSource < Engine::Component
   attr_reader :clip, :max_distance
 
   def start
-    raise ArgumentError, "clip must be a NativeAudio::Clip" unless @clip.is_a?(NativeAudio::Clip)
     @volume ||= 1.0
     @loop = true if @loop.nil?
     @playing = @play_on_start.nil? ? true : @play_on_start

@@ -1,4 +1,10 @@
 class CargoBayLevel < Level
+  # Level spans x: 0 to 30, z: 0 to -31
+  # Adding ~5m padding
+  def bounds
+    Physics::AABB.new(-5, -36, 35, 5)
+  end
+
   def create
     # Outer walls (30m x 30m)
     wall(x: 15, z: 0, width: 30, length: 1)       # top
