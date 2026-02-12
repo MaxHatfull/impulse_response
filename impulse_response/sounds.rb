@@ -37,5 +37,40 @@ module Sounds
     def interacter_enter
       @interacter_enter ||= NativeAudio::Clip.new("#{BASE_PATH}/clicks/SharpClick2.wav")
     end
+
+  end
+
+  module CircuitPanel
+    BASE_PATH = "impulse_response/assets/audio/circuit_panel"
+
+    class << self
+      def ambient
+        @ambient ||= NativeAudio::Clip.new("#{BASE_PATH}/ambient.wav")
+      end
+
+      def power_on
+        @power_on ||= NativeAudio::Clip.new("#{BASE_PATH}/power_on.wav")
+      end
+
+      def power_off
+        @power_off ||= NativeAudio::Clip.new("#{BASE_PATH}/power_off.wav")
+      end
+
+      def welcome
+        @welcome ||= NativeAudio::Clip.new("#{BASE_PATH}/circuit_panel_total_power_1.wav")
+      end
+
+      def insufficient_power
+        @insufficient_power ||= NativeAudio::Clip.new("#{BASE_PATH}/insufficient_power.wav")
+      end
+
+      def powered
+        @powered ||= NativeAudio::Clip.new("#{BASE_PATH}/powered.wav")
+      end
+
+      def unpowered
+        @unpowered ||= NativeAudio::Clip.new("#{BASE_PATH}/unpowered.wav")
+      end
+    end
   end
 end

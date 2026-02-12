@@ -1,6 +1,8 @@
 class Door < Engine::Component
   serialize :powered, :locked, :sound_source, :on_open
 
+  attr_reader :powered
+
   def start
     @powered = true if @powered.nil?
     @locked = false if @locked.nil?

@@ -12,31 +12,11 @@ class Level
   end
 
   def wall(x:, z:, width:, length:, height: 1, rotation: 0)
-    game_object = Engine::StandardObjects::Cube.create(
-      pos: Vector[x, height / 2.0, z],
-      scale: Vector[width, height, length],
-      rotation: Vector[0, rotation, 0],
-      material: wall_material,
-      components: [Physics::RectCollider.create(width: width, height: length, tags: [:wall])]
-    )
-    game_object.parent = @level_root
-    game_object
+    Level::Wall.create(parent: @level_root, x: x, z: z, width: width, length: length, height: height, rotation: rotation)
   end
 
   def sound_source(x:, z:, clip: nil, beam_length: 40, beam_count: 64, volume: 10, loop: true, play_on_start: true)
-    pos = Vector[x, 0.5, z]
-    game_object = Engine::GameObject.create(
-      pos: pos,
-      components: [
-        SoundCastSource.create(
-          beam_length: beam_length, beam_count: beam_count, volume: volume,
-          clip: clip, loop: loop, play_on_start: play_on_start
-        )
-      ]
-    )
-    game_object.parent = @level_root
-    Engine::StandardObjects::Sphere.create(pos: pos, parent: @level_root)
-    game_object
+    Level::SoundSource.create(parent: @level_root, x: x, z: z, clip: clip, beam_length: beam_length, beam_count: beam_count, volume: volume, loop: loop, play_on_start: play_on_start)
   end
 
   def player_spawn(x:, z:, rotation: 0)
@@ -44,69 +24,14 @@ class Level
   end
 
   def door(x:, z:, level_class:, radius: 2, powered: true, locked: false)
-    sound_source(x: x, z: z, clip: Sounds.door_ambient)
-    effect_source = sound_source(x: x, z: z, clip: nil, loop: false, play_on_start: false)
-      .component(SoundCastSource)
-
-    door_component = Door.create(
-      powered: powered,
-      locked: locked,
-      sound_source: effect_source,
-      on_open: -> { Map.instance.load_level(level_class) }
-    )
-
-    game_object = Engine::GameObject.create(
-      pos: Vector[x, 0, z],
-      components: [
-        Physics::CircleCollider.create(radius: radius),
-        Interacter.create(on_interact: -> { door_component.try_open }),
-        door_component
-      ]
-    )
-    game_object.parent = @level_root
-    game_object
+    Level::Door.create(parent: @level_root, x: x, z: z, level_class: level_class, radius: radius, powered: powered, locked: locked)
   end
 
-  def terminal(x:, z:, options: [], welcome_clip: nil)
-    ambient_source = sound_source(x: x, z: z, clip: Sounds.terminal, volume: 0.2)
-      .component(SoundCastSource)
-    terminal_output_source = sound_source(x: x, z: z, clip: nil, beam_length: 10, beam_count: 60, loop: false, play_on_start: false)
-      .component(SoundCastSource)
-
-    terminal_controls = TerminalControls.create(
-      ambient_source: ambient_source,
-      terminal_output_source: terminal_output_source,
-      options: options,
-      welcome_clip: welcome_clip
-    )
-
-    game_object = Engine::GameObject.create(
-      pos: Vector[x, 0, z],
-      components: [
-        Physics::CircleCollider.create(radius: 2),
-        Interacter.create(on_interact: -> { terminal_controls.open }),
-        terminal_controls
-      ]
-    )
-    game_object.parent = @level_root
-    game_object
+  def terminal(x:, z:, options: [], welcome_clip: nil, powered: true)
+    Level::Terminal.create(parent: @level_root, x: x, z: z, options: options, welcome_clip: welcome_clip, powered: powered)
   end
 
-  private
-
-  def wall_material
-    @wall_material ||= begin
-      material = Engine::Material.create(shader: Engine::Shader.default)
-      material.set_vec3("baseColour", Vector[0.9, 0.2, 0.2])
-      material.set_texture("image", nil)
-      material.set_texture("normalMap", nil)
-      material.set_float("diffuseStrength", 0.5)
-      material.set_float("specularStrength", 0.3)
-      material.set_float("specularPower", 32.0)
-      material.set_vec3("ambientLight", Vector[0.02, 0.02, 0.02])
-      material.set_float("roughness", 0.6)
-      material.set_float("ambientStrength", 0.7)
-      material
-    end
+  def circuit_panel(x:, z:, devices: [], welcome_clip: nil, total_power: 1)
+    Level::CircuitPanel.create(parent: @level_root, x: x, z: z, devices: devices, welcome_clip: welcome_clip, total_power: total_power)
   end
 end

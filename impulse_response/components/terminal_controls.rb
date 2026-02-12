@@ -1,9 +1,12 @@
 class TerminalControls < Engine::Component
-  serialize :ambient_source, :terminal_output_source, :options, :welcome_clip
+  serialize :ambient_source, :terminal_output_source, :options, :welcome_clip, :powered
 
-  def awake
+  attr_reader :powered
+
+  def start
     @open = false
     @state = :idle
+    @powered = true if @powered.nil?
   end
 
   def update(delta_time)
@@ -40,6 +43,8 @@ class TerminalControls < Engine::Component
   end
 
   def open
+    return unless @powered
+
     @open = true
     @state = :welcome
     @current_menu_index = 0
@@ -50,12 +55,22 @@ class TerminalControls < Engine::Component
 
   def close
     @open = false
-    @ambient_source.play
+    @ambient_source.play if @powered
     Player.instance.enable_controls
   end
 
   def open?
     @open
+  end
+
+  def power_on
+    @powered = true
+    @ambient_source.play
+  end
+
+  def power_off
+    @powered = false
+    @ambient_source.stop
   end
 
   def play_clip(clip)

@@ -11,12 +11,13 @@ class IntroductionLevel < Level
 
     # Door starts locked and unpowered
     exit_door = door(x: 0, z: -8, level_class: Level0Corridor, powered: false, locked: true)
-      .component(Door)
+      .component(::Door)
 
-    # Terminal in center of the octagon
-    terminal(
+    # Terminal starts unpowered
+    cryo_terminal = terminal(
       x: 0,
       z: 0,
+      powered: false,
       welcome_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Welcome.wav"),
       options: [
         {
@@ -38,6 +39,23 @@ class IntroductionLevel < Level
           on_select: -> {
             exit_door.unlock
           }
+        }
+      ]
+    ).component(::TerminalControls)
+
+    # Circuit panel to control power
+    circuit_panel(
+      x: 5, z: 0,
+      total_power: 1,
+      welcome_clip: Sounds::CircuitPanel.welcome,
+      devices: [
+        {
+          name_audio: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/circuit_panel/main_door.wav"),
+          device: exit_door
+        },
+        {
+          name_audio: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/circuit_panel/terminal.wav"),
+          device: cryo_terminal
         }
       ]
     )
