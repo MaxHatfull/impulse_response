@@ -13,11 +13,11 @@ class IntroductionLevel < Level
     exit_door = door(x: 0, z: -8, level_class: Level0Corridor, powered: false, locked: true)
       .component(::Door)
 
-    # Terminal starts unpowered
+    # Terminal starts powered
     cryo_terminal = terminal(
       x: 0,
       z: 0,
-      powered: false,
+      powered: true,
       welcome_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Welcome.wav"),
       options: [
         {

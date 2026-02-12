@@ -40,6 +40,16 @@ module Sounds
 
   end
 
+  module Terminal
+    BASE_PATH = "impulse_response/assets/audio/terminal"
+
+    class << self
+      def insufficient_power
+        @insufficient_power ||= NativeAudio::Clip.new("#{BASE_PATH}/insufficient_power.wav")
+      end
+    end
+  end
+
   module CircuitPanel
     BASE_PATH = "impulse_response/assets/audio/circuit_panel"
 

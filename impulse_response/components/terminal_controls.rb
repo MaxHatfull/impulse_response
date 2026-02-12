@@ -44,7 +44,10 @@ class TerminalControls < Engine::Component
   end
 
   def open
-    return unless @powered
+    unless @powered
+      play_clip(Sounds::Terminal.insufficient_power)
+      return
+    end
 
     @open = true
     @state = :welcome
