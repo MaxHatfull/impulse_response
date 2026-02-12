@@ -31,7 +31,7 @@ class SoundCastSource < Engine::Component
       end
     end
 
-    pos = game_object.pos
+    pos = game_object.world_pos
     hits = @caster.cast_beams(start: Vector[pos[0], pos[2]])
     SoundListener.instance&.on_sound_hits(self, hits)
   end
