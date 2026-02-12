@@ -20,6 +20,8 @@ class Interacter < Engine::Component
   def start
     @player_inside = false
     @enter_clip ||= Sounds.interacter_enter
+    @enter_audio_source = NativeAudio::AudioSource.new(@enter_clip)
+    @enter_audio_source.set_looping(false)
   end
 
   def update(delta_time)
@@ -43,11 +45,7 @@ class Interacter < Engine::Component
   private
 
   def play_enter_clip
-    return unless @enter_clip
-
-    audio_source = NativeAudio::AudioSource.new(@enter_clip)
-    audio_source.set_looping(false)
-    audio_source.play
+    @enter_audio_source.play
   end
 
   def player_colliding?
