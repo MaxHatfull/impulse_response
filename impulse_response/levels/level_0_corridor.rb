@@ -1,4 +1,10 @@
 class Level0Corridor < Level
+  # Level spans x: -2.5 to +2.5, z: 0 to -40.5
+  # Adding ~5m padding
+  def bounds
+    Physics::AABB.new(-8, -46, 8, 6)
+  end
+
   def create
     puts "loading 0"
     # Long corridor - 4m wide, 40m long

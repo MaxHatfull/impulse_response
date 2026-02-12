@@ -7,6 +7,10 @@ class Level
     raise NotImplementedError, "Subclasses must implement #create"
   end
 
+  def bounds
+    raise NotImplementedError, "Subclasses must implement #bounds"
+  end
+
   def wall(x:, z:, width:, length:, height: 1, rotation: 0)
     game_object = Engine::StandardObjects::Cube.create(
       pos: Vector[x, height / 2.0, z],

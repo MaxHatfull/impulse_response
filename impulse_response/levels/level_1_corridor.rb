@@ -1,4 +1,10 @@
 class Level1Corridor < Level
+  # Level spans x: -10.5 to +10.5, z: 0.5 to -50.5
+  # Adding ~5m padding
+  def bounds
+    Physics::AABB.new(-16, -56, 16, 6)
+  end
+
   def create
     puts "loading level 1"
 

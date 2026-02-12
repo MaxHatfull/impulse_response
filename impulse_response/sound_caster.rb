@@ -1,6 +1,6 @@
 class SoundCaster
   EPSILON = 0.001
-  MAX_BOUNCES = 5
+  MAX_BOUNCES = 3
 
   def initialize(beam_count:, max_distance:)
     @beam_count = beam_count
