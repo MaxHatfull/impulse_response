@@ -4,6 +4,8 @@ class Map
   def load_level(level_class)
     @level_root&.destroy!
     @level_root = Engine::GameObject.create(name: "Level Root")
-    level_class.new(@level_root).create
+    level = level_class.new(@level_root)
+    Physics.set_bounds(level.bounds)
+    level.create
   end
 end

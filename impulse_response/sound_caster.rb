@@ -1,6 +1,6 @@
 class SoundCaster
   EPSILON = 0.001
-  MAX_BOUNCES = 5
+  MAX_BOUNCES = 3
 
   def initialize(beam_count:, max_distance:)
     @beam_count = beam_count
@@ -82,7 +82,7 @@ class SoundCaster
   end
 
   def draw_debug_line(from, to)
-    # Engine::Debug.line(to_3d(from), to_3d(to), color: [1, 1, 1])
+    #Engine::Debug.line(to_3d(from), to_3d(to), color: [1, 1, 1])
   end
 
   def to_3d(vec2)

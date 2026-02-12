@@ -4,6 +4,11 @@ module Physics
     attr_reader :width, :height
 
     def rotation
+      version = game_object.local_version
+      return @cached_rotation if @cached_rotation_version == version
+
+      @cached_rotation_version = version
+
       # Get Y rotation from game object's euler angles (in radians)
       euler = game_object.euler_angles
       y_rotation = euler[1]
@@ -13,7 +18,7 @@ module Physics
         y_rotation = 180 - y_rotation
       end
 
-      y_rotation * Math::PI / 180
+      @cached_rotation = y_rotation * Math::PI / 180
     end
 
     def compute_aabb

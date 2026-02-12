@@ -1,8 +1,12 @@
 module Physics
-  WORLD_BOUNDS = AABB.new(-50, -50, 50, 50)
+  DEFAULT_BOUNDS = AABB.new(-100, -100, 100, 100)
 
   def self.quadtree
-    @quadtree ||= Quadtree.new(WORLD_BOUNDS)
+    @quadtree ||= Quadtree.new(DEFAULT_BOUNDS)
+  end
+
+  def self.set_bounds(aabb)
+    @quadtree = Quadtree.new(aabb)
   end
 
   def self.register_collider(collider)
