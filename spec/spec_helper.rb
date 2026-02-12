@@ -46,6 +46,7 @@ RSpec.configure do |config|
 
     if defined?(NativeAudio::Clip)
       mock_clip = double("NativeAudio::Clip")
+      allow(mock_clip).to receive(:is_a?).with(NativeAudio::Clip).and_return(true)
       allow(NativeAudio::Clip).to receive(:new).and_return(mock_clip)
 
       mock_audio_source = double("NativeAudio::AudioSource",

@@ -13,7 +13,7 @@ class Player
         Physics::CircleCollider.create(radius: 2, tags: [:listener]),
         SoundListener.create,
         SoundCastSource.create(
-          clip_path: "impulse_response/assets/audio/clicks/DullClick2.wav",
+          clip: Sounds.tap,
           beam_count: 64,
           beam_length: 50,
           volume: 40.0,

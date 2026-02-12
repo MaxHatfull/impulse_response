@@ -2,6 +2,7 @@ require "ruby_rpg"
 require "singleton"
 
 # Load in dependency order
+require_relative "sounds"
 require_relative "components/player_controller"
 require_relative "components/player_trigger"
 require_relative "components/interacter"

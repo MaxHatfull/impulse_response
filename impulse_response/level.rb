@@ -30,7 +30,7 @@ class Level
       components: [
         SoundCastSource.create(
           beam_length: beam_length, beam_count: beam_count, volume: volume,
-          clip_path: clip, loop: loop, play_on_start: play_on_start
+          clip: clip, loop: loop, play_on_start: play_on_start
         )
       ]
     )
@@ -44,7 +44,7 @@ class Level
   end
 
   def door(x:, z:, level_class:, radius: 2)
-    sound_source(x: x, z: z, clip: "impulse_response/assets/sci_fi_audio/2 Sci Fi Sound.wav")
+    sound_source(x: x, z: z, clip: Sounds.door)
 
     game_object = Engine::GameObject.create(
       pos: Vector[x, 0, z],
@@ -58,7 +58,7 @@ class Level
   end
 
   def terminal(x:, z:, options: [], welcome_clip: nil)
-    ambient_source = sound_source(x: x, z: z, clip: "impulse_response/assets/audio/basic_audio/computerNoise_000.wav", volume: 0.2)
+    ambient_source = sound_source(x: x, z: z, clip: Sounds.terminal, volume: 0.2)
       .component(SoundCastSource)
     terminal_output_source = sound_source(x: x, z: z, clip: nil, beam_length: 10, beam_count: 60, loop: false, play_on_start: false)
       .component(SoundCastSource)

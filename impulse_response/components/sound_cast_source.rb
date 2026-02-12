@@ -1,10 +1,10 @@
 class SoundCastSource < Engine::Component
-  serialize :beam_length, :beam_count, :volume, :clip_path, :loop, :play_on_start
+  serialize :beam_length, :beam_count, :volume, :clip, :loop, :play_on_start
 
   attr_reader :clip, :max_distance
 
   def start
-    @clip = NativeAudio::Clip.new(@clip_path || "impulse_response/assets/audio/basic_audio/test.wav")
+    raise ArgumentError, "clip must be a NativeAudio::Clip" unless @clip.is_a?(NativeAudio::Clip)
     @volume ||= 1.0
     @loop = true if @loop.nil?
     @playing = @play_on_start.nil? ? true : @play_on_start

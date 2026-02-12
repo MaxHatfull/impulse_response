@@ -1,4 +1,8 @@
 class DebugLevel < Level
+  def bounds
+    Physics::AABB.new(-1, -50, 50, 1)
+  end
+
   def create
     # Outer walls
     wall(x: 24.5, z: 0, width: 50, length: 1)      # top
@@ -10,10 +14,10 @@ class DebugLevel < Level
     wall(x: 10, z: -15, width: 1, length: 1)
 
     # Sound sources
-    sound_source(x: 10, z: -5)
-    sound_source(x: 30, z: -10, clip: "impulse_response/assets/sci_fi_audio/1 Sci Fi Sound.wav")
-    sound_source(x: 40, z: -30, clip: "impulse_response/assets/sci_fi_audio/3 Sci Fi Sound.wav")
-    sound_source(x: 5, z: -40, clip: "impulse_response/assets/sci_fi_audio/5 Sci Fi Sound.wav")
+    sound_source(x: 10, z: -5, clip: Sounds.debug_1)
+    sound_source(x: 30, z: -10, clip: Sounds.debug_1)
+    sound_source(x: 40, z: -30, clip: Sounds.debug_3)
+    sound_source(x: 5, z: -40, clip: Sounds.debug_5)
 
     # Player spawn
     player_spawn(x: 2, z: -18)
