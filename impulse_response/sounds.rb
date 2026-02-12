@@ -7,7 +7,7 @@ module Sounds
     end
 
     def door
-      @door ||= NativeAudio::Clip.new("impulse_response/assets/sci_fi_audio/2 Sci Fi Sound.wav")
+      @door ||= NativeAudio::Clip.new("#{BASE_PATH}/door/ambient.wav")
     end
 
     def terminal
