@@ -47,7 +47,7 @@ module Physics
     def query(aabb)
       result = []
 
-      return result unless @bounds.intersects?(aabb)
+      return result unless @depth == 0 || @bounds.intersects?(aabb)
 
       @objects.each do |obj|
         result << obj if obj.aabb.intersects?(aabb)
@@ -65,7 +65,7 @@ module Physics
     def query_ray(ray)
       result = []
 
-      return result unless @bounds.intersects_ray?(ray)
+      return result unless @depth == 0 || @bounds.intersects_ray?(ray)
 
       @objects.each do |obj|
         result << obj if obj.aabb.intersects_ray?(ray)
@@ -83,7 +83,7 @@ module Physics
     def query_point(point)
       result = []
 
-      return result unless @bounds.contains_point?(point)
+      return result unless @depth == 0 || @bounds.contains_point?(point)
 
       @objects.each do |obj|
         result << obj if obj.aabb.contains_point?(point)

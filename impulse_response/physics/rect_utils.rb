@@ -39,22 +39,26 @@ module Physics
     #
     # Set ray_length to Float::INFINITY for infinite rays
     def self.slab_intersection(min_x:, min_y:, max_x:, max_y:, ray_start:, ray_dir:, ray_length: Float::INFINITY)
-      if ray_dir[0] != 0.0
-        t_min_x = (min_x - ray_start[0]) / ray_dir[0]
-        t_max_x = (max_x - ray_start[0]) / ray_dir[0]
+      # Extract vector components to avoid repeated Vector#[] calls
+      rs0, rs1 = ray_start[0], ray_start[1]
+      rd0, rd1 = ray_dir[0], ray_dir[1]
+
+      if rd0 != 0.0
+        t_min_x = (min_x - rs0) / rd0
+        t_max_x = (max_x - rs0) / rd0
         t_min_x, t_max_x = t_max_x, t_min_x if t_min_x > t_max_x
       else
-        return nil if ray_start[0] < min_x || ray_start[0] > max_x
+        return nil if rs0 < min_x || rs0 > max_x
         t_min_x = -Float::INFINITY
         t_max_x = Float::INFINITY
       end
 
-      if ray_dir[1] != 0.0
-        t_min_y = (min_y - ray_start[1]) / ray_dir[1]
-        t_max_y = (max_y - ray_start[1]) / ray_dir[1]
+      if rd1 != 0.0
+        t_min_y = (min_y - rs1) / rd1
+        t_max_y = (max_y - rs1) / rd1
         t_min_y, t_max_y = t_max_y, t_min_y if t_min_y > t_max_y
       else
-        return nil if ray_start[1] < min_y || ray_start[1] > max_y
+        return nil if rs1 < min_y || rs1 > max_y
         t_min_y = -Float::INFINITY
         t_max_y = Float::INFINITY
       end
