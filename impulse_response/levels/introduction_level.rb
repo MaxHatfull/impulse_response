@@ -9,8 +9,9 @@ class IntroductionLevel < Level
     # Octagon room - radius 10m, centered at origin
     octagon_walls(center_x: 0, center_z: 0, radius: 10)
 
-    level = self
-    door_created = false
+    # Door starts locked and unpowered
+    exit_door = door(x: 0, z: -8, level_class: Level0Corridor, powered: false, locked: true)
+      .component(Door)
 
     # Terminal in center of the octagon
     terminal(
@@ -35,10 +36,7 @@ class IntroductionLevel < Level
           menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Health Check.wav"),
           on_select_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Health Check completed.wav"),
           on_select: -> {
-            unless door_created
-              level.door(x: 0, z: -8, level_class: Level0Corridor)
-              door_created = true
-            end
+            exit_door.unlock
           }
         }
       ]

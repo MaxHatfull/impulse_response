@@ -6,8 +6,16 @@ module Sounds
       @tap ||= NativeAudio::Clip.new("#{BASE_PATH}/clicks/DullClick2.wav")
     end
 
-    def door
-      @door ||= NativeAudio::Clip.new("#{BASE_PATH}/door/ambient.wav")
+    def door_ambient
+      @door_ambient ||= NativeAudio::Clip.new("#{BASE_PATH}/door/ambient.wav")
+    end
+
+    def door_locked
+      @door_locked ||= NativeAudio::Clip.new("#{BASE_PATH}/door/locked.wav")
+    end
+
+    def door_requires_power
+      @door_requires_power ||= NativeAudio::Clip.new("#{BASE_PATH}/door/door_requires_power.wav")
     end
 
     def terminal
