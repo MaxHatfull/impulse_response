@@ -1,4 +1,4 @@
-class IntroductionLevel < Level
+class CryoRoomLevel < Level
   # Octagon with radius 10 centered at origin
   # Adding ~5m padding
   def bounds
