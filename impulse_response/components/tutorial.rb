@@ -1,40 +1,19 @@
 class Tutorial < Engine::Component
   serialize :terminal_source, :on_complete
 
-  BASE_PATH = "impulse_response/assets/audio/cryo_room/tutorial"
-
-  class << self
-    def awakening_terminal
-      @awakening_terminal ||= NativeAudio::Clip.new("#{BASE_PATH}/Awakening - Terminal only.wav")
-    end
-
-    def awakening_player
-      @awakening_player ||= NativeAudio::Clip.new("#{BASE_PATH}/Awakening - Quinn only.wav")
-    end
-
-    def health_check_exercise_2
-      @health_check_exercise_2 ||= NativeAudio::Clip.new("#{BASE_PATH}/Health Check Exercise 2.wav")
-    end
-
-    def health_check_exercise_3_and_4
-      @health_check_exercise_3_and_4 ||= NativeAudio::Clip.new("#{BASE_PATH}/Health Check Exercise 3 and 4.wav")
-    end
-
-    def health_check_complete_1
-      @health_check_complete_1 ||= NativeAudio::Clip.new("#{BASE_PATH}/Health Check Complete 1.wav")
-    end
-  end
-
   def start
     @state = :awakening
     @clip_end_time = nil
     @look_left_time = 0
     @look_right_time = 0
 
-    play_terminal_clip(Tutorial.awakening_terminal)
-    play_player_clip(Tutorial.awakening_player)
+    play_terminal_clip(Sounds::CryoRoom::Tutorial.awakening_terminal)
+    play_player_clip(Sounds::CryoRoom::Tutorial.awakening_player)
 
-    @clip_end_time = Time.now + [Tutorial.awakening_terminal.duration, Tutorial.awakening_player.duration].max
+    @clip_end_time = Time.now + [
+      Sounds::CryoRoom::Tutorial.awakening_terminal.duration,
+      Sounds::CryoRoom::Tutorial.awakening_player.duration
+    ].max
   end
 
   def update(delta_time)
@@ -70,8 +49,8 @@ class Tutorial < Engine::Component
     end
 
     if @look_left_time >= 0.3 && @look_right_time >= 0.3
-      play_terminal_clip(Tutorial.health_check_exercise_2)
-      @clip_end_time = Time.now + Tutorial.health_check_exercise_2.duration
+      play_terminal_clip(Sounds::CryoRoom::Tutorial.health_check_exercise_2)
+      @clip_end_time = Time.now + Sounds::CryoRoom::Tutorial.health_check_exercise_2.duration
       @state = :exercise_2
       @w_time = 0
       @a_time = 0
@@ -87,16 +66,16 @@ class Tutorial < Engine::Component
     @d_time += delta_time if Engine::Input.key?(Engine::Input::KEY_D)
 
     if @w_time >= 0.1 && @a_time >= 0.1 && @s_time >= 0.1 && @d_time >= 0.1
-      play_terminal_clip(Tutorial.health_check_exercise_3_and_4)
-      @clip_end_time = Time.now + Tutorial.health_check_exercise_3_and_4.duration
+      play_terminal_clip(Sounds::CryoRoom::Tutorial.health_check_exercise_3_and_4)
+      @clip_end_time = Time.now + Sounds::CryoRoom::Tutorial.health_check_exercise_3_and_4.duration
       @state = :exercise_3_and_4
     end
   end
 
   def check_for_tap
     if Engine::Input.key_down?(Engine::Input::KEY_SPACE) || Engine::Input.key_down?(Engine::Input::MOUSE_BUTTON_LEFT)
-      play_terminal_clip(Tutorial.health_check_complete_1)
-      @clip_end_time = Time.now + Tutorial.health_check_complete_1.duration
+      play_terminal_clip(Sounds::CryoRoom::Tutorial.health_check_complete_1)
+      @clip_end_time = Time.now + Sounds::CryoRoom::Tutorial.health_check_complete_1.duration
       @state = :complete
     end
   end

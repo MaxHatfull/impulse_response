@@ -83,4 +83,114 @@ module Sounds
       end
     end
   end
+
+  module CryoRoom
+    module Door
+      BASE_PATH = "impulse_response/assets/audio/cryo_room/door"
+
+      class << self
+        def corridor
+          @corridor ||= NativeAudio::Clip.new("#{BASE_PATH}/Corridor.wav")
+        end
+      end
+    end
+
+    module Terminal
+      BASE_PATH = "impulse_response/assets/audio/cryo_room/terminal"
+
+      class << self
+        def welcome
+          @welcome ||= NativeAudio::Clip.new("#{BASE_PATH}/Health Check complete 2.wav")
+        end
+
+        def ship_status
+          @ship_status ||= NativeAudio::Clip.new("#{BASE_PATH}/Ship Status.wav")
+        end
+
+        def ship_status_result_terminal
+          @ship_status_result_terminal ||= NativeAudio::Clip.new("#{BASE_PATH}/Ship Status Result - Terminal only.wav")
+        end
+
+        def ship_status_result_player
+          @ship_status_result_player ||= NativeAudio::Clip.new("#{BASE_PATH}/Ship Status Result - Quinn only.wav")
+        end
+
+        def crew_status
+          @crew_status ||= NativeAudio::Clip.new("#{BASE_PATH}/Crew Status.wav")
+        end
+
+        def crew_status_result_terminal
+          @crew_status_result_terminal ||= NativeAudio::Clip.new("#{BASE_PATH}/Crew Status Result - Terminal only.wav")
+        end
+
+        def crew_status_result_player
+          @crew_status_result_player ||= NativeAudio::Clip.new("#{BASE_PATH}/Crew Status Result - Quinn only.wav")
+        end
+
+        def cryopod_status
+          @cryopod_status ||= NativeAudio::Clip.new("#{BASE_PATH}/CryoPod Status.wav")
+        end
+
+        def cryopod_status_result
+          @cryopod_status_result ||= NativeAudio::Clip.new("#{BASE_PATH}/Cryopod status Result.wav")
+        end
+
+        def emergency_override
+          @emergency_override ||= NativeAudio::Clip.new("#{BASE_PATH}/Emergency Cryopod override.wav")
+        end
+
+        def emergency_override_result_terminal
+          @emergency_override_result_terminal ||= NativeAudio::Clip.new("#{BASE_PATH}/Emergency Cryopod Override result - Terminal only.wav")
+        end
+
+        def emergency_override_result_player
+          @emergency_override_result_player ||= NativeAudio::Clip.new("#{BASE_PATH}/Emergency Cryopod Override result - Quinn only.wav")
+        end
+      end
+    end
+
+    module CircuitPanel
+      BASE_PATH = "impulse_response/assets/audio/cryo_room/circuit_panel"
+
+      class << self
+        def main_door
+          @main_door ||= NativeAudio::Clip.new("#{BASE_PATH}/main_door.wav")
+        end
+
+        def terminal
+          @terminal ||= NativeAudio::Clip.new("#{BASE_PATH}/terminal.wav")
+        end
+
+        def cryo_pods
+          @cryo_pods ||= NativeAudio::Clip.new("#{BASE_PATH}/cryo_pods.wav")
+        end
+      end
+    end
+
+    module Tutorial
+      BASE_PATH = "impulse_response/assets/audio/cryo_room/tutorial"
+
+      class << self
+        def awakening_terminal
+          @awakening_terminal ||= NativeAudio::Clip.new("#{BASE_PATH}/Awakening - Terminal only.wav")
+        end
+
+        def awakening_player
+          @awakening_player ||= NativeAudio::Clip.new("#{BASE_PATH}/Awakening - Quinn only.wav")
+        end
+
+        def health_check_exercise_2
+          @health_check_exercise_2 ||= NativeAudio::Clip.new("#{BASE_PATH}/Health Check Exercise 2.wav")
+        end
+
+        def health_check_exercise_3_and_4
+          @health_check_exercise_3_and_4 ||= NativeAudio::Clip.new("#{BASE_PATH}/Health Check Exercise 3 and 4.wav")
+        end
+
+        def health_check_complete_1
+          @health_check_complete_1 ||= NativeAudio::Clip.new("#{BASE_PATH}/Health Check Complete 1.wav")
+        end
+      end
+    end
+  end
 end

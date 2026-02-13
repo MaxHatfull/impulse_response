@@ -23,8 +23,8 @@ class Level
     Player.instance.reset(Vector[x, 0, z], rotation: rotation)
   end
 
-  def door(x:, z:, level_class:, radius: 2, powered: true, locked: false)
-    Level::Door.create(parent: @level_root, x: x, z: z, level_class: level_class, radius: radius, powered: powered, locked: locked)
+  def door(x:, z:, level_class:, radius: 2, powered: true, locked: false, trigger_clip: nil)
+    Level::Door.create(parent: @level_root, x: x, z: z, level_class: level_class, radius: radius, powered: powered, locked: locked, trigger_clip: trigger_clip)
   end
 
   def terminal(x:, z:, options: [], welcome_clip: nil, powered: true, locked: false)

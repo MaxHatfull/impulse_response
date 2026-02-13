@@ -10,7 +10,7 @@ class CryoRoomLevel < Level
     octagon_walls(center_x: 0, center_z: 0, radius: 10)
 
     # Door starts locked and unpowered
-    exit_door = door(x: 0, z: -8, level_class: Level0Corridor, powered: false, locked: true)
+    exit_door = door(x: 0, z: -8, level_class: Level0Corridor, powered: false, locked: true, trigger_clip: Sounds::CryoRoom::Door.corridor)
       .component(::Door)
 
     # Terminal starts powered but locked
@@ -19,26 +19,26 @@ class CryoRoomLevel < Level
       z: 0,
       powered: true,
       locked: true,
-      welcome_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Health Check complete 2.wav"),
+      welcome_clip: Sounds::CryoRoom::Terminal.welcome,
       options: [
         {
-          menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Ship Status.wav"),
-          on_select_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Ship Status Result - Terminal only.wav"),
-          on_select_player_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Ship Status Result - Quinn only.wav")
+          menu_item: Sounds::CryoRoom::Terminal.ship_status,
+          on_select_clip: Sounds::CryoRoom::Terminal.ship_status_result_terminal,
+          on_select_player_clip: Sounds::CryoRoom::Terminal.ship_status_result_player
         },
         {
-          menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Crew Status.wav"),
-          on_select_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Crew Status Result - Terminal only.wav"),
-          on_select_player_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Crew Status Result - Quinn only.wav")
+          menu_item: Sounds::CryoRoom::Terminal.crew_status,
+          on_select_clip: Sounds::CryoRoom::Terminal.crew_status_result_terminal,
+          on_select_player_clip: Sounds::CryoRoom::Terminal.crew_status_result_player
         },
         {
-          menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/CryoPod Status.wav"),
-          on_select_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Cryopod status Result.wav")
+          menu_item: Sounds::CryoRoom::Terminal.cryopod_status,
+          on_select_clip: Sounds::CryoRoom::Terminal.cryopod_status_result
         },
         {
-          menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Emergency Cryopod override.wav"),
-          on_select_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Emergency Cryopod Override result - Terminal only.wav"),
-          on_select_player_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Emergency Cryopod Override result - Quinn only.wav")
+          menu_item: Sounds::CryoRoom::Terminal.emergency_override,
+          on_select_clip: Sounds::CryoRoom::Terminal.emergency_override_result_terminal,
+          on_select_player_clip: Sounds::CryoRoom::Terminal.emergency_override_result_player
         }
       ]
     ).component(::TerminalControls)
@@ -51,11 +51,11 @@ class CryoRoomLevel < Level
       welcome_clip: Sounds::CircuitPanel.welcome,
       devices: [
         {
-          name_audio: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/circuit_panel/main_door.wav"),
+          name_audio: Sounds::CryoRoom::CircuitPanel.main_door,
           device: exit_door
         },
         {
-          name_audio: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/circuit_panel/terminal.wav"),
+          name_audio: Sounds::CryoRoom::CircuitPanel.terminal,
           device: cryo_terminal
         }
       ]
