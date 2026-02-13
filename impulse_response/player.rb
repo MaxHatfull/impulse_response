@@ -25,7 +25,7 @@ class Player
           clip: Sounds.tap,
           beam_count: 64,
           beam_length: 50,
-          volume: 40.0,
+          volume: 60.0,
           loop: false,
           play_on_start: false
         )
