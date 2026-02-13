@@ -1,7 +1,7 @@
 class Player
   include Singleton
 
-  CAMERA_HEIGHT = 0.5
+  CAMERA_HEIGHT = 0.25
 
   attr_reader :voice_source
 
@@ -10,24 +10,24 @@ class Player
       name: "Player",
       pos: Vector[0, 0, 0],
       components: [
-        PlayerController.create(move_speed: 5.0, look_sensitivity: 0.3),
-        Physics::CircleCollider.create(radius: 0.5, tags: [:player]),
-        Physics::CircleCollider.create(radius: 2, tags: [:listener]),
+        PlayerController.create(move_speed: 2.5, look_sensitivity: 0.3),
+        Physics::CircleCollider.create(radius: 0.25, tags: [:player]),
+        Physics::CircleCollider.create(radius: 1, tags: [:listener]),
         SoundListener.create
       ]
     )
 
     @tap_source = Engine::GameObject.create(
       name: "TapSource",
-      pos: Vector[0, 0, 0.5],
+      pos: Vector[0, 0, 0.25],
       parent: @game_object,
       components: [
         TapController.create,
         SoundCastSource.create(
           clip: Sounds.tap,
           beam_count: 64,
-          beam_length: 50,
-          volume: 60.0,
+          beam_length: 100,
+          volume: 120.0,
           loop: false,
           play_on_start: false
         )
@@ -36,14 +36,14 @@ class Player
 
     @voice_source = Engine::GameObject.create(
       name: "VoiceSource",
-      pos: Vector[0, 0, 0.5],
+      pos: Vector[0, 0, 0.01],
       parent: @game_object,
       components: [
         SoundCastSource.create(
           clip: Sounds.tap,
           beam_count: 64,
-          beam_length: 50,
-          volume: 60.0,
+          beam_length: 100,
+          volume: 0.8,
           loop: false,
           play_on_start: false
         )

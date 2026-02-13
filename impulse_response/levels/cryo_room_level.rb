@@ -1,16 +1,16 @@
 class CryoRoomLevel < Level
-  # Octagon with radius 10 centered at origin
+  # Rectangular room 6m wide (E-W) × 14m long (N-S)
   # Adding ~5m padding
   def bounds
-    Physics::AABB.new(-15, -15, 15, 15)
+    Physics::AABB.new(-8, -12, 8, 12)
   end
 
   def create
-    # Octagon room - radius 10m, centered at origin
-    octagon_walls(center_x: 0, center_z: 0, radius: 10)
+    # Rectangular room
+    rectangular_room(center_x: 0, center_z: 0, width: 6, length: 14)
 
     # Door starts locked and unpowered
-    exit_door = door(x: 0, z: -8, level_class: Level0Corridor, powered: false, locked: true, trigger_clip: Sounds::CryoRoom::Door.corridor)
+    exit_door = door(x: 0, z: -6, level_class: Level0Corridor, powered: false, locked: true, trigger_clip: Sounds::CryoRoom::Door.corridor)
       .component(::Door)
 
     # Terminal starts powered but locked
@@ -45,7 +45,7 @@ class CryoRoomLevel < Level
 
     # Circuit panel to control power, starts locked
     cryo_circuit_panel = circuit_panel(
-      x: 5, z: 0,
+      x: 2, z: -3,
       total_power: 1,
       locked: true,
       welcome_clip: Sounds::CircuitPanel.welcome,
@@ -76,31 +76,19 @@ class CryoRoomLevel < Level
       )]
     )
 
-    # Player spawn near wall, facing terminal
-    player_spawn(x: 0, z: 8, rotation: 180)
+    # Player spawn near south wall, facing terminal
+    player_spawn(x: 0, z: 6, rotation: 180)
   end
 
   private
 
-  def octagon_walls(center_x:, center_z:, radius:)
-    # Regular octagon: 8 walls at 45° increments
-    # Wall center is at distance r * cos(π/8) from center
-    # Wall length is 2 * r * sin(π/8)
-    wall_distance = radius * Math.cos(Math::PI / 8)
-    wall_length = 2 * radius * Math.sin(Math::PI / 8)
+  def rectangular_room(center_x:, center_z:, width:, length:)
+    half_w = width / 2.0
+    half_l = length / 2.0
 
-    8.times do |i|
-      angle = i * 45  # degrees
-      angle_rad = angle * Math::PI / 180
-
-      # Wall center position
-      wall_x = center_x + wall_distance * Math.sin(angle_rad)
-      wall_z = center_z - wall_distance * Math.cos(angle_rad)
-
-      # Wall rotation: perpendicular to radial direction
-      wall_rotation = angle
-
-      wall(x: wall_x, z: wall_z, width: wall_length, length: 1, rotation: wall_rotation)
-    end
+    wall(x: center_x, z: center_z - half_l, width: width, length: 1, rotation: 0)   # North
+    wall(x: center_x, z: center_z + half_l, width: width, length: 1, rotation: 0)   # South
+    wall(x: center_x + half_w, z: center_z, width: length, length: 1, rotation: 90) # East
+    wall(x: center_x - half_w, z: center_z, width: length, length: 1, rotation: 90) # West
   end
 end

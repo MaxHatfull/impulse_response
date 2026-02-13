@@ -1,6 +1,7 @@
 class SoundPlayer
-  BOUNCE_LOSS = 0.3 # volume multiplier per bounce
+  BOUNCE_LOSS = 0.4 # volume multiplier per bounce
   SOUND_RANGE = 10 # distance for full volume
+  REVERB_RANGE = 15 # distance for full wet reverb
   DISTANCE_BUCKET_SIZE = 5 # meters per bucket
 
   # audio
@@ -116,8 +117,9 @@ class SoundPlayer
       c[:volume] * Math.sqrt(c[:distance]) * 0.05
     }.clamp(0.0, 0.5)
 
-    dry = contributions.select { |c| c[:bounces] <= 1 }.sum { |c| c[:volume] }
-    wet = contributions.select { |c| c[:bounces] > 1 }.sum { |c| c[:volume] }
+    # Scale wet/dry by distance - close sounds are dry, far sounds are wet
+    dry = contributions.sum { |c| c[:volume] * [1.0 - c[:distance] / REVERB_RANGE, 0.0].max }
+    wet = contributions.sum { |c| c[:volume] * [c[:distance] / REVERB_RANGE, 1.0].min }
 
     dry = (dry / total_volume).clamp(0.0, 1.0)
     wet = (wet / total_volume).clamp(0.0, 1.0)
