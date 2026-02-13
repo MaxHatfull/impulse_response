@@ -11,12 +11,21 @@ class Player
         PlayerController.create(move_speed: 5.0, look_sensitivity: 0.3),
         Physics::CircleCollider.create(radius: 0.5, tags: [:player]),
         Physics::CircleCollider.create(radius: 2, tags: [:listener]),
-        SoundListener.create,
+        SoundListener.create
+      ]
+    )
+
+    @tap_source = Engine::GameObject.create(
+      name: "TapSource",
+      pos: Vector[0, 0, 0.5],
+      parent: @game_object,
+      components: [
+        TapController.create,
         SoundCastSource.create(
-          clip_path: "impulse_response/assets/audio/clicks/DullClick2.wav",
+          clip: Sounds.tap,
           beam_count: 64,
           beam_length: 50,
-          volume: 40.0,
+          volume: 60.0,
           loop: false,
           play_on_start: false
         )
@@ -47,11 +56,13 @@ class Player
 
   def disable_controls
     @game_object.component(PlayerController).disable
+    @tap_source.component(TapController).disable
     Interacter.disable_all
   end
 
   def enable_controls
     @game_object.component(PlayerController).enable
+    @tap_source.component(TapController).enable
     Interacter.enable_all
   end
 end

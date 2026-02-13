@@ -1,15 +1,23 @@
 class IntroductionLevel < Level
+  # Octagon with radius 10 centered at origin
+  # Adding ~5m padding
+  def bounds
+    Physics::AABB.new(-15, -15, 15, 15)
+  end
+
   def create
     # Octagon room - radius 10m, centered at origin
     octagon_walls(center_x: 0, center_z: 0, radius: 10)
 
-    level = self
-    door_created = false
+    # Door starts locked and unpowered
+    exit_door = door(x: 0, z: -8, level_class: Level0Corridor, powered: false, locked: true)
+      .component(::Door)
 
-    # Terminal in center of the octagon
-    terminal(
+    # Terminal starts powered
+    cryo_terminal = terminal(
       x: 0,
       z: 0,
+      powered: true,
       welcome_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Welcome.wav"),
       options: [
         {
@@ -29,11 +37,25 @@ class IntroductionLevel < Level
           menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Health Check.wav"),
           on_select_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Health Check completed.wav"),
           on_select: -> {
-            unless door_created
-              level.door(x: 0, z: -8, level_class: Level0Corridor)
-              door_created = true
-            end
+            exit_door.unlock
           }
+        }
+      ]
+    ).component(::TerminalControls)
+
+    # Circuit panel to control power
+    circuit_panel(
+      x: 5, z: 0,
+      total_power: 1,
+      welcome_clip: Sounds::CircuitPanel.welcome,
+      devices: [
+        {
+          name_audio: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/circuit_panel/main_door.wav"),
+          device: exit_door
+        },
+        {
+          name_audio: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/circuit_panel/terminal.wav"),
+          device: cryo_terminal
         }
       ]
     )

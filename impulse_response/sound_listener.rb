@@ -29,4 +29,8 @@ class SoundListener < Engine::Component
   def clip_changed(source)
     @sound_players[source]&.clip_changed
   end
+
+  def pitch_changed(source)
+    @sound_players[source]&.set_pitch(source.pitch)
+  end
 end

@@ -1,5 +1,9 @@
 RSpec.describe SoundCastSource, "#destroy" do
-  let(:mock_clip) { instance_double(NativeAudio::Clip) }
+  let(:mock_clip) do
+    instance_double(NativeAudio::Clip).tap do |clip|
+      allow(clip).to receive(:is_a?).with(NativeAudio::Clip).and_return(true)
+    end
+  end
   let(:mock_audio_source) do
     instance_double(NativeAudio::AudioSource,
       play: nil, stop: nil, set_pos: nil, set_volume: nil,
@@ -17,7 +21,7 @@ RSpec.describe SoundCastSource, "#destroy" do
     source_go = Engine::GameObject.create(
       pos: Vector[0, 0, 0],
       components: [
-        SoundCastSource.create(beam_length: 20, beam_count: 8)
+        SoundCastSource.create(beam_length: 20, beam_count: 8, clip: mock_clip)
       ]
     )
     source = source_go.component(SoundCastSource)
@@ -45,7 +49,7 @@ RSpec.describe SoundCastSource, "#destroy" do
     source_go = Engine::GameObject.create(
       pos: Vector[0, 0, 0],
       components: [
-        SoundCastSource.create(beam_length: 20, beam_count: 8)
+        SoundCastSource.create(beam_length: 20, beam_count: 8, clip: mock_clip)
       ]
     )
     source = source_go.component(SoundCastSource)
@@ -57,7 +61,7 @@ RSpec.describe SoundCastSource, "#destroy" do
     source_go = Engine::GameObject.create(
       pos: Vector[0, 0, 0],
       components: [
-        SoundCastSource.create(beam_length: 20, beam_count: 8)
+        SoundCastSource.create(beam_length: 20, beam_count: 8, clip: mock_clip)
       ]
     )
     source = source_go.component(SoundCastSource)

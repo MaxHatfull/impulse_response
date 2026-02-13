@@ -1,15 +1,19 @@
 class SoundCastSource < Engine::Component
-  serialize :beam_length, :beam_count, :volume, :clip_path, :loop, :play_on_start
+  serialize :beam_length, :beam_count, :volume, :clip, :loop, :play_on_start
 
   attr_reader :clip, :max_distance
 
   def start
-    @clip = NativeAudio::Clip.new(@clip_path || "impulse_response/assets/audio/basic_audio/test.wav")
     @volume ||= 1.0
+    @pitch ||= 1.0
     @loop = true if @loop.nil?
     @playing = @play_on_start.nil? ? true : @play_on_start
     @max_distance = @beam_length
     @caster = SoundCaster.new(beam_count: @beam_count, max_distance: @max_distance)
+  end
+
+  def pitch
+    @pitch
   end
 
   def loop
@@ -31,7 +35,7 @@ class SoundCastSource < Engine::Component
       end
     end
 
-    pos = game_object.pos
+    pos = game_object.world_pos
     hits = @caster.cast_beams(start: Vector[pos[0], pos[2]])
     SoundListener.instance&.on_sound_hits(self, hits)
   end
@@ -55,5 +59,10 @@ class SoundCastSource < Engine::Component
   def set_clip(clip)
     @clip = clip
     SoundListener.instance&.clip_changed(self)
+  end
+
+  def set_pitch(pitch)
+    @pitch = pitch
+    SoundListener.instance&.pitch_changed(self)
   end
 end

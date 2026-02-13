@@ -1,6 +1,6 @@
 RSpec.describe SoundCaster do
   describe "#cast_beam" do
-    let(:sound_caster) { SoundCaster.new(beam_count: 8, length: 10, volume: 1.0, clip: nil) }
+    let(:sound_caster) { SoundCaster.new(beam_count: 8, max_distance: 10) }
 
     context "when a listener is hit" do
       it "records the listener hit" do
@@ -9,10 +9,9 @@ RSpec.describe SoundCaster do
         direction = Vector[1, 0]
 
         result = sound_caster.cast_beam(start:, direction:)
-        all_hits = result.values.flatten
 
-        expect(result.keys.length).to eq(1)
-        expect(all_hits.first).to be_a(SoundHit)
+        expect(result.length).to eq(1)
+        expect(result.first).to be_a(SoundHit)
       end
 
       it "includes travel_distance in SoundHit" do
@@ -21,9 +20,8 @@ RSpec.describe SoundCaster do
         direction = Vector[1, 0]
 
         result = sound_caster.cast_beam(start:, direction:)
-        all_hits = result.values.flatten
 
-        expect(all_hits.first.travel_distance).to be_within(0.01).of(4)
+        expect(result.first.travel_distance).to be_within(0.01).of(4)
       end
 
       it "includes the raycast_hit in SoundHit" do
@@ -32,15 +30,14 @@ RSpec.describe SoundCaster do
         direction = Vector[1, 0]
 
         result = sound_caster.cast_beam(start:, direction:)
-        all_hits = result.values.flatten
 
-        expect(all_hits.first.raycast_hit).to be_a(Physics::RaycastHit)
-        expect(all_hits.first.raycast_hit.entry_point[0]).to be_within(0.01).of(4)
+        expect(result.first.raycast_hit).to be_a(Physics::RaycastHit)
+        expect(result.first.raycast_hit.entry_point[0]).to be_within(0.01).of(4)
       end
     end
 
     context "with listener behind wall" do
-      let(:caster) { SoundCaster.new(beam_count: 8, length: 15, volume: 1.0, clip: nil) }
+      let(:caster) { SoundCaster.new(beam_count: 8, max_distance: 15) }
 
       it "does not register hit on listener behind wall" do
         create_circle(center: Vector[5, 0], radius: 1, tags: [:wall])
@@ -50,7 +47,7 @@ RSpec.describe SoundCaster do
 
         result = caster.cast_beam(start:, direction:)
 
-        expect(result.keys.length).to eq(0)
+        expect(result.length).to eq(0)
       end
 
       it "registers hit on listener in front of wall" do
@@ -61,30 +58,30 @@ RSpec.describe SoundCaster do
 
         result = caster.cast_beam(start:, direction:)
 
-        expect(result.keys.length).to eq(1)
+        # Listener gets hit twice: once going toward wall, once on bounce back
+        expect(result.length).to eq(2)
       end
     end
 
     context "with listener after wall bounce" do
       it "accumulates travel_distance through bounces" do
-        caster = SoundCaster.new(beam_count: 8, length: 20, volume: 1.0, clip: nil)
+        caster = SoundCaster.new(beam_count: 8, max_distance: 20)
         create_circle(center: Vector[5, 0], radius: 1, tags: [:wall])
         create_circle(center: Vector[-5, 0], radius: 1, tags: [:listener])
         start = Vector[0, 0]
         direction = Vector[1, 0]
 
         result = caster.cast_beam(start:, direction:)
-        all_hits = result.values.flatten
 
-        expect(result.keys.length).to eq(1)
+        expect(result.length).to eq(1)
         # 4 units to wall + 8 units back to listener = 12 total
-        expect(all_hits.first.travel_distance).to be_within(0.1).of(12)
+        expect(result.first.travel_distance).to be_within(0.1).of(12)
       end
     end
   end
 
   describe "#cast_beams" do
-    let(:sound_caster) { SoundCaster.new(beam_count: 8, length: 10, volume: 1.0, clip: nil) }
+    let(:sound_caster) { SoundCaster.new(beam_count: 8, max_distance: 10) }
 
     it "casts the specified number of beams" do
       start = Vector[0, 0]
@@ -92,52 +89,6 @@ RSpec.describe SoundCaster do
       expect(sound_caster).to receive(:cast_beam).exactly(8).times.and_call_original
 
       sound_caster.cast_beams(start:)
-    end
-
-    context "when play_on_start is false" do
-      let(:sound_caster) { SoundCaster.new(beam_count: 8, length: 10, volume: 1.0, clip: nil, play_on_start: false) }
-
-      it "does not cast beams" do
-        start = Vector[0, 0]
-
-        expect(sound_caster).not_to receive(:cast_beam)
-
-        sound_caster.cast_beams(start:)
-      end
-
-      it "casts beams after play is called" do
-        start = Vector[0, 0]
-
-        sound_caster.play
-
-        expect(sound_caster).to receive(:cast_beam).exactly(8).times.and_call_original
-
-        sound_caster.cast_beams(start:)
-      end
-    end
-
-    context "when stop is called" do
-      it "does not cast beams after stop" do
-        start = Vector[0, 0]
-
-        sound_caster.cast_beams(start:)  # should work initially
-        sound_caster.stop
-
-        expect(sound_caster).not_to receive(:cast_beam)
-
-        sound_caster.cast_beams(start:)
-      end
-
-      it "resumes casting beams after play is called again" do
-        start = Vector[0, 0]
-
-        sound_caster.stop
-        sound_caster.play
-
-        expect(sound_caster).to receive(:cast_beam).exactly(8).times.and_call_original
-
-        sound_caster.cast_beams(start:)
-      end
     end
 
     it "casts beams in evenly spaced directions" do
