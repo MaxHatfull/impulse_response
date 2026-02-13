@@ -6,7 +6,6 @@ class CircuitPanel < Engine::Component
   def awake
     @open = false
     @state = :idle
-    @clip_queue = []
     @devices ||= []
   end
 
@@ -15,11 +14,11 @@ class CircuitPanel < Engine::Component
 
     close if Engine::Input.key_down?(Engine::Input::KEY_Q)
 
-    process_clip_queue unless playing?
+    @audio_queue.update
 
     handle_menu_input if @state == :menu
 
-    return if playing?
+    return if @audio_queue.playing?
 
     if @state == :welcome || @state == :toggled
       @state = :menu
@@ -40,25 +39,25 @@ class CircuitPanel < Engine::Component
   end
 
   def announce_current_device
-    interrupt
+    @audio_queue.interrupt
     device = current_device[:device]
     status_clip = device.powered ? Sounds::CircuitPanel.powered : Sounds::CircuitPanel.unpowered
-    queue_clips(current_device[:name_audio], status_clip)
+    @audio_queue.queue(current_device[:name_audio], status_clip)
   end
 
   def toggle_current_device
-    interrupt
+    @audio_queue.interrupt
     device = current_device[:device]
     @state = :toggled
 
     if device.powered
       device.power_off
-      play_clip(Sounds::CircuitPanel.power_off)
+      @audio_queue.queue(Sounds::CircuitPanel.power_off)
     elsif power_available?
       device.power_on
-      play_clip(Sounds::CircuitPanel.power_on)
+      @audio_queue.queue(Sounds::CircuitPanel.power_on)
     else
-      play_clip(Sounds::CircuitPanel.insufficient_power)
+      @audio_queue.queue(Sounds::CircuitPanel.insufficient_power)
     end
   end
 
@@ -78,49 +77,20 @@ class CircuitPanel < Engine::Component
     @open = true
     @state = :welcome
     @current_index = 0
-    @clip_queue = []
+    @audio_queue = AudioQueue.new(@output_source)
     @ambient_source.stop
     Player.instance.disable_controls
-    play_clip(@welcome_clip) if @welcome_clip
+    @audio_queue.queue(@welcome_clip) if @welcome_clip
   end
 
   def close
     @open = false
-    @clip_queue = []
+    @audio_queue.interrupt
     @ambient_source.play
     Player.instance.enable_controls
   end
 
   def open?
     @open
-  end
-
-  def queue_clips(*clips)
-    @clip_queue = clips.compact
-    process_clip_queue
-  end
-
-  def process_clip_queue
-    return if @clip_queue.empty?
-
-    clip = @clip_queue.shift
-    play_clip(clip)
-  end
-
-  def play_clip(clip)
-    return unless clip
-
-    @output_source.set_clip(clip)
-    @output_source.play
-    @clip_end_time = Time.now + clip.duration
-  end
-
-  def playing?
-    @clip_end_time && Time.now < @clip_end_time
-  end
-
-  def interrupt
-    @clip_queue = []
-    @clip_end_time = nil
   end
 end
