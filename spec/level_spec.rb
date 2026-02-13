@@ -5,9 +5,9 @@ RSpec.describe "Levels" do
     end
   end
 
-  describe IntroductionLevel do
+  describe CryoRoomLevel do
     it "loads without error" do
-      expect { Map.instance.load_level(IntroductionLevel) }.not_to raise_error
+      expect { Map.instance.load_level(CryoRoomLevel) }.not_to raise_error
     end
   end
 

@@ -1,0 +1,96 @@
+class Tutorial < Engine::Component
+  serialize :terminal_source, :on_complete
+
+  def start
+    @state = :awakening
+    @clip_end_time = nil
+    @look_left_time = 0
+    @look_right_time = 0
+
+    play_terminal_clip(Sounds::CryoRoom::Tutorial.awakening_terminal)
+    play_player_clip(Sounds::CryoRoom::Tutorial.awakening_player)
+
+    @clip_end_time = Time.now + [
+      Sounds::CryoRoom::Tutorial.awakening_terminal.duration,
+      Sounds::CryoRoom::Tutorial.awakening_player.duration
+    ].max
+  end
+
+  def update(delta_time)
+    case @state
+    when :awakening
+      @state = :tracking_look unless playing?
+    when :tracking_look
+      track_look(delta_time)
+    when :exercise_2
+      @state = :tracking_movement unless playing?
+    when :tracking_movement
+      track_movement(delta_time)
+    when :exercise_3_and_4
+      @state = :waiting_for_tap unless playing?
+    when :waiting_for_tap
+      check_for_tap
+    when :complete
+      unless playing?
+        @on_complete&.call
+        @state = :done
+      end
+    end
+  end
+
+  private
+
+  def track_look(delta_time)
+    delta = Engine::Input.mouse_delta
+    if delta[0] > 0
+      @look_right_time += delta_time
+    elsif delta[0] < 0
+      @look_left_time += delta_time
+    end
+
+    if @look_left_time >= 0.3 && @look_right_time >= 0.3
+      play_terminal_clip(Sounds::CryoRoom::Tutorial.health_check_exercise_2)
+      @clip_end_time = Time.now + Sounds::CryoRoom::Tutorial.health_check_exercise_2.duration
+      @state = :exercise_2
+      @w_time = 0
+      @a_time = 0
+      @s_time = 0
+      @d_time = 0
+    end
+  end
+
+  def track_movement(delta_time)
+    @w_time += delta_time if Engine::Input.key?(Engine::Input::KEY_W)
+    @a_time += delta_time if Engine::Input.key?(Engine::Input::KEY_A)
+    @s_time += delta_time if Engine::Input.key?(Engine::Input::KEY_S)
+    @d_time += delta_time if Engine::Input.key?(Engine::Input::KEY_D)
+
+    if @w_time >= 0.1 && @a_time >= 0.1 && @s_time >= 0.1 && @d_time >= 0.1
+      play_terminal_clip(Sounds::CryoRoom::Tutorial.health_check_exercise_3_and_4)
+      @clip_end_time = Time.now + Sounds::CryoRoom::Tutorial.health_check_exercise_3_and_4.duration
+      @state = :exercise_3_and_4
+    end
+  end
+
+  def check_for_tap
+    if Engine::Input.key_down?(Engine::Input::KEY_SPACE) || Engine::Input.key_down?(Engine::Input::MOUSE_BUTTON_LEFT)
+      play_terminal_clip(Sounds::CryoRoom::Tutorial.health_check_complete_1)
+      @clip_end_time = Time.now + Sounds::CryoRoom::Tutorial.health_check_complete_1.duration
+      @state = :complete
+    end
+  end
+
+  def playing?
+    @clip_end_time && Time.now < @clip_end_time
+  end
+
+  def play_terminal_clip(clip)
+    @terminal_source.set_clip(clip)
+    @terminal_source.play
+  end
+
+  def play_player_clip(clip)
+    Player.instance.voice_source.set_clip(clip)
+    Player.instance.voice_source.play
+  end
+end

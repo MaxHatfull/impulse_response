@@ -7,7 +7,7 @@ RSpec.describe SoundCastSource, "#destroy" do
   let(:mock_audio_source) do
     instance_double(NativeAudio::AudioSource,
       play: nil, stop: nil, set_pos: nil, set_volume: nil,
-      set_looping: nil, set_reverb: nil
+      set_looping: nil, set_reverb: nil, set_pitch: nil
     )
   end
 

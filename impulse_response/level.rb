@@ -23,15 +23,15 @@ class Level
     Player.instance.reset(Vector[x, 0, z], rotation: rotation)
   end
 
-  def door(x:, z:, level_class:, radius: 2, powered: true, locked: false)
-    Level::Door.create(parent: @level_root, x: x, z: z, level_class: level_class, radius: radius, powered: powered, locked: locked)
+  def door(x:, z:, level_class:, radius: 2, powered: true, locked: false, trigger_clip: nil)
+    Level::Door.create(parent: @level_root, x: x, z: z, level_class: level_class, radius: radius, powered: powered, locked: locked, trigger_clip: trigger_clip)
   end
 
-  def terminal(x:, z:, options: [], welcome_clip: nil, powered: true)
-    Level::Terminal.create(parent: @level_root, x: x, z: z, options: options, welcome_clip: welcome_clip, powered: powered)
+  def terminal(x:, z:, options: [], welcome_clip: nil, powered: true, locked: false)
+    Level::Terminal.create(parent: @level_root, x: x, z: z, options: options, welcome_clip: welcome_clip, powered: powered, locked: locked)
   end
 
-  def circuit_panel(x:, z:, devices: [], welcome_clip: nil, total_power: 1)
-    Level::CircuitPanel.create(parent: @level_root, x: x, z: z, devices: devices, welcome_clip: welcome_clip, total_power: total_power)
+  def circuit_panel(x:, z:, devices: [], welcome_clip: nil, total_power: 1, locked: false)
+    Level::CircuitPanel.create(parent: @level_root, x: x, z: z, devices: devices, welcome_clip: welcome_clip, total_power: total_power, locked: locked)
   end
 end

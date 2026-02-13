@@ -18,5 +18,9 @@ class Level0Corridor < Level
 
     # Player spawn at entrance, facing down corridor
     player_spawn(x: 0, z: -2, rotation: 180)
+
+    # Play corridor trigger from player voice
+    Player.instance.voice_source.set_clip(Sounds::Level0.corridor_trigger)
+    Player.instance.voice_source.play
   end
 end

@@ -45,7 +45,7 @@ RSpec.configure do |config|
     end)
 
     if defined?(NativeAudio::Clip)
-      mock_clip = double("NativeAudio::Clip")
+      mock_clip = double("NativeAudio::Clip", duration: 1.0)
       allow(mock_clip).to receive(:is_a?).with(NativeAudio::Clip).and_return(true)
       allow(NativeAudio::Clip).to receive(:new).and_return(mock_clip)
 
@@ -60,6 +60,8 @@ RSpec.configure do |config|
 
     if defined?(Player)
       allow(Player.instance).to receive(:reset)
+      mock_voice_source = double("voice_source", set_clip: nil, play: nil)
+      allow(Player.instance).to receive(:voice_source).and_return(mock_voice_source)
     end
   end
   # rspec-expectations config goes here. You can use an alternate

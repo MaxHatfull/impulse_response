@@ -1,5 +1,5 @@
 class TerminalControls < Engine::Component
-  serialize :ambient_source, :terminal_output_source, :options, :welcome_clip, :powered
+  serialize :ambient_source, :terminal_output_source, :options, :welcome_clip, :powered, :locked
 
   attr_reader :powered
 
@@ -30,6 +30,7 @@ class TerminalControls < Engine::Component
       @state = :selected
       current_option[:on_select]&.call
       play_clip(current_option[:on_select_clip]) if current_option[:on_select_clip]
+      play_player_clip(current_option[:on_select_player_clip]) if current_option[:on_select_player_clip]
     elsif Engine::Input.key_down?(Engine::Input::KEY_W)
       @current_menu_index = (@current_menu_index - 1) % @options.length
       play_clip(current_option[:menu_item])
@@ -44,6 +45,8 @@ class TerminalControls < Engine::Component
   end
 
   def open
+    return if @locked
+
     unless @powered
       play_clip(Sounds::Terminal.insufficient_power)
       return
@@ -77,6 +80,10 @@ class TerminalControls < Engine::Component
     update_ambient_pitch
   end
 
+  def unlock
+    @locked = false
+  end
+
   def update_ambient_pitch
     return unless @ambient_source
 
@@ -87,6 +94,13 @@ class TerminalControls < Engine::Component
     @terminal_output_source.set_clip(clip)
     @terminal_output_source.play
     @clip_end_time = Time.now + clip.duration
+  end
+
+  def play_player_clip(clip)
+    Player.instance.voice_source.set_clip(clip)
+    Player.instance.voice_source.play
+    player_clip_end_time = Time.now + clip.duration
+    @clip_end_time = [@clip_end_time, player_clip_end_time].compact.max
   end
 
   def playing?
