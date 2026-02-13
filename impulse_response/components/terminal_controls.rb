@@ -1,5 +1,5 @@
 class TerminalControls < Engine::Component
-  serialize :ambient_source, :terminal_output_source, :options, :welcome_clip, :powered
+  serialize :ambient_source, :terminal_output_source, :options, :welcome_clip, :powered, :locked
 
   attr_reader :powered
 
@@ -45,6 +45,8 @@ class TerminalControls < Engine::Component
   end
 
   def open
+    return if @locked
+
     unless @powered
       play_clip(Sounds::Terminal.insufficient_power)
       return
@@ -76,6 +78,10 @@ class TerminalControls < Engine::Component
   def power_off
     @powered = false
     update_ambient_pitch
+  end
+
+  def unlock
+    @locked = false
   end
 
   def update_ambient_pitch

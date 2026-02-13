@@ -1,6 +1,6 @@
 class Level
   class Terminal
-    def self.create(parent:, x:, z:, options: [], welcome_clip: nil, powered: true)
+    def self.create(parent:, x:, z:, options: [], welcome_clip: nil, powered: true, locked: false)
       ambient_source = Level::SoundSource.create(parent: parent, x: x, z: z, clip: Sounds.terminal, volume: 0.2)
         .component(SoundCastSource)
       terminal_output_source = Level::SoundSource.create(parent: parent, x: x, z: z, clip: nil, beam_length: 10, beam_count: 60, loop: false, play_on_start: false)
@@ -11,7 +11,8 @@ class Level
         terminal_output_source: terminal_output_source,
         options: options,
         welcome_clip: welcome_clip,
-        powered: powered
+        powered: powered,
+        locked: locked
       )
 
       game_object = Engine::GameObject.create(

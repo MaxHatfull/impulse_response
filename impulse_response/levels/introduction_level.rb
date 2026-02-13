@@ -13,12 +13,13 @@ class IntroductionLevel < Level
     exit_door = door(x: 0, z: -8, level_class: Level0Corridor, powered: false, locked: true)
       .component(::Door)
 
-    # Terminal starts powered
+    # Terminal starts powered but locked
     cryo_terminal = terminal(
       x: 0,
       z: 0,
       powered: true,
-      welcome_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Welcome.wav"),
+      locked: true,
+      welcome_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Health Check complete 2.wav"),
       options: [
         {
           menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Ship Status.wav"),
@@ -42,10 +43,11 @@ class IntroductionLevel < Level
       ]
     ).component(::TerminalControls)
 
-    # Circuit panel to control power
-    circuit_panel(
+    # Circuit panel to control power, starts locked
+    cryo_circuit_panel = circuit_panel(
       x: 5, z: 0,
       total_power: 1,
+      locked: true,
       welcome_clip: Sounds::CircuitPanel.welcome,
       devices: [
         {
@@ -57,6 +59,21 @@ class IntroductionLevel < Level
           device: cryo_terminal
         }
       ]
+    ).component(::CircuitPanel)
+
+    # Tutorial sound source at terminal position
+    tutorial_source = sound_source(x: 0, z: 0, clip: nil, loop: false, play_on_start: false)
+      .component(SoundCastSource)
+
+    Engine::GameObject.create(
+      components: [Tutorial.create(
+        terminal_source: tutorial_source,
+        on_complete: -> {
+          cryo_terminal.unlock
+          cryo_circuit_panel.unlock
+          exit_door.unlock
+        }
+      )]
     )
 
     # Player spawn near wall, facing terminal

@@ -1,5 +1,5 @@
 class CircuitPanel < Engine::Component
-  serialize :ambient_source, :output_source, :welcome_clip, :total_power
+  serialize :ambient_source, :output_source, :welcome_clip, :total_power, :locked
 
   attr_accessor :devices
 
@@ -74,6 +74,8 @@ class CircuitPanel < Engine::Component
   end
 
   def open
+    return if @locked
+
     @open = true
     @state = :welcome
     @current_index = 0
@@ -92,5 +94,9 @@ class CircuitPanel < Engine::Component
 
   def open?
     @open
+  end
+
+  def unlock
+    @locked = false
   end
 end
