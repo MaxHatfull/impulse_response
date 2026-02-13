@@ -22,9 +22,12 @@ class IntroductionLevel < Level
       options: [
         {
           menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Ship Status.wav"),
+          on_select_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Ship Status result.wav")
         },
         {
           menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Crew Status.wav"),
+          on_select_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Crew Status Result - Terminal only.wav"),
+          on_select_player_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Crew Status Result - Quinn only.wav")
         },
         {
           menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/CryoPod Status.wav"),

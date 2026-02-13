@@ -16,7 +16,6 @@
         { "filename": "terminal.wav", "content": "Terminal" }
       ],
       "terminal": [
-        { "filename": "Crew Status.wav", "content": "Crew Status" },
         { "filename": "CryoPod Status.wav", "content": "CryoPod Status" },
         { "filename": "Emergency CryoPod Override selected.wav", "content": "Emergency CryoPod Override selected" },
         { "filename": "Emergency Cryopod override.wav", "content": "Emergency Cryopod override" },

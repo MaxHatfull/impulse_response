@@ -3,6 +3,8 @@ class Player
 
   CAMERA_HEIGHT = 0.5
 
+  attr_reader :voice_source
+
   def spawn
     @game_object = Engine::GameObject.create(
       name: "Player",
@@ -31,6 +33,22 @@ class Player
         )
       ]
     )
+
+    @voice_source = Engine::GameObject.create(
+      name: "VoiceSource",
+      pos: Vector[0, 0, 0.5],
+      parent: @game_object,
+      components: [
+        SoundCastSource.create(
+          clip: Sounds.tap,
+          beam_count: 64,
+          beam_length: 50,
+          volume: 60.0,
+          loop: false,
+          play_on_start: false
+        )
+      ]
+    ).component(SoundCastSource)
 
     Engine::GameObject.create(
       name: "Camera",

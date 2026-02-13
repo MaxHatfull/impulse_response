@@ -30,6 +30,7 @@ class TerminalControls < Engine::Component
       @state = :selected
       current_option[:on_select]&.call
       play_clip(current_option[:on_select_clip]) if current_option[:on_select_clip]
+      play_player_clip(current_option[:on_select_player_clip]) if current_option[:on_select_player_clip]
     elsif Engine::Input.key_down?(Engine::Input::KEY_W)
       @current_menu_index = (@current_menu_index - 1) % @options.length
       play_clip(current_option[:menu_item])
@@ -87,6 +88,13 @@ class TerminalControls < Engine::Component
     @terminal_output_source.set_clip(clip)
     @terminal_output_source.play
     @clip_end_time = Time.now + clip.duration
+  end
+
+  def play_player_clip(clip)
+    Player.instance.voice_source.set_clip(clip)
+    Player.instance.voice_source.play
+    player_clip_end_time = Time.now + clip.duration
+    @clip_end_time = [@clip_end_time, player_clip_end_time].compact.max
   end
 
   def playing?
