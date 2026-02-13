@@ -1,7 +1,7 @@
 class Level
   class Door
     def self.create(parent:, x:, z:, level_class:, radius: 2, powered: true, locked: false, trigger_clip: nil)
-      ambient_source = Level::SoundSource.create(parent: parent, x: x, z: z, clip: Sounds.door_ambient)
+      ambient_source = Level::SoundSource.create(parent: parent, x: x, z: z, clip: Sounds.door_ambient, volume: 1)
         .component(SoundCastSource)
       effect_source = Level::SoundSource.create(parent: parent, x: x, z: z, clip: nil, loop: false, play_on_start: false)
         .component(SoundCastSource)

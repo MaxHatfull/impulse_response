@@ -84,6 +84,16 @@ module Sounds
     end
   end
 
+  module Level0
+    BASE_PATH = "impulse_response/assets/audio/level_0"
+
+    class << self
+      def corridor_trigger
+        @corridor_trigger ||= NativeAudio::Clip.new("#{BASE_PATH}/Level 0 Corridor trigger.wav")
+      end
+    end
+  end
+
   module CryoRoom
     module Door
       BASE_PATH = "impulse_response/assets/audio/cryo_room/door"
