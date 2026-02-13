@@ -31,6 +31,7 @@ class IntroductionLevel < Level
         },
         {
           menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/CryoPod Status.wav"),
+          on_select_clip: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Cryopod status Result.wav")
         },
         {
           menu_item: NativeAudio::Clip.new("impulse_response/assets/audio/cryo_room/terminal/Emergency Cryopod override.wav"),
