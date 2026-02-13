@@ -11,7 +11,7 @@ module Sounds
     end
 
     def door_locked
-      @door_locked ||= NativeAudio::Clip.new("#{BASE_PATH}/door/locked.wav")
+      @door_locked ||= NativeAudio::Clip.new("#{BASE_PATH}/door/Door locked.wav")
     end
 
     def door_requires_power

@@ -14,21 +14,11 @@
         { "filename": "cryo_pods.wav", "content": "Cryo pods" },
         { "filename": "main_door.wav", "content": "Main door" },
         { "filename": "terminal.wav", "content": "Terminal" }
-      ],
-      "terminal": [
-        { "filename": "CryoPod Status.wav", "content": "CryoPod Status" },
-        { "filename": "Emergency CryoPod Override selected.wav", "content": "Emergency CryoPod Override selected" },
-        { "filename": "Emergency Cryopod override.wav", "content": "Emergency Cryopod override" },
-        { "filename": "Health Check completed.wav", "content": "Health Check completed" },
-        { "filename": "Health Check.wav", "content": "Health Check" },
-        { "filename": "Ship Status.wav", "content": "Ship Status" },
-        { "filename": "Welcome.wav", "content": "Welcome" }
       ]
     },
     "door": [
       { "filename": "ambient.wav", "content": null },
-      { "filename": "door_requires_power.wav", "content": "Door requires power" },
-      { "filename": "locked.wav", "content": "Locked" }
+      { "filename": "door_requires_power.wav", "content": "Door requires power" }
     ],
     "terminal": [
       { "filename": "insufficient_power.wav", "content": "Insufficient power" }
