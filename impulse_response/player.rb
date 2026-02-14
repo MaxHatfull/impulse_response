@@ -1,7 +1,7 @@
 class Player
   include Singleton
 
-  CAMERA_HEIGHT = 0.25
+  CAMERA_HEIGHT = 2
 
   attr_reader :voice_source
 

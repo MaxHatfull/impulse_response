@@ -9,10 +9,10 @@ class Level1Corridor < Level
     puts "loading level 1"
 
     # Basic corridor - 4m wide, 50m long
-    # Left wall with gaps for Airlock (z=-10 to z=-18) and MedBay (z=-26 to z=-34)
-    wall(x: -2, z: -5, width: 1, length: 10)     # z=0 to z=-10
-    wall(x: -2, z: -22, width: 1, length: 8)     # z=-18 to z=-26
-    wall(x: -2, z: -42, width: 1, length: 16)    # z=-34 to z=-50
+    # Left wall with gaps for MedBay (z=-26 to z=-34) and Airlock (z=-42 to z=-46)
+    wall(x: -2, z: -13, width: 1, length: 26)    # z=0 to z=-26
+    wall(x: -2, z: -38, width: 1, length: 8)     # z=-34 to z=-42
+    wall(x: -2, z: -48, width: 1, length: 4)     # z=-46 to z=-50
 
     # Right wall with gap for Stowage (z=-38 to z=-46)
     wall(x: 2, z: -19, width: 1, length: 38)     # z=0 to z=-38
@@ -20,11 +20,14 @@ class Level1Corridor < Level
     wall(x: 0, z: 0, width: 4, length: 1)        # entrance wall
     wall(x: 0, z: -50, width: 4, length: 1)      # exit wall
 
-    # Airlock room (8x8, left side)
-    # Gap is at z=-10 to z=-18 on left corridor wall
-    wall(x: -10, z: -14, width: 1, length: 8)    # west wall
-    wall(x: -5.5, z: -10, width: 8, length: 1)   # north wall (x=-9.5 to x=-1.5)
-    wall(x: -5.5, z: -18, width: 8, length: 1)   # south wall (x=-9.5 to x=-1.5)
+    # Airlock corridor (4m wide, 6m long, left side)
+    # Gap is at z=-42 to z=-46 on left corridor wall
+    wall(x: -5, z: -42, width: 6, length: 1)     # north wall
+    wall(x: -5, z: -46, width: 6, length: 1)     # south wall
+    wall(x: -8, z: -44, width: 1, length: 4)     # west wall (end)
+
+    # Door to Airlock at end of corridor
+    door(x: -7, z: -44, level_class: Airlock)
 
     # MedBay room (8x8, left side)
     # Gap is at z=-26 to z=-34 on left corridor wall
