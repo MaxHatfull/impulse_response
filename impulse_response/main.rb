@@ -17,5 +17,5 @@ Engine.start do
 
   Player.instance.spawn
   Scenery.instance.create_ground
-  Map.instance.load_level(MedBay)
+  Map.instance.load_level(Stowage)
 end
