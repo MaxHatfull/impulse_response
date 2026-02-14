@@ -36,7 +36,7 @@ class Level1Corridor < Level
     wall(x: -6, z: -12, width: 1, length: 4)     # west wall (end)
 
     # Door to MedBay at end of corridor
-    door(x: -5, z: -12, level_class: MedBay)
+    door(x: -5, z: -12, level_class: MedBay, locked: true)
 
     # Stowage corridor (4m wide, short, right side)
     # Gap is at z=-28 to z=-32 on right corridor wall
@@ -45,7 +45,7 @@ class Level1Corridor < Level
     wall(x: 6, z: -30, width: 1, length: 4)      # east wall (end)
 
     # Door to Stowage at end of corridor
-    door(x: 5, z: -30, level_class: Stowage)
+    door(x: 5, z: -30, level_class: Stowage, locked: true)
 
     # Doors
     door(x: 0, z: -48, level_class: Level1Corridor)
