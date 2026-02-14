@@ -1,0 +1,39 @@
+name: Build Windows Executable
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:  # Allow manual triggers
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'  # Using 3.4 as 4.0 may not be supported by ocran
+          bundler-cache: false
+
+      - name: Install gems
+        run: |
+          bundle config set --local without development test
+          bundle install
+
+      - name: Install ocran
+        run: gem install ocran
+
+      - name: Build executable
+        shell: cmd
+        run: ocran bin/run --gemfile Gemfile --add-all-core --gem-full --no-dep-run --output impulse_response.exe impulse_response/**/*
+
+      - name: Upload executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: impulse_response-windows
+          path: impulse_response.exe
+          retention-days: 30
