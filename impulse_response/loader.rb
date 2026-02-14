@@ -1,6 +1,8 @@
 require "ruby_rpg"
 require "singleton"
 
+DEBUG = ENV['DEBUG'] == 'true'
+
 # Load in dependency order
 require_relative "sounds"
 require_relative "components/player_controller"

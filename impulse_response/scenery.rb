@@ -13,12 +13,14 @@ class Scenery
     floor_material.set_float("roughness", 0.3)
     floor_material.set_float("ambientStrength", 0.7)
 
-    Engine::StandardObjects::Plane.create(
-      pos: Vector[0, 0, 0],
-      scale: Vector[100, 100, 100],
-      rotation: Vector[90, 0, 0],
-      material: floor_material
-    )
+    if DEBUG
+      Engine::StandardObjects::Plane.create(
+        pos: Vector[0, 0, 0],
+        scale: Vector[100, 100, 100],
+        rotation: Vector[90, 0, 0],
+        material: floor_material
+      )
+    end
 
     Engine::GameObject.create(
       name: "Direction Light",

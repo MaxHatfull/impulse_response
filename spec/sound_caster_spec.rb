@@ -1,6 +1,6 @@
 RSpec.describe SoundCaster do
   describe "#cast_beam" do
-    let(:sound_caster) { SoundCaster.new(beam_count: 8, max_distance: 10) }
+    let(:sound_caster) { SoundCaster.new(beam_count: 8, max_distance: 10, beam_strength: 1.0) }
 
     context "when a listener is hit" do
       it "records the listener hit" do
@@ -37,7 +37,7 @@ RSpec.describe SoundCaster do
     end
 
     context "with listener behind wall" do
-      let(:caster) { SoundCaster.new(beam_count: 8, max_distance: 15) }
+      let(:caster) { SoundCaster.new(beam_count: 8, max_distance: 15, beam_strength: 1.0) }
 
       it "does not register hit on listener behind wall" do
         create_circle(center: Vector[5, 0], radius: 1, tags: [:wall])
@@ -65,7 +65,7 @@ RSpec.describe SoundCaster do
 
     context "with listener after wall bounce" do
       it "accumulates travel_distance through bounces" do
-        caster = SoundCaster.new(beam_count: 8, max_distance: 20)
+        caster = SoundCaster.new(beam_count: 8, max_distance: 20, beam_strength: 1.0)
         create_circle(center: Vector[5, 0], radius: 1, tags: [:wall])
         create_circle(center: Vector[-5, 0], radius: 1, tags: [:listener])
         start = Vector[0, 0]
@@ -81,7 +81,7 @@ RSpec.describe SoundCaster do
   end
 
   describe "#cast_beams" do
-    let(:sound_caster) { SoundCaster.new(beam_count: 8, max_distance: 10) }
+    let(:sound_caster) { SoundCaster.new(beam_count: 8, max_distance: 10, beam_strength: 1.0) }
 
     it "casts the specified number of beams" do
       start = Vector[0, 0]

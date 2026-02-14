@@ -12,14 +12,14 @@
 
 TEXT="$1"
 OUTPUT_NAME="$2"
-MODEL="${PIPER_MODEL:-en_US-lessac-medium}"
+MODEL="${PIPER_MODEL:-en_US-libritts-high}"
 
 OUTPUT_DIR="impulse_response/assets/audio/generated"
 
 if [ -z "$TEXT" ]; then
   echo "Usage: $0 \"text to speak\" [output_name]"
   echo ""
-  echo "Set PIPER_MODEL env var to change voice (default: en_US-lessac-medium)"
+  echo "Set PIPER_MODEL env var to change voice (default: en_US-libritts-high)"
   echo "Models: https://github.com/rhasspy/piper/blob/master/VOICES.md"
   exit 1
 fi
@@ -43,6 +43,6 @@ echo "Generating: \"$TEXT\""
 echo "Model: $MODEL"
 echo "Output: $WAV_FILE"
 
-echo "$TEXT" | piper --model "$MODEL" --output_file "$WAV_FILE"
+echo "$TEXT" | piper --model "$MODEL" --speaker 100 --length-scale 1.2 --output_file "$WAV_FILE"
 
 echo "Done!"

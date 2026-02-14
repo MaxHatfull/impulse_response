@@ -26,3 +26,7 @@ Thumbs.db
 
 # Profiling
 *.dump
+
+# Piper TTS models (large files)
+/models/*.onnx
+/models/*.onnx.json

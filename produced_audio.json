@@ -1,27 +1,25 @@
 {
   "audio": {
     "circuit_panel": [
-      { "filename": "ambient.wav", "content": null },
-      { "filename": "circuit_panel_total_power_1.wav", "content": "Circuit panel total power 1" },
-      { "filename": "insufficient_power.wav", "content": "Insufficient power" },
-      { "filename": "power_off.wav", "content": "Power off" },
-      { "filename": "power_on.wav", "content": "Power on" },
-      { "filename": "powered.wav", "content": "Powered" },
-      { "filename": "unpowered.wav", "content": "Unpowered" }
+      { "filename": "circuit_panel_total_power_1.wav", "content": "Circuit panel total power 1..." },
+      { "filename": "insufficient_power.wav", "content": "Insufficient power..." },
+      { "filename": "power_off.wav", "content": "Power off..." },
+      { "filename": "power_on.wav", "content": "Power on..." },
+      { "filename": "powered.wav", "content": "Powered..." },
+      { "filename": "unpowered.wav", "content": "Unpowered..." }
     ],
     "cryo_room": {
       "circuit_panel": [
-        { "filename": "cryo_pods.wav", "content": "Cryo pods" },
-        { "filename": "main_door.wav", "content": "Main door" },
-        { "filename": "terminal.wav", "content": "Terminal" }
+        { "filename": "cryo_pods.wav", "content": "Cryo pods..." },
+        { "filename": "main_door.wav", "content": "Main door..." },
+        { "filename": "terminal.wav", "content": "Terminal..." }
       ]
     },
     "door": [
-      { "filename": "ambient.wav", "content": null },
-      { "filename": "door_requires_power.wav", "content": "Door requires power" }
+      { "filename": "door_requires_power.wav", "content": "Door requires power..." }
     ],
     "terminal": [
-      { "filename": "insufficient_power.wav", "content": "Insufficient power" }
+      { "filename": "insufficient_power.wav", "content": "Insufficient power..." }
     ]
   }
 }

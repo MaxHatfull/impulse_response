@@ -3,7 +3,7 @@
 # Generate all voice files from produced_audio.json using Piper TTS
 
 PIPER="/Users/maxhatfull/Library/Python/3.9/bin/piper"
-MODEL="/Users/maxhatfull/dev/impulse_response/models/en_US-lessac-medium.onnx"
+MODEL="/Users/maxhatfull/dev/impulse_response/models/en_US-libritts-high.onnx"
 JSON_FILE="/Users/maxhatfull/dev/impulse_response/produced_audio.json"
 AUDIO_DIR="/Users/maxhatfull/dev/impulse_response/impulse_response/assets/audio"
 
@@ -28,7 +28,7 @@ import os
 json_file = "/Users/maxhatfull/dev/impulse_response/produced_audio.json"
 audio_dir = "/Users/maxhatfull/dev/impulse_response/impulse_response/assets/audio"
 piper = "/Users/maxhatfull/Library/Python/3.9/bin/piper"
-model = "/Users/maxhatfull/dev/impulse_response/models/en_US-lessac-medium.onnx"
+model = "/Users/maxhatfull/dev/impulse_response/models/en_US-libritts-high.onnx"
 
 with open(json_file) as f:
     data = json.load(f)
@@ -44,7 +44,7 @@ def process_entries(entries, path):
                 print(f"Generating: {output_path}")
                 print(f"  Text: {content}")
                 proc = subprocess.run(
-                    [piper, "--model", model, "--output_file", output_path],
+                    [piper, "--model", model, "--speaker", "200", "--length-scale", "1.2", "--output_file", output_path],
                     input=content,
                     text=True
                 )

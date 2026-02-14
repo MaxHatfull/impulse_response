@@ -18,36 +18,16 @@ Press **Escape** to quit.
 
 ## Generating Voice Lines
 
-Use the built-in script to generate WAV voice lines from text (macOS only):
-
-```bash
-./scripts/generate_voice.sh "Hello world"                     # auto-names output
-./scripts/generate_voice.sh "System online" system_online     # custom filename
-./scripts/generate_voice.sh "Greetings" greet Zarvox          # custom voice
-```
-
-Available voices:
-- **Samantha** - Clean computer voice (default)
-- **Zarvox** - Robotic/alien
-- **Trinoids** - Alien chorus
-- **Whisper** - Creepy whisper
-
-Output goes to `impulse_response/assets/audio/generated/` by default.
-
-### High-Quality Voice Generation (Piper)
-
-For better quality neural TTS, use Piper:
+Voice lines are generated using [Piper TTS](https://github.com/rhasspy/piper).
 
 1. Install Piper:
    ```bash
    pip3 install piper-tts pathvalidate
    ```
 
-2. Download a voice model (one-time):
+2. Download voice models (one-time):
    ```bash
-   mkdir -p models
-   curl -L -O https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium.onnx
-   curl -L -O https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json
+   ./scripts/download_models.sh
    ```
 
 3. Regenerate all voice files from `produced_audio.json`:
@@ -66,7 +46,9 @@ For better quality neural TTS, use Piper:
 ├── bin/
 │   └── run                   # launch script
 ├── scripts/
-│   └── generate_voice.sh     # voice line generator
+│   ├── download_models.sh        # download Piper voice models
+│   ├── generate_all_voices.sh    # regenerate all from produced_audio.json
+│   └── generate_voice_piper.sh   # generate single voice line
 └── impulse_response/
     ├── main.rb               # main entry point
     ├── assets/               # images, models, sounds

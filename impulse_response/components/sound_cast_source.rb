@@ -9,7 +9,7 @@ class SoundCastSource < Engine::Component
     @loop = true if @loop.nil?
     @playing = @play_on_start.nil? ? true : @play_on_start
     @max_distance = @beam_length
-    @caster = SoundCaster.new(beam_count: @beam_count, max_distance: @max_distance)
+    @caster = SoundCaster.new(beam_count: @beam_count, max_distance: @max_distance, beam_strength: beam_strength)
   end
 
   def pitch

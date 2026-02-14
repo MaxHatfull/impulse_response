@@ -18,7 +18,7 @@ class Level
       game_object = Engine::GameObject.create(
         pos: Vector[x, 0, z],
         components: [
-          Physics::CircleCollider.create(radius: 2),
+          Physics::CircleCollider.create(radius: 1),
           Interacter.create(on_interact: -> { circuit_panel.open }),
           circuit_panel
         ]

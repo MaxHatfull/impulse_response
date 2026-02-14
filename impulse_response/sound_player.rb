@@ -1,6 +1,7 @@
 class SoundPlayer
-  BOUNCE_LOSS = 0.3 # volume multiplier per bounce
+  BOUNCE_LOSS = 0.4 # volume multiplier per bounce
   SOUND_RANGE = 10 # distance for full volume
+  REVERB_RANGE = 15 # distance for full wet reverb
   DISTANCE_BUCKET_SIZE = 5 # meters per bucket
 
   # audio
@@ -69,7 +70,7 @@ class SoundPlayer
     @right_contributions = []
 
     hits.each do |hit|
-      volume = hit_volume(hit)
+      volume = hit.volume
       bounces = hit.total_bounces
       distance = hit.travel_distance
       left_pan, right_pan = stereo_pan(hit)
@@ -80,8 +81,11 @@ class SoundPlayer
   end
 
   def stereo_pan(hit)
-    to_hit = hit.raycast_hit.entry_point - listener_pos
-    angle = Math.atan2(to_hit[1], to_hit[0]) - Math.atan2(forward_2d[1], forward_2d[0])
+    # Use incoming ray direction (negated = direction sound came FROM)
+    # Alternative: use entry_point position relative to listener, but this
+    # gives wrong panning for glancing hits (e.g. sound from right grazing left ear)
+    from_dir = -hit.ray_direction
+    angle = Math.atan2(from_dir[1], from_dir[0]) - Math.atan2(forward_2d[1], forward_2d[0])
 
     # right_pan: 0° (forward) = 0.5, 90° (right) = 1.0, 180° = 0.5, 270° (left) = 0.0
     right_pan = 0.5 + 0.5 * Math.sin(angle)
@@ -96,6 +100,9 @@ class SoundPlayer
     left_total = @left_contributions.sum { |c| c[:volume] }
     right_total = @right_contributions.sum { |c| c[:volume] }
 
+    puts "left too loud" if left_total > 128
+    puts "right too loud" if right_total > 128
+
     @left_audio.set_volume((left_total * 128).clamp(0, 128).to_i)
     @right_audio.set_volume((right_total * 128).clamp(0, 128).to_i)
 
@@ -107,25 +114,38 @@ class SoundPlayer
   end
 
   def reverb_from_contributions(contributions)
-    return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 0.0 } if contributions.empty?
+    return { room_size: 0.0, damping: 0.0, wet: 0.0, dry: 1.0 } if contributions.empty?
 
     total_volume = contributions.sum { |c| c[:volume] }
-    return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 0.0 } if total_volume <= 0
+    return { room_size: 0.0, damping: 0.0, wet: 0.0, dry: 1.0 } if total_volume <= 0
 
-    room_size = contributions.sum { |c|
-      c[:volume] * Math.sqrt(c[:distance]) * 0.05
-    }.clamp(0.0, 0.5)
+    # Direct hits (0 bounces) are dry, bounced hits are wet
+    direct_volume = contributions.select { |c| c[:bounces] == 0 }.sum { |c| c[:volume] }
+    bounced_volume = contributions.select { |c| c[:bounces] > 0 }.sum { |c| c[:volume] }
 
-    dry = contributions.select { |c| c[:bounces] <= 1 }.sum { |c| c[:volume] }
-    wet = contributions.select { |c| c[:bounces] > 1 }.sum { |c| c[:volume] }
+    dry = direct_volume / total_volume
+    wet = bounced_volume / total_volume
 
-    dry = (dry / total_volume).clamp(0.0, 1.0)
-    wet = (wet / total_volume).clamp(0.0, 1.0)
+    # Average bounces weighted by volume - more bounces = duller sound
+    avg_bounces = contributions.sum { |c| c[:volume] * c[:bounces] } / total_volume
+    damping = (avg_bounces / SoundCaster::MAX_BOUNCES) * 0.5
 
-    avg_distance = contributions.sum { |c| c[:volume] * c[:distance] } / total_volume
-    damping = (avg_distance / max_distance * 0.5).clamp(0.0, 0.5)
+    # Room size based on distance of bounced sounds only
+    bounced = contributions.select { |c| c[:bounces] > 0 }
+    if bounced.empty?
+      room_size = 0.0
+    else
+      bounced_total = bounced.sum { |c| c[:volume] }
+      avg_bounced_distance = bounced.sum { |c| c[:volume] * c[:distance] } / bounced_total
+      room_size = (avg_bounced_distance / max_distance).clamp(0.0, 1.0)
+    end
 
-    { room_size: room_size, damping: damping, wet: wet, dry: dry }
+    {
+      room_size: room_size,
+      damping: damping,
+      wet: wet,
+      dry: dry
+    }
   end
 
   def listener_pos
