@@ -25,11 +25,9 @@ Voice lines are generated using [Piper TTS](https://github.com/rhasspy/piper).
    pip3 install piper-tts pathvalidate
    ```
 
-2. Download a voice model (one-time):
+2. Download voice models (one-time):
    ```bash
-   mkdir -p models
-   curl -L -O https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium.onnx
-   curl -L -O https://huggingface.co/rhasspy/piper-voices/resolve/main/en/en_US/lessac/medium/en_US-lessac-medium.onnx.json
+   ./scripts/download_models.sh
    ```
 
 3. Regenerate all voice files from `produced_audio.json`:
@@ -48,6 +46,7 @@ Voice lines are generated using [Piper TTS](https://github.com/rhasspy/piper).
 ├── bin/
 │   └── run                   # launch script
 ├── scripts/
+│   ├── download_models.sh        # download Piper voice models
 │   ├── generate_all_voices.sh    # regenerate all from produced_audio.json
 │   └── generate_voice_piper.sh   # generate single voice line
 └── impulse_response/

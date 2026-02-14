@@ -12,14 +12,14 @@
 
 TEXT="$1"
 OUTPUT_NAME="$2"
-MODEL="${PIPER_MODEL:-en_US-lessac-medium}"
+MODEL="${PIPER_MODEL:-en_US-ryan-high}"
 
 OUTPUT_DIR="impulse_response/assets/audio/generated"
 
 if [ -z "$TEXT" ]; then
   echo "Usage: $0 \"text to speak\" [output_name]"
   echo ""
-  echo "Set PIPER_MODEL env var to change voice (default: en_US-lessac-medium)"
+  echo "Set PIPER_MODEL env var to change voice (default: en_US-ryan-high)"
   echo "Models: https://github.com/rhasspy/piper/blob/master/VOICES.md"
   exit 1
 fi
