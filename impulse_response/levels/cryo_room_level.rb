@@ -19,7 +19,10 @@ class CryoRoomLevel < Level
       z: 0,
       powered: true,
       locked: true,
-      welcome_clip: Sounds::CryoRoom::Terminal.welcome,
+      welcome_clips: [
+        Sounds::CryoRoom::Terminal.welcome,
+        Sounds::CryoRoom::Terminal.navigation_tutorial
+      ],
       options: [
         {
           menu_item: Sounds::CryoRoom::Terminal.ship_status,

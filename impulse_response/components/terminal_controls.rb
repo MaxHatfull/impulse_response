@@ -1,5 +1,5 @@
 class TerminalControls < Engine::Component
-  serialize :ambient_source, :terminal_output_source, :options, :welcome_clip, :powered, :locked
+  serialize :ambient_source, :terminal_output_source, :options, :welcome_clips, :powered, :locked
 
   attr_reader :powered
 
@@ -7,6 +7,7 @@ class TerminalControls < Engine::Component
     @open = false
     @state = :idle
     @powered = true if @powered.nil?
+    @welcome_clips ||= []
     update_ambient_pitch
   end
 
@@ -14,6 +15,8 @@ class TerminalControls < Engine::Component
     return unless @open
 
     close if Engine::Input.key_down?(Engine::Input::KEY_Q)
+
+    @audio_queue.update
 
     handle_menu_input if @state == :menu
 
@@ -48,16 +51,18 @@ class TerminalControls < Engine::Component
     return if @locked
 
     unless @powered
-      play_clip(Sounds::Terminal.insufficient_power)
+      @terminal_output_source.set_clip(Sounds::Terminal.insufficient_power)
+      @terminal_output_source.play
       return
     end
 
     @open = true
     @state = :welcome
     @current_menu_index = 0
+    @audio_queue = AudioQueue.new(@terminal_output_source)
     @ambient_source.stop
     Player.instance.disable_controls
-    play_clip(@welcome_clip) if @welcome_clip
+    @audio_queue.queue(*@welcome_clips) if @welcome_clips.any?
   end
 
   def close
@@ -91,19 +96,19 @@ class TerminalControls < Engine::Component
   end
 
   def play_clip(clip)
-    @terminal_output_source.set_clip(clip)
-    @terminal_output_source.play
-    @clip_end_time = Time.now + clip.duration
+    @audio_queue.interrupt
+    @audio_queue.queue(clip)
   end
 
   def play_player_clip(clip)
     Player.instance.voice_source.set_clip(clip)
     Player.instance.voice_source.play
-    player_clip_end_time = Time.now + clip.duration
-    @clip_end_time = [@clip_end_time, player_clip_end_time].compact.max
+    @player_clip_end_time = Time.now + clip.duration
   end
 
   def playing?
-    @clip_end_time && Time.now < @clip_end_time
+    queue_playing = @audio_queue&.playing? || false
+    player_playing = @player_clip_end_time && Time.now < @player_clip_end_time
+    queue_playing || player_playing
   end
 end

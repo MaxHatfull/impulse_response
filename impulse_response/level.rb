@@ -27,8 +27,8 @@ class Level
     Level::Door.create(parent: @level_root, x: x, z: z, level_class: level_class, radius: radius, powered: powered, locked: locked, trigger_clip: trigger_clip)
   end
 
-  def terminal(x:, z:, options: [], welcome_clip: nil, powered: true, locked: false)
-    Level::Terminal.create(parent: @level_root, x: x, z: z, options: options, welcome_clip: welcome_clip, powered: powered, locked: locked)
+  def terminal(x:, z:, options: [], welcome_clips: [], powered: true, locked: false)
+    Level::Terminal.create(parent: @level_root, x: x, z: z, options: options, welcome_clips: welcome_clips, powered: powered, locked: locked)
   end
 
   def circuit_panel(x:, z:, devices: [], welcome_clip: nil, total_power: 1, locked: false)
