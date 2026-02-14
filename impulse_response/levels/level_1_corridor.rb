@@ -9,9 +9,9 @@ class Level1Corridor < Level
     puts "loading level 1"
 
     # Basic corridor - 4m wide, 50m long
-    # Left wall with gaps for MedBay (z=-26 to z=-34) and Airlock (z=-42 to z=-46)
-    wall(x: -2, z: -13, width: 1, length: 26)    # z=0 to z=-26
-    wall(x: -2, z: -38, width: 1, length: 8)     # z=-34 to z=-42
+    # Left wall with gaps for MedBay (z=-10 to z=-14) and Airlock (z=-42 to z=-46)
+    wall(x: -2, z: -5, width: 1, length: 10)     # z=0 to z=-10
+    wall(x: -2, z: -28, width: 1, length: 28)    # z=-14 to z=-42
     wall(x: -2, z: -48, width: 1, length: 4)     # z=-46 to z=-50
 
     # Right wall with gap for Stowage (z=-38 to z=-46)
@@ -29,11 +29,14 @@ class Level1Corridor < Level
     # Door to Airlock at end of corridor
     door(x: -7, z: -44, level_class: Airlock)
 
-    # MedBay room (8x8, left side)
-    # Gap is at z=-26 to z=-34 on left corridor wall
-    wall(x: -10, z: -30, width: 1, length: 8)    # west wall
-    wall(x: -5.5, z: -26, width: 8, length: 1)   # north wall (x=-9.5 to x=-1.5)
-    wall(x: -5.5, z: -34, width: 8, length: 1)   # south wall (x=-9.5 to x=-1.5)
+    # MedBay corridor (4m wide, short, left side near spawn)
+    # Gap is at z=-10 to z=-14 on left corridor wall
+    wall(x: -4, z: -10, width: 4, length: 1)     # north wall
+    wall(x: -4, z: -14, width: 4, length: 1)     # south wall
+    wall(x: -6, z: -12, width: 1, length: 4)     # west wall (end)
+
+    # Door to MedBay at end of corridor
+    door(x: -5, z: -12, level_class: MedBay)
 
     # Stowage room (8x8, right side)
     # Gap is at z=-38 to z=-46 on right corridor wall
