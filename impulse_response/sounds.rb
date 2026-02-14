@@ -113,6 +113,10 @@ module Sounds
           @welcome ||= NativeAudio::Clip.new("#{BASE_PATH}/Health Check complete 2.wav")
         end
 
+        def navigation_tutorial
+          @navigation_tutorial ||= NativeAudio::Clip.new("#{BASE_PATH}/Terminal navigation tutorial.wav")
+        end
+
         def ship_status
           @ship_status ||= NativeAudio::Clip.new("#{BASE_PATH}/Ship Status.wav")
         end
