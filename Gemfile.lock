@@ -23,7 +23,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.7)
-    ruby_rpg (0.1.5)
+    ruby_rpg (0.1.6)
       chunky_png (~> 1.4)
       concurrent-ruby
       fiddle

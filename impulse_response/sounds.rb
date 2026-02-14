@@ -1,5 +1,5 @@
 module Sounds
-  BASE_PATH = "impulse_response/assets/audio"
+  BASE_PATH = File.join(__dir__, "assets", "audio")
 
   class << self
     def tap
@@ -23,15 +23,15 @@ module Sounds
     end
 
     def debug_1
-      @debug_1 ||= NativeAudio::Clip.new("impulse_response/assets/sci_fi_audio/1 Sci Fi Sound.wav")
+      @debug_1 ||= NativeAudio::Clip.new(File.join(__dir__, "assets", "sci_fi_audio", "1 Sci Fi Sound.wav"))
     end
 
     def debug_3
-      @debug_3 ||= NativeAudio::Clip.new("impulse_response/assets/sci_fi_audio/3 Sci Fi Sound.wav")
+      @debug_3 ||= NativeAudio::Clip.new(File.join(__dir__, "assets", "sci_fi_audio", "3 Sci Fi Sound.wav"))
     end
 
     def debug_5
-      @debug_5 ||= NativeAudio::Clip.new("impulse_response/assets/sci_fi_audio/5 Sci Fi Sound.wav")
+      @debug_5 ||= NativeAudio::Clip.new(File.join(__dir__, "assets", "sci_fi_audio", "5 Sci Fi Sound.wav"))
     end
 
     def interacter_enter
@@ -41,7 +41,7 @@ module Sounds
   end
 
   module Terminal
-    BASE_PATH = "impulse_response/assets/audio/terminal"
+    BASE_PATH = File.join(__dir__, "assets", "audio", "terminal")
 
     class << self
       def insufficient_power
@@ -51,7 +51,7 @@ module Sounds
   end
 
   module CircuitPanel
-    BASE_PATH = "impulse_response/assets/audio/circuit_panel"
+    BASE_PATH = File.join(__dir__, "assets", "audio", "circuit_panel")
 
     class << self
       def ambient
@@ -85,7 +85,7 @@ module Sounds
   end
 
   module Level0
-    BASE_PATH = "impulse_response/assets/audio/level_0"
+    BASE_PATH = File.join(__dir__, "assets", "audio", "level_0")
 
     class << self
       def corridor_trigger
@@ -96,7 +96,7 @@ module Sounds
 
   module CryoRoom
     module Door
-      BASE_PATH = "impulse_response/assets/audio/cryo_room/door"
+      BASE_PATH = File.join(__dir__, "assets", "audio", "cryo_room", "door")
 
       class << self
         def corridor
@@ -106,7 +106,7 @@ module Sounds
     end
 
     module Terminal
-      BASE_PATH = "impulse_response/assets/audio/cryo_room/terminal"
+      BASE_PATH = File.join(__dir__, "assets", "audio", "cryo_room", "terminal")
 
       class << self
         def welcome
@@ -160,7 +160,7 @@ module Sounds
     end
 
     module CircuitPanel
-      BASE_PATH = "impulse_response/assets/audio/cryo_room/circuit_panel"
+      BASE_PATH = File.join(__dir__, "assets", "audio", "cryo_room", "circuit_panel")
 
       class << self
         def main_door
@@ -178,7 +178,7 @@ module Sounds
     end
 
     module Tutorial
-      BASE_PATH = "impulse_response/assets/audio/cryo_room/tutorial"
+      BASE_PATH = File.join(__dir__, "assets", "audio", "cryo_room", "tutorial")
 
       class << self
         def awakening_terminal

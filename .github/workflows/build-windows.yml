@@ -1,0 +1,42 @@
+name: Build Windows Executable
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate version
+        id: version
+        run: echo "version=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+          bundler-cache: false
+
+      - name: Install gems
+        run: |
+          bundle config set --local without development test
+          bundle install
+
+      - name: Install ocran
+        run: gem install ocran
+
+      - name: Build executable
+        shell: cmd
+        run: ocran bin/run --gemfile Gemfile --add-all-core --gem-full --no-dep-run --output impulse_response.exe impulse_response
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          name: Impulse Response ${{ steps.version.outputs.version }}
+          files: impulse_response.exe
+          draft: false
+          prerelease: false
