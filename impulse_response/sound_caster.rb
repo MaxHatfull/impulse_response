@@ -2,7 +2,8 @@ class SoundCaster
   EPSILON = 0.001
   MAX_BOUNCES = 3
   BOUNCE_LOSS = 0.4
-  SOUND_RANGE = 10.0
+  NEAR_FIELD = 5.0
+  ROLLOFF = 1.0
 
   def initialize(beam_count:, max_distance:, beam_strength:)
     @beam_count = beam_count
@@ -68,10 +69,10 @@ class SoundCaster
   private
 
   def volume_at_distance(current_volume, start_distance, end_distance)
-    # Inverse distance falloff, with full volume up to SOUND_RANGE
-    start_factor = [start_distance / SOUND_RANGE, 1.0].max
-    end_factor = [end_distance / SOUND_RANGE, 1.0].max
-    current_volume * (start_factor / end_factor)
+    # Inverse distance falloff, with full volume within NEAR_FIELD
+    start_factor = [start_distance / NEAR_FIELD, 1.0].max
+    end_factor = [end_distance / NEAR_FIELD, 1.0].max
+    current_volume * ((start_factor / end_factor) ** ROLLOFF)
   end
 
   private
