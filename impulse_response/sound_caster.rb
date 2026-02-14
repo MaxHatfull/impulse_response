@@ -1,10 +1,13 @@
 class SoundCaster
   EPSILON = 0.001
   MAX_BOUNCES = 3
+  BOUNCE_LOSS = 0.4
+  SOUND_RANGE = 10.0
 
-  def initialize(beam_count:, max_distance:)
+  def initialize(beam_count:, max_distance:, beam_strength:)
     @beam_count = beam_count
     @max_distance = max_distance
+    @beam_strength = beam_strength
   end
 
   def cast_beams(start:)
@@ -22,6 +25,7 @@ class SoundCaster
     remaining_length = @max_distance
     distance_traveled = 0
     bounce_count = 0
+    current_volume = @beam_strength
 
     while remaining_length > 0 && bounce_count < MAX_BOUNCES
       ray = Physics::Ray.new(start_point: current_pos, direction: current_dir, length: remaining_length)
@@ -31,17 +35,22 @@ class SoundCaster
       max_distance = wall_hit ? wall_hit.entry_distance : remaining_length
 
       raycast_hits.select { |h| has_tag?(h, :listener) && h.entry_distance < max_distance && coming_towards?(h, current_dir) }.each do |h|
+        total_distance = distance_traveled + h.entry_distance
+        volume = volume_at_distance(current_volume, distance_traveled, total_distance)
         hits << SoundHit.new(
           raycast_hit: h,
-          travel_distance: distance_traveled + h.entry_distance,
-          total_bounces: bounce_count
+          travel_distance: total_distance,
+          total_bounces: bounce_count,
+          volume: volume
         )
       end
 
       if wall_hit && wall_hit.entry_distance < remaining_length && wall_hit.entry_distance > EPSILON
         draw_debug_line(current_pos, wall_hit.entry_point)
 
-        distance_traveled += wall_hit.entry_distance
+        new_distance = distance_traveled + wall_hit.entry_distance
+        current_volume = volume_at_distance(current_volume, distance_traveled, new_distance) * BOUNCE_LOSS
+        distance_traveled = new_distance
         remaining_length -= wall_hit.entry_distance
         current_dir = reflect(current_dir, wall_hit.entry_normal)
         current_pos = wall_hit.entry_point + current_dir * EPSILON
@@ -54,6 +63,15 @@ class SoundCaster
     end
 
     hits
+  end
+
+  private
+
+  def volume_at_distance(current_volume, start_distance, end_distance)
+    # Inverse distance falloff, with full volume up to SOUND_RANGE
+    start_factor = [start_distance / SOUND_RANGE, 1.0].max
+    end_factor = [end_distance / SOUND_RANGE, 1.0].max
+    current_volume * (start_factor / end_factor)
   end
 
   private
