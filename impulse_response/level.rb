@@ -3,7 +3,7 @@ class Level
     @level_root = level_root
   end
 
-  def create
+  def create(**)
     raise NotImplementedError, "Subclasses must implement #create"
   end
 
@@ -23,8 +23,8 @@ class Level
     Player.instance.reset(Vector[x, 0, z], rotation: rotation)
   end
 
-  def door(x:, z:, level_class:, radius: 2, powered: true, locked: false, trigger_clip: nil)
-    Level::Door.create(parent: @level_root, x: x, z: z, level_class: level_class, radius: radius, powered: powered, locked: locked, trigger_clip: trigger_clip)
+  def door(x:, z:, level_class:, radius: 2, powered: true, locked: false, trigger_clip: nil, level_options: {})
+    Level::Door.create(parent: @level_root, x: x, z: z, level_class: level_class, radius: radius, powered: powered, locked: locked, trigger_clip: trigger_clip, level_options: level_options)
   end
 
   def terminal(x:, z:, options: [], welcome_clips: [], powered: true, locked: false)

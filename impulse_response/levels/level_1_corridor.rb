@@ -5,7 +5,7 @@ class Level1Corridor < Level
     Physics::AABB.new(-16, -56, 16, 6)
   end
 
-  def create
+  def create(from: nil)
     puts "loading level 1"
 
     # Basic corridor - 4m wide, 50m long
@@ -50,7 +50,12 @@ class Level1Corridor < Level
     # Doors
     door(x: 0, z: -48, level_class: Level1Corridor)
 
-    # Player spawn (away from the door trigger zone)
-    player_spawn(x: 0, z: -6, rotation: 180)
+    # Player spawn based on where they came from
+    case from
+    when :airlock
+      player_spawn(x: -5, z: -44, rotation: 270)
+    else
+      player_spawn(x: 0, z: -6, rotation: 180)
+    end
   end
 end
