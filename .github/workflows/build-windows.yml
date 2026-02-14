@@ -31,6 +31,19 @@ jobs:
         shell: cmd
         run: ocran bin/run --gemfile Gemfile --add-all-core --gem-full --no-dep-run --output impulse_response.exe impulse_response/**/*
 
+      - name: Test executable
+        shell: pwsh
+        env:
+          DUMMY_AUDIO_BACKEND: "true"
+        run: |
+          $proc = Start-Process -FilePath .\impulse_response.exe -PassThru
+          Start-Sleep -Seconds 5
+          if ($proc.HasExited) {
+            Write-Error "Process exited prematurely with code $($proc.ExitCode)"
+            exit 1
+          }
+          Stop-Process -Id $proc.Id -Force
+
       - name: Upload executable
         uses: actions/upload-artifact@v4
         with:
