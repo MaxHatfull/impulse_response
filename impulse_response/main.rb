@@ -17,5 +17,5 @@ Engine.start do
 
   Player.instance.spawn
   Scenery.instance.create_ground
-  Map.instance.load_level(Airlock)
+  Map.instance.load_level(MedBay)
 end

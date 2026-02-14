@@ -54,6 +54,8 @@ class Level1Corridor < Level
     case from
     when :airlock
       player_spawn(x: -5, z: -44, rotation: 270)
+    when :medbay
+      player_spawn(x: -4, z: -12, rotation: 270)
     else
       player_spawn(x: 0, z: -6, rotation: 180)
     end
