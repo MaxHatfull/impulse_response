@@ -39,7 +39,6 @@ class Level1Corridor < Level
     wall(x: 5.5, z: -46, width: 8, length: 1)    # south wall (x=1.5 to x=9.5)
 
     # Doors
-    door(x: 0, z: -2, level_class: Level0Corridor)
     door(x: 0, z: -48, level_class: Level1Corridor)
 
     # Player spawn (away from the door trigger zone)
