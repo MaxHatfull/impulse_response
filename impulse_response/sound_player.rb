@@ -70,7 +70,7 @@ class SoundPlayer
     @right_contributions = []
 
     hits.each do |hit|
-      volume = hit_volume(hit)
+      volume = hit.volume
       bounces = hit.total_bounces
       distance = hit.travel_distance
       left_pan, right_pan = stereo_pan(hit)
@@ -81,8 +81,11 @@ class SoundPlayer
   end
 
   def stereo_pan(hit)
-    to_hit = hit.raycast_hit.entry_point - listener_pos
-    angle = Math.atan2(to_hit[1], to_hit[0]) - Math.atan2(forward_2d[1], forward_2d[0])
+    # Use incoming ray direction (negated = direction sound came FROM)
+    # Alternative: use entry_point position relative to listener, but this
+    # gives wrong panning for glancing hits (e.g. sound from right grazing left ear)
+    from_dir = -hit.ray_direction
+    angle = Math.atan2(from_dir[1], from_dir[0]) - Math.atan2(forward_2d[1], forward_2d[0])
 
     # right_pan: 0° (forward) = 0.5, 90° (right) = 1.0, 180° = 0.5, 270° (left) = 0.0
     right_pan = 0.5 + 0.5 * Math.sin(angle)
@@ -96,6 +99,9 @@ class SoundPlayer
   def update_audio
     left_total = @left_contributions.sum { |c| c[:volume] }
     right_total = @right_contributions.sum { |c| c[:volume] }
+
+    puts "left too loud" if left_total > 128
+    puts "right too loud" if right_total > 128
 
     @left_audio.set_volume((left_total * 128).clamp(0, 128).to_i)
     @right_audio.set_volume((right_total * 128).clamp(0, 128).to_i)
