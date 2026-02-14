@@ -114,26 +114,38 @@ class SoundPlayer
   end
 
   def reverb_from_contributions(contributions)
-    return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 0.0 } if contributions.empty?
+    return { room_size: 0.0, damping: 0.0, wet: 0.0, dry: 1.0 } if contributions.empty?
 
     total_volume = contributions.sum { |c| c[:volume] }
-    return { room_size: 0.0, damping: 0.5, wet: 0.0, dry: 0.0 } if total_volume <= 0
+    return { room_size: 0.0, damping: 0.0, wet: 0.0, dry: 1.0 } if total_volume <= 0
 
-    room_size = contributions.sum { |c|
-      c[:volume] * Math.sqrt(c[:distance]) * 0.05
-    }.clamp(0.0, 0.5)
+    # Direct hits (0 bounces) are dry, bounced hits are wet
+    direct_volume = contributions.select { |c| c[:bounces] == 0 }.sum { |c| c[:volume] }
+    bounced_volume = contributions.select { |c| c[:bounces] > 0 }.sum { |c| c[:volume] }
 
-    # Scale wet/dry by distance - close sounds are dry, far sounds are wet
-    dry = contributions.sum { |c| c[:volume] * [1.0 - c[:distance] / REVERB_RANGE, 0.0].max }
-    wet = contributions.sum { |c| c[:volume] * [c[:distance] / REVERB_RANGE, 1.0].min }
+    dry = direct_volume / total_volume
+    wet = bounced_volume / total_volume
 
-    dry = (dry / total_volume).clamp(0.0, 1.0)
-    wet = (wet / total_volume).clamp(0.0, 1.0)
+    # Average bounces weighted by volume - more bounces = duller sound
+    avg_bounces = contributions.sum { |c| c[:volume] * c[:bounces] } / total_volume
+    damping = (avg_bounces / SoundCaster::MAX_BOUNCES) * 0.5
 
-    avg_distance = contributions.sum { |c| c[:volume] * c[:distance] } / total_volume
-    damping = (avg_distance / max_distance * 0.5).clamp(0.0, 0.5)
+    # Room size based on distance of bounced sounds only
+    bounced = contributions.select { |c| c[:bounces] > 0 }
+    if bounced.empty?
+      room_size = 0.0
+    else
+      bounced_total = bounced.sum { |c| c[:volume] }
+      avg_bounced_distance = bounced.sum { |c| c[:volume] * c[:distance] } / bounced_total
+      room_size = (avg_bounced_distance / max_distance).clamp(0.0, 1.0)
+    end
 
-    { room_size: room_size, damping: damping, wet: wet, dry: dry }
+    {
+      room_size: room_size,
+      damping: damping,
+      wet: wet,
+      dry: dry
+    }
   end
 
   def listener_pos
