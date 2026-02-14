@@ -1,7 +1,6 @@
 {
   "audio": {
     "circuit_panel": [
-      { "filename": "ambient.wav", "content": null },
       { "filename": "circuit_panel_total_power_1.wav", "content": "Circuit panel total power 1" },
       { "filename": "insufficient_power.wav", "content": "Insufficient power" },
       { "filename": "power_off.wav", "content": "Power off" },
@@ -17,7 +16,6 @@
       ]
     },
     "door": [
-      { "filename": "ambient.wav", "content": null },
       { "filename": "door_requires_power.wav", "content": "Door requires power" }
     ],
     "terminal": [
