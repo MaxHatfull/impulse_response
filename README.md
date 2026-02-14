@@ -18,25 +18,7 @@ Press **Escape** to quit.
 
 ## Generating Voice Lines
 
-Use the built-in script to generate WAV voice lines from text (macOS only):
-
-```bash
-./scripts/generate_voice.sh "Hello world"                     # auto-names output
-./scripts/generate_voice.sh "System online" system_online     # custom filename
-./scripts/generate_voice.sh "Greetings" greet Zarvox          # custom voice
-```
-
-Available voices:
-- **Samantha** - Clean computer voice (default)
-- **Zarvox** - Robotic/alien
-- **Trinoids** - Alien chorus
-- **Whisper** - Creepy whisper
-
-Output goes to `impulse_response/assets/audio/generated/` by default.
-
-### High-Quality Voice Generation (Piper)
-
-For better quality neural TTS, use Piper:
+Voice lines are generated using [Piper TTS](https://github.com/rhasspy/piper).
 
 1. Install Piper:
    ```bash
@@ -66,7 +48,8 @@ For better quality neural TTS, use Piper:
 ├── bin/
 │   └── run                   # launch script
 ├── scripts/
-│   └── generate_voice.sh     # voice line generator
+│   ├── generate_all_voices.sh    # regenerate all from produced_audio.json
+│   └── generate_voice_piper.sh   # generate single voice line
 └── impulse_response/
     ├── main.rb               # main entry point
     ├── assets/               # images, models, sounds
