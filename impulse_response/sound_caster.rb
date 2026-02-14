@@ -82,7 +82,7 @@ class SoundCaster
   end
 
   def draw_debug_line(from, to)
-    Engine::Debug.line(to_3d(from), to_3d(to), color: [1, 1, 1])
+    #Engine::Debug.line(to_3d(from), to_3d(to), color: [1, 1, 1])
   end
 
   def to_3d(vec2)

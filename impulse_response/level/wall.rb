@@ -1,15 +1,25 @@
 class Level
   class Wall
     def self.create(parent:, x:, z:, width:, length:, height: 1, rotation: 0)
-      game_object = Engine::StandardObjects::Cube.create(
-        pos: Vector[x, height / 2.0, z],
-        scale: Vector[width, height, length],
-        rotation: Vector[0, rotation, 0],
-        material: material,
-        components: [Physics::RectCollider.create(width: width, height: length, tags: [:wall])]
-      )
-      game_object.parent = parent
-      game_object
+      if DEBUG
+        game_object = Engine::StandardObjects::Cube.create(
+          pos: Vector[x, height / 2.0, z],
+          scale: Vector[width, height, length],
+          rotation: Vector[0, rotation, 0],
+          material: material,
+          components: [Physics::RectCollider.create(width: width, height: length, tags: [:wall])]
+        )
+        game_object.parent = parent
+        game_object
+      else
+        game_object = Engine::GameObject.create(
+          pos: Vector[x, height / 2.0, z],
+          rotation: Vector[0, rotation, 0],
+          components: [Physics::RectCollider.create(width: width, height: length, tags: [:wall])]
+        )
+        game_object.parent = parent
+        game_object
+      end
     end
 
     def self.material

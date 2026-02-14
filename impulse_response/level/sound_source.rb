@@ -12,7 +12,9 @@ class Level
         ]
       )
       game_object.parent = parent
-      Engine::StandardObjects::Sphere.create(pos: pos, parent: parent, scale: Vector[0.5, 0.5, 0.5])
+      if DEBUG
+        Engine::StandardObjects::Sphere.create(pos: pos, parent: parent, scale: Vector[0.5, 0.5, 0.5])
+      end
       game_object
     end
   end
