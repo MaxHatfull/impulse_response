@@ -27,6 +27,17 @@
         { "filename": "stowage.wav", "content": "Stowage..." },
         { "filename": "airlock.wav", "content": "Airlock..." }
       ]
+    },
+    "stowage_room": {
+      "circuit_panel": [
+        { "filename": "airlock_interior_door.wav", "content": "Airlock interior door..." },
+        { "filename": "medbay_diagnostic_pod.wav", "content": "Medbay diagnostic pod..." },
+        { "filename": "medbay_terminal.wav", "content": "Medbay terminal..." },
+        { "filename": "medbay_door.wav", "content": "Medbay door..." },
+        { "filename": "stowage_door.wav", "content": "Stowage door..." },
+        { "filename": "door_to_level_0.wav", "content": "Door to level 0..." },
+        { "filename": "door_to_level_2.wav", "content": "Door to level 2..." }
+      ]
     }
   }
 }
