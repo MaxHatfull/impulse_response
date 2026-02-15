@@ -10,7 +10,7 @@ class Player
       name: "Player",
       pos: Vector[0, 0, 0],
       components: [
-        PlayerController.create(move_speed: 2.5, look_sensitivity: 0.3),
+        PlayerController.create(move_speed: 4.0, look_sensitivity: 0.3),
         Physics::CircleCollider.create(radius: 0.25, tags: [:player]),
         Physics::CircleCollider.create(radius: 1, tags: [:listener]),
         SoundListener.create

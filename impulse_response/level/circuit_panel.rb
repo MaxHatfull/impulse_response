@@ -1,7 +1,7 @@
 class Level
   class CircuitPanel
     def self.create(parent:, x:, z:, devices: [], welcome_clip: nil, total_power: 1, locked: false)
-      ambient_source = Level::SoundSource.create(parent: parent, x: x, z: z, clip: Sounds::CircuitPanel.ambient, volume: 0.2)
+      ambient_source = Level::SoundSource.create(parent: parent, x: x, z: z, clip: Sounds::CircuitPanel.ambient, volume: 0.5)
         .component(SoundCastSource)
       output_source = Level::SoundSource.create(parent: parent, x: x, z: z, clip: nil, beam_length: 10, beam_count: 60, loop: false, play_on_start: false)
         .component(SoundCastSource)
