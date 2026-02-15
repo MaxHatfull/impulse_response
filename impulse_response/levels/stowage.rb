@@ -3,6 +3,10 @@ class Stowage < Level
     Physics::AABB.new(-11, -16, 11, 5)
   end
 
+  def skybox_color
+    Vector[0.2, 0.2, 0.6]  # Navy blue
+  end
+
   def create
     puts "loading stowage"
 

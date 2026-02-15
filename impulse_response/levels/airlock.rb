@@ -3,6 +3,10 @@ class Airlock < Level
     Physics::AABB.new(-10, -16, 10, 5)
   end
 
+  def skybox_color
+    Vector[0.75, 0.75, 0.75]  # Light grey
+  end
+
   def create
     puts "loading airlock"
 

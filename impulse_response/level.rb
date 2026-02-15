@@ -11,6 +11,10 @@ class Level
     raise NotImplementedError, "Subclasses must implement #bounds"
   end
 
+  def skybox_color
+    Vector[0, 0, 0]  # Default to black
+  end
+
   def wall(x:, z:, width:, length:, height: 1, rotation: 0)
     Level::Wall.create(parent: @level_root, x: x, z: z, width: width, length: length, height: height, rotation: rotation)
   end

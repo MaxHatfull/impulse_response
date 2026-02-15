@@ -3,6 +3,10 @@ class MedBay < Level
     Physics::AABB.new(-21, -24, 21, 5)
   end
 
+  def skybox_color
+    Vector[0.2, 0.6, 0.2]  # Dark green
+  end
+
   def create
     puts "loading medbay"
 

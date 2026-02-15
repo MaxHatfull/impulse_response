@@ -5,6 +5,10 @@ class Level1Corridor < Level
     Physics::AABB.new(-16, -56, 16, 6)
   end
 
+  def skybox_color
+    Vector[0.4, 0.4, 0.4]  # Darkish grey
+  end
+
   def create(from: nil)
     puts "loading level 1"
 

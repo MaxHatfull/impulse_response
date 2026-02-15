@@ -5,6 +5,10 @@ class CryoRoomLevel < Level
     Physics::AABB.new(-8, -12, 8, 12)
   end
 
+  def skybox_color
+    Vector[0.8, 0.4, 0.1]  # Orange
+  end
+
   def create
     # Rectangular room
     rectangular_room(center_x: 0, center_z: 0, width: 6, length: 14)
