@@ -142,8 +142,8 @@ class SoundPlayer
 
     {
       room_size: room_size,
-      damping: damping * 0.01,
-      wet: wet * 0.4,
+      damping: damping * 0.1,
+      wet: wet * 0.5,
       dry: dry
     }
   end
