@@ -80,14 +80,17 @@ class Level1Corridor < Level
       },
       {
         menu_item: Sounds::Level1::Terminal.depressurize,
+        available: -> { !GameState.instance.get(:airlock_door_unlocked) },
         on_select_clip: Sounds::Level1::Terminal.depressurize_result
       },
       {
         menu_item: Sounds::Level1::Terminal.outer_door,
+        available: -> { !GameState.instance.get(:airlock_door_unlocked) },
         on_select_clip: Sounds::Level1::Terminal.outer_door_result
       },
       {
         menu_item: Sounds::Level1::Terminal.inner_door,
+        available: -> { !GameState.instance.get(:airlock_door_unlocked) },
         on_select_clip: Sounds::Level1::Terminal.inner_door_result_terminal,
         on_select_player_clip: Sounds::Level1::Terminal.inner_door_result_player,
         on_select: -> {
