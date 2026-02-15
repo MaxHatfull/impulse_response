@@ -50,6 +50,10 @@
         { "filename": "inner_door_result_player.wav", "content": "Kerrick! Kerrick, can you hear me?" }
       ]
     },
+    "airlock": [
+      { "filename": "find_kerrick_quinn.wav", "content": "Got you! Kerrick, can you hear me? Monitor, monitor. Okay, status button. SHIT! No no no. Don't be dead, please don't be dead. Kerrick? She's still warm, maybe the monitor just isn't picking up her pulse. Okay. MedBay. Diagnostic pod will know what to do." },
+      { "filename": "find_kerrick_terminal.wav", "content": "Captain Joslyn Kerrick. No vital signs present." }
+    ],
     "stowage_room": {
       "circuit_panel": [
         { "filename": "airlock_interior_door.wav", "content": "Airlock interior door..." },

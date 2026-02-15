@@ -316,6 +316,20 @@ module Sounds
     end
   end
 
+  module Airlock
+    BASE_PATH = File.join(__dir__, "assets", "audio", "airlock")
+
+    class << self
+      def find_kerrick_quinn
+        @find_kerrick_quinn ||= NativeAudio::Clip.new("#{BASE_PATH}/find_kerrick_quinn.wav")
+      end
+
+      def find_kerrick_terminal
+        @find_kerrick_terminal ||= NativeAudio::Clip.new("#{BASE_PATH}/find_kerrick_terminal.wav")
+      end
+    end
+  end
+
   module StowageRoom
     module CircuitPanel
       BASE_PATH = File.join(__dir__, "assets", "audio", "stowage_room", "circuit_panel")

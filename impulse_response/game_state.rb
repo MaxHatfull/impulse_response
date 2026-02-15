@@ -8,7 +8,8 @@ class GameState
     medbay_door_powered: true,
     door_to_level_2_powered: false,
     level_1_intro_played: false,
-    airlock_door_unlocked: false
+    airlock_door_unlocked: false,
+    airlock_kerrick_found: false
   }.freeze
 
   def initialize

@@ -21,5 +21,18 @@ class Airlock < Level
 
     # Player spawn (facing into room)
     player_spawn(x: 0, z: -4.5, rotation: 180)
+
+    # Play find Kerrick dialogue on first entry
+    # Quinn from player voice, terminal from scene source (both play simultaneously, timing baked into files)
+    unless GameState.instance.get(:airlock_kerrick_found)
+      GameState.instance.update(airlock_kerrick_found: true)
+
+      # Terminal voice in the room
+      terminal_source = sound_source(x: 0, z: -5, clip: Sounds::Airlock.find_kerrick_terminal, loop: false, play_on_start: true)
+
+      # Quinn voice from player
+      Player.instance.voice_source.set_clip(Sounds::Airlock.find_kerrick_quinn)
+      Player.instance.voice_source.play
+    end
   end
 end
