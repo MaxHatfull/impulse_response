@@ -57,7 +57,7 @@ class Level1Corridor < Level
     wall(x: 3.0, z: -32.9, width: 1, length: 3.1, rotation: -45)   # south chamfer
 
     # Door to Stowage at end of corridor
-    door(x: 5, z: -30, level_class: Stowage, locked: true, trigger_clip: Sounds::Level1::Door.stowage)
+    door(x: 5, z: -30, level_class: Stowage, trigger_clip: Sounds::Level1::Door.stowage)
 
     # Door to Level 2
     # Powered state controlled by stowage circuit panel
