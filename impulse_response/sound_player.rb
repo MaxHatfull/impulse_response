@@ -3,7 +3,7 @@ class SoundPlayer
   SOUND_RANGE = 10 # distance for full volume
   REVERB_RANGE = 15 # distance for full wet reverb
   DISTANCE_BUCKET_SIZE = 5 # meters per bucket
-  MIN_ECHO_DISTANCE = 2.0 # bounces shorter than this blend with direct sound
+  MIN_ECHO_DISTANCE = 10.0 # bounces shorter than this blend with direct sound
 
   # audio
   LEFT_ANGLE = 270
