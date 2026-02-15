@@ -18,7 +18,7 @@ class Level0Corridor < Level
     wall(x: 0, z: -40, width: 4, length: 1)    # far wall
 
     # Door at far end leading to Level 1
-    door(x: 0, z: -38, level_class: Level1Corridor)
+    door(x: 0, z: -38, level_class: Level1Corridor, trigger_clip: Sounds::Level1::Door.corridor_trigger)
 
     # Player spawn at entrance, facing down corridor
     player_spawn(x: 0, z: -2, rotation: 180)
