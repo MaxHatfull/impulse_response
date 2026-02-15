@@ -20,8 +20,9 @@ class Stowage < Level
     wall(x: -2, z: -4, width: 1, length: 1)       # pillar 1
     wall(x: 1, z: -7, width: 1, length: 1)        # pillar 2
 
-    # Door back to Level 1 corridor
-    door(x: 3, z: -1, level_class: Level1Corridor, level_options: { from: :stowage }, trigger_clip: Sounds::Level1::Door.corridor_trigger)
+    # Door back to Level 1 corridor (controlled by circuit panel)
+    stowage_door = door(x: 3, z: -1, level_class: Level1Corridor, level_options: { from: :stowage }, trigger_clip: Sounds::Level1::Door.corridor_trigger, powered: true)
+      .component(::Door)
 
     # Circuit panel - controls power to devices on Level 1
     # Power budget: 4, 7 devices total
@@ -64,11 +65,7 @@ class Stowage < Level
         },
         {
           name_audio: Sounds::StowageRoom::CircuitPanel.stowage_door,
-          device: CallbackDevice.new(
-            powered: true,
-            on_power_on: -> { GameState.instance.update(stowage_door_powered: true) },
-            on_power_off: -> { GameState.instance.update(stowage_door_powered: false) }
-          )
+          device: stowage_door
         },
         {
           name_audio: Sounds::StowageRoom::CircuitPanel.door_to_level_2,
