@@ -1,6 +1,28 @@
 module Sounds
   BASE_PATH = File.join(__dir__, "assets", "audio")
 
+  module MainMenu
+    BASE_PATH = File.join(__dir__, "assets", "audio", "main_menu")
+
+    class << self
+      def welcome
+        @welcome ||= NativeAudio::Clip.new("#{BASE_PATH}/welcome.wav")
+      end
+
+      def start_game
+        @start_game ||= NativeAudio::Clip.new("#{BASE_PATH}/start_game.wav")
+      end
+
+      def exit_game
+        @exit_game ||= NativeAudio::Clip.new("#{BASE_PATH}/exit.wav")
+      end
+
+      def music
+        @music ||= NativeAudio::Clip.new(File.join(__dir__, "assets", "audio", "menu", "music.wav"))
+      end
+    end
+  end
+
   class << self
     def tap
       @tap ||= NativeAudio::Clip.new("#{BASE_PATH}/clicks/DullClick2.wav")

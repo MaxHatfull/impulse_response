@@ -1,5 +1,10 @@
 {
   "audio": {
+    "main_menu": [
+      { "filename": "welcome.wav", "content": "Impulse Response" },
+      { "filename": "start_game.wav", "content": "Start game" },
+      { "filename": "exit.wav", "content": "Exit" }
+    ],
     "circuit_panel": [
       { "filename": "circuit_panel_total_power_1.wav", "content": "Circuit panel total power 1..." },
       { "filename": "circuit_panel_total_power_3.wav", "content": "Circuit panel total power 3..." },
