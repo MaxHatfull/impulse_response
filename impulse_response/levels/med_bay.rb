@@ -19,6 +19,14 @@ class MedBay < Level
     # Door back to Level 1 corridor (behind player spawn)
     door(x: -13, z: -1, level_class: Level1Corridor, level_options: { from: :medbay }, trigger_clip: Sounds::Level1::Door.corridor_trigger)
 
+    # Terminal - powered state controlled by stowage circuit panel
+    terminal(
+      x: 0,
+      z: -10,
+      powered: GameState.instance.get(:medbay_terminal_powered),
+      options: []
+    )
+
     # Player spawn in corner (facing into room)
     player_spawn(x: -13, z: -4, rotation: 180)
   end
