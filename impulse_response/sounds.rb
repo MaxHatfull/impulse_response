@@ -316,6 +316,74 @@ module Sounds
     end
   end
 
+  module MedBay
+    module Terminal
+      BASE_PATH = File.join(__dir__, "assets", "audio", "medbay", "terminal")
+
+      class << self
+        def welcome
+          @welcome ||= NativeAudio::Clip.new("#{BASE_PATH}/welcome.wav")
+        end
+
+        def diagnostic_kerrick
+          @diagnostic_kerrick ||= NativeAudio::Clip.new("#{BASE_PATH}/diagnostic_kerrick.wav")
+        end
+
+        def diagnostic_kerrick_unpowered
+          @diagnostic_kerrick_unpowered ||= NativeAudio::Clip.new("#{BASE_PATH}/diagnostic_kerrick_unpowered.wav")
+        end
+
+        def diagnostic_kerrick_result_terminal
+          @diagnostic_kerrick_result_terminal ||= NativeAudio::Clip.new("#{BASE_PATH}/diagnostic_kerrick_result_terminal.wav")
+        end
+
+        def diagnostic_kerrick_result_quinn
+          @diagnostic_kerrick_result_quinn ||= NativeAudio::Clip.new("#{BASE_PATH}/diagnostic_kerrick_result_quinn.wav")
+        end
+
+        def diagnostic_quinn
+          @diagnostic_quinn ||= NativeAudio::Clip.new("#{BASE_PATH}/diagnostic_quinn.wav")
+        end
+
+        def diagnostic_quinn_unpowered
+          @diagnostic_quinn_unpowered ||= NativeAudio::Clip.new("#{BASE_PATH}/diagnostic_quinn_unpowered.wav")
+        end
+
+        def diagnostic_quinn_result_terminal
+          @diagnostic_quinn_result_terminal ||= NativeAudio::Clip.new("#{BASE_PATH}/diagnostic_quinn_result_terminal.wav")
+        end
+
+        def diagnostic_quinn_result_quinn
+          @diagnostic_quinn_result_quinn ||= NativeAudio::Clip.new("#{BASE_PATH}/diagnostic_quinn_result_quinn.wav")
+        end
+
+        def quarantine_status
+          @quarantine_status ||= NativeAudio::Clip.new("#{BASE_PATH}/quarantine_status.wav")
+        end
+
+        def quarantine_status_result_terminal
+          @quarantine_status_result_terminal ||= NativeAudio::Clip.new("#{BASE_PATH}/quarantine_status_result_terminal.wav")
+        end
+
+        def quarantine_status_result_quinn
+          @quarantine_status_result_quinn ||= NativeAudio::Clip.new("#{BASE_PATH}/quarantine_status_result_quinn.wav")
+        end
+
+        def cryo_sleep
+          @cryo_sleep ||= NativeAudio::Clip.new("#{BASE_PATH}/cryo_sleep.wav")
+        end
+
+        def cryo_sleep_result_terminal
+          @cryo_sleep_result_terminal ||= NativeAudio::Clip.new("#{BASE_PATH}/cryo_sleep_result_terminal.wav")
+        end
+
+        def cryo_sleep_result_quinn
+          @cryo_sleep_result_quinn ||= NativeAudio::Clip.new("#{BASE_PATH}/cryo_sleep_result_quinn.wav")
+        end
+      end
+    end
+  end
+
   module Airlock
     BASE_PATH = File.join(__dir__, "assets", "audio", "airlock")
 

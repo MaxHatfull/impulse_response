@@ -24,10 +24,71 @@ class MedBay < Level
       x: 0,
       z: -10,
       powered: GameState.instance.get(:medbay_terminal_powered),
-      options: []
+      welcome_clips: [Sounds::MedBay::Terminal.welcome],
+      options: medbay_terminal_options
     )
 
     # Player spawn in corner (facing into room)
     player_spawn(x: -13, z: -4, rotation: 180)
+  end
+
+  private
+
+  def medbay_terminal_options
+    [
+      diagnostic_kerrick_option,
+      diagnostic_quinn_option,
+      quarantine_status_option,
+      cryo_sleep_option
+    ]
+  end
+
+  def diagnostic_kerrick_option
+    if GameState.instance.get(:medbay_diagnostic_pod_powered)
+      {
+        menu_item: Sounds::MedBay::Terminal.diagnostic_kerrick,
+        on_select_clip: Sounds::MedBay::Terminal.diagnostic_kerrick_result_terminal,
+        on_select_player_clip: Sounds::MedBay::Terminal.diagnostic_kerrick_result_quinn,
+        on_select: -> { GameState.instance.update(kerrick_diagnosed: true) }
+      }
+    else
+      {
+        menu_item: Sounds::MedBay::Terminal.diagnostic_kerrick,
+        on_select_clip: Sounds::MedBay::Terminal.diagnostic_kerrick_unpowered
+      }
+    end
+  end
+
+  def diagnostic_quinn_option
+    if GameState.instance.get(:medbay_diagnostic_pod_powered)
+      {
+        menu_item: Sounds::MedBay::Terminal.diagnostic_quinn,
+        on_select_clip: Sounds::MedBay::Terminal.diagnostic_quinn_result_terminal,
+        on_select_player_clip: Sounds::MedBay::Terminal.diagnostic_quinn_result_quinn
+      }
+    else
+      {
+        menu_item: Sounds::MedBay::Terminal.diagnostic_quinn,
+        on_select_clip: Sounds::MedBay::Terminal.diagnostic_quinn_unpowered
+      }
+    end
+  end
+
+  def quarantine_status_option
+    {
+      menu_item: Sounds::MedBay::Terminal.quarantine_status,
+      on_select_clip: Sounds::MedBay::Terminal.quarantine_status_result_terminal,
+      on_select_player_clip: Sounds::MedBay::Terminal.quarantine_status_result_quinn,
+      on_select: -> { GameState.instance.update(quarantine_disabled: true) }
+    }
+  end
+
+  def cryo_sleep_option
+    {
+      menu_item: Sounds::MedBay::Terminal.cryo_sleep,
+      on_select_clip: Sounds::MedBay::Terminal.cryo_sleep_result_terminal,
+      on_select_player_clip: Sounds::MedBay::Terminal.cryo_sleep_result_quinn,
+      on_select: -> { GameState.instance.update(kerrick_in_cryo: true) }
+    }
   end
 end

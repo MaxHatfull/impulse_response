@@ -10,7 +10,10 @@ class GameState
     level_1_intro_played: false,
     airlock_door_unlocked: false,
     airlock_kerrick_found: false,
-    carrying_kerrick: false
+    carrying_kerrick: false,
+    kerrick_diagnosed: false,
+    quarantine_disabled: false,
+    kerrick_in_cryo: false
   }.freeze
 
   def initialize
