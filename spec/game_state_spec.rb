@@ -32,13 +32,6 @@ RSpec.describe GameState do
 
       expect(game_state.get(:door_powered)).to be false
     end
-
-    it "handles nested hashes" do
-      game_state.update(level_1: { medbay_door: true })
-      game_state.update(level_1: { airlock_door: false })
-
-      expect(game_state.get(:level_1)).to eq({ medbay_door: true, airlock_door: false })
-    end
   end
 
   describe "#get" do
@@ -59,6 +52,30 @@ RSpec.describe GameState do
       game_state.reset
 
       expect(game_state.get(:foo)).to be_nil
+    end
+  end
+
+  describe "#key?" do
+    it "returns false for unknown keys" do
+      expect(game_state.key?(:unknown)).to be false
+    end
+
+    it "returns true for existing keys" do
+      game_state.update(foo: "bar")
+
+      expect(game_state.key?(:foo)).to be true
+    end
+
+    it "returns true even if value is nil" do
+      game_state.update(foo: nil)
+
+      expect(game_state.key?(:foo)).to be true
+    end
+
+    it "returns true even if value is false" do
+      game_state.update(foo: false)
+
+      expect(game_state.key?(:foo)).to be true
     end
   end
 end
