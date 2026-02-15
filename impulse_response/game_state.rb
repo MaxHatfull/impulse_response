@@ -1,8 +1,16 @@
 class GameState
   include Singleton
 
+  DEFAULTS = {
+    airlock_interior_door_powered: true,
+    medbay_diagnostic_pod_powered: false,
+    medbay_terminal_powered: false,
+    medbay_door_powered: true,
+    door_to_level_2_powered: false
+  }.freeze
+
   def initialize
-    @state = {}
+    @state = DEFAULTS.dup
   end
 
   def update(new_state)
@@ -18,6 +26,6 @@ class GameState
   end
 
   def reset
-    @state = {}
+    @state = DEFAULTS.dup
   end
 end

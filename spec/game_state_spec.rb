@@ -44,14 +44,23 @@ RSpec.describe GameState do
 
       expect(game_state.get(:foo)).to eq "bar"
     end
+
+    it "returns default values for circuit panel devices" do
+      expect(game_state.get(:airlock_interior_door_powered)).to be true
+      expect(game_state.get(:medbay_diagnostic_pod_powered)).to be false
+      expect(game_state.get(:medbay_terminal_powered)).to be false
+      expect(game_state.get(:medbay_door_powered)).to be true
+      expect(game_state.get(:door_to_level_2_powered)).to be false
+    end
   end
 
   describe "#reset" do
-    it "clears all state" do
-      game_state.update(foo: "bar")
+    it "restores to defaults" do
+      game_state.update(foo: "bar", airlock_interior_door_powered: false)
       game_state.reset
 
       expect(game_state.get(:foo)).to be_nil
+      expect(game_state.get(:airlock_interior_door_powered)).to be true
     end
   end
 
