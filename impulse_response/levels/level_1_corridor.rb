@@ -15,7 +15,7 @@ class Level1Corridor < Level
     # Basic corridor - 4m wide, 50m long
     # Left wall with gaps for MedBay (z=-10 to z=-14) and Airlock (z=-42 to z=-46)
     wall(x: -2, z: -3.8, width: 1, length: 9)     # z=0 to z=-10
-    wall(x: -2, z: -28, width: 1, length: 28)    # z=-14 to z=-42
+    wall(x: -2, z: -28, width: 1, length: 24.75)    # z=-16 to z=-40 (between chamfers)
     wall(x: -2, z: -48, width: 1, length: 4)     # z=-46 to z=-50
 
     # Right wall with gap for Stowage (z=-28 to z=-32)
@@ -29,8 +29,8 @@ class Level1Corridor < Level
     wall(x: -5.65, z: -42, width: 4, length: 1)   # north wall (stops at x=-3.65)
     wall(x: -5.65, z: -46, width: 4, length: 1)   # south wall (stops at x=-3.65)
     wall(x: -8, z: -44, width: 1, length: 4)      # west wall (end)
-    wall(x: -3.0, z: -41.07, width: 1, length: 3.1, rotation: -45)  # north chamfer
-    wall(x: -3.0, z: -46.9, width: 1, length: 3.1, rotation: 45)    # south chamfer
+    wall(x: -3.0, z: -41.1, width: 1, length: 3.1, rotation: -45)  # north chamfer
+    wall(x: -3.0, z: -46.93, width: 1, length: 3.1, rotation: 45)    # south chamfer
 
     # Door to Airlock at end of corridor
     door(x: -7, z: -44, level_class: Airlock, trigger_clip: Sounds::Level1::Door.airlock)
