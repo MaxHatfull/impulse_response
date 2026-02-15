@@ -39,7 +39,7 @@ class Level1Corridor < Level
     wall(x: -4.65, z: -14, width: 2, length: 1)   # south wall (stops at x=-3)
     wall(x: -6, z: -12, width: 1, length: 4)     # west wall (end)
     wall(x: -3.0, z: -9.07, width: 1, length: 3.1, rotation: -45)  # north chamfer
-    wall(x: -3.0, z: -14, width: 1, length: 3.1, rotation: 45)   # south chamfer
+    wall(x: -3.0, z: -14.9, width: 1, length: 3.1, rotation: 45)   # south chamfer
 
     # Door to MedBay at end of corridor
     door(x: -5, z: -12, level_class: MedBay, locked: true, trigger_clip: Sounds::Level1::Door.medbay)
