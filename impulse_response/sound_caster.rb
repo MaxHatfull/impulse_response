@@ -11,10 +11,12 @@ class SoundCaster
     @beam_strength = beam_strength
   end
 
-  def cast_beams(start:)
+  def cast_beams(start:, start_angle: 0, end_angle: 2 * Math::PI)
+    arc_range = end_angle - start_angle
     @beam_count.times.flat_map do |i|
-      angle = i * Math::PI / (@beam_count / 2.0)
+      angle = start_angle + (i * arc_range / @beam_count)
       direction = rotate_direction(Vector[0, 1], angle)
+      draw_beam_direction(start, direction)
       cast_beam(start:, direction:)
     end
   end
@@ -125,6 +127,11 @@ class SoundCaster
 
   def draw_debug_line(from, to)
     #Engine::Debug.line(to_3d(from), to_3d(to), color: [1, 1, 1])
+  end
+
+  def draw_beam_direction(start, direction)
+    endpoint = start + direction.normalize
+    Engine::Debug.line(to_3d(start), to_3d(endpoint), color: [1, 0, 0])
   end
 
   def to_3d(vec2)
