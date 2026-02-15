@@ -17,9 +17,9 @@ class MedBay < Level
     wall(x: 0, z: -18, width: 30, length: 1)      # front wall
 
     # Door back to Level 1 corridor (behind player spawn)
-    door(x: -13, z: -1, level_class: Level1Corridor, level_options: { from: :medbay })
+    door(x: -13, z: -1, level_class: Level1Corridor, level_options: { from: :medbay }, trigger_clip: Sounds::Level1::Door.corridor_trigger)
 
     # Player spawn in corner (facing into room)
-    player_spawn(x: -13, z: -3, rotation: 180)
+    player_spawn(x: -13, z: -4, rotation: 180)
   end
 end

@@ -94,6 +94,30 @@ module Sounds
     end
   end
 
+  module Level1
+    module Door
+      BASE_PATH = File.join(__dir__, "assets", "audio", "level_1", "door")
+
+      class << self
+        def corridor_trigger
+          @corridor_trigger ||= NativeAudio::Clip.new("#{BASE_PATH}/corridor.wav")
+        end
+
+        def medbay
+          @medbay ||= NativeAudio::Clip.new("#{BASE_PATH}/medbay.wav")
+        end
+
+        def stowage
+          @stowage ||= NativeAudio::Clip.new("#{BASE_PATH}/stowage.wav")
+        end
+
+        def airlock
+          @airlock ||= NativeAudio::Clip.new("#{BASE_PATH}/airlock.wav")
+        end
+      end
+    end
+  end
+
   module CryoRoom
     module Door
       BASE_PATH = File.join(__dir__, "assets", "audio", "cryo_room", "door")

@@ -21,9 +21,9 @@ class Stowage < Level
     wall(x: 1, z: -7, width: 1, length: 1)        # pillar 2
 
     # Door back to Level 1 corridor
-    door(x: 3, z: -1, level_class: Level1Corridor, level_options: { from: :stowage })
+    door(x: 3, z: -1, level_class: Level1Corridor, level_options: { from: :stowage }, trigger_clip: Sounds::Level1::Door.corridor_trigger)
 
     # Player spawn in corner (facing into room)
-    player_spawn(x: 3, z: -3, rotation: 180)
+    player_spawn(x: 3, z: -4, rotation: 180)
   end
 end

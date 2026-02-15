@@ -20,6 +20,13 @@
     ],
     "terminal": [
       { "filename": "insufficient_power.wav", "content": "Insufficient power..." }
-    ]
+    ],
+    "level_1": {
+      "door": [
+        { "filename": "medbay.wav", "content": "Medbay..." },
+        { "filename": "stowage.wav", "content": "Stowage..." },
+        { "filename": "airlock.wav", "content": "Airlock..." }
+      ]
+    }
   }
 }
