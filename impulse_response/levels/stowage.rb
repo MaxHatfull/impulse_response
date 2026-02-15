@@ -23,6 +23,44 @@ class Stowage < Level
     # Door back to Level 1 corridor
     door(x: 3, z: -1, level_class: Level1Corridor, level_options: { from: :stowage }, trigger_clip: Sounds::Level1::Door.corridor_trigger)
 
+    # Circuit panel - controls power to devices on Level 1
+    # Power budget: 4, 7 devices total
+    circuit_panel(
+      x: -3, z: -8,
+      total_power: 4,
+      welcome_clip: Sounds::CircuitPanel.welcome_power_4,
+      devices: [
+        {
+          name_audio: Sounds::StowageRoom::CircuitPanel.airlock_interior_door,
+          device: CallbackDevice.new(powered: true)
+        },
+        {
+          name_audio: Sounds::StowageRoom::CircuitPanel.medbay_diagnostic_pod,
+          device: CallbackDevice.new(powered: false)
+        },
+        {
+          name_audio: Sounds::StowageRoom::CircuitPanel.medbay_terminal,
+          device: CallbackDevice.new(powered: false)
+        },
+        {
+          name_audio: Sounds::StowageRoom::CircuitPanel.medbay_door,
+          device: CallbackDevice.new(powered: true)
+        },
+        {
+          name_audio: Sounds::StowageRoom::CircuitPanel.stowage_door,
+          device: CallbackDevice.new(powered: true)
+        },
+        {
+          name_audio: Sounds::StowageRoom::CircuitPanel.door_to_level_0,
+          device: CallbackDevice.new(powered: true)
+        },
+        {
+          name_audio: Sounds::StowageRoom::CircuitPanel.door_to_level_2,
+          device: CallbackDevice.new(powered: false)
+        }
+      ]
+    )
+
     # Player spawn in corner (facing into room)
     player_spawn(x: 3, z: -4, rotation: 180)
   end

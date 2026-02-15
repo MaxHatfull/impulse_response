@@ -70,6 +70,10 @@ module Sounds
         @welcome ||= NativeAudio::Clip.new("#{BASE_PATH}/circuit_panel_total_power_1.wav")
       end
 
+      def welcome_power_4
+        @welcome_power_4 ||= NativeAudio::Clip.new("#{BASE_PATH}/circuit_panel_total_power_4.wav")
+      end
+
       def insufficient_power
         @insufficient_power ||= NativeAudio::Clip.new("#{BASE_PATH}/insufficient_power.wav")
       end
@@ -227,6 +231,42 @@ module Sounds
 
         def health_check_complete_1
           @health_check_complete_1 ||= NativeAudio::Clip.new("#{BASE_PATH}/Health Check Complete 1.wav")
+        end
+      end
+    end
+  end
+
+  module StowageRoom
+    module CircuitPanel
+      BASE_PATH = File.join(__dir__, "assets", "audio", "stowage_room", "circuit_panel")
+
+      class << self
+        def airlock_interior_door
+          @airlock_interior_door ||= NativeAudio::Clip.new("#{BASE_PATH}/airlock_interior_door.wav")
+        end
+
+        def medbay_diagnostic_pod
+          @medbay_diagnostic_pod ||= NativeAudio::Clip.new("#{BASE_PATH}/medbay_diagnostic_pod.wav")
+        end
+
+        def medbay_terminal
+          @medbay_terminal ||= NativeAudio::Clip.new("#{BASE_PATH}/medbay_terminal.wav")
+        end
+
+        def medbay_door
+          @medbay_door ||= NativeAudio::Clip.new("#{BASE_PATH}/medbay_door.wav")
+        end
+
+        def stowage_door
+          @stowage_door ||= NativeAudio::Clip.new("#{BASE_PATH}/stowage_door.wav")
+        end
+
+        def door_to_level_0
+          @door_to_level_0 ||= NativeAudio::Clip.new("#{BASE_PATH}/door_to_level_0.wav")
+        end
+
+        def door_to_level_2
+          @door_to_level_2 ||= NativeAudio::Clip.new("#{BASE_PATH}/door_to_level_2.wav")
         end
       end
     end

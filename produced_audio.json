@@ -2,6 +2,7 @@
   "audio": {
     "circuit_panel": [
       { "filename": "circuit_panel_total_power_1.wav", "content": "Circuit panel total power 1..." },
+      { "filename": "circuit_panel_total_power_4.wav", "content": "Circuit panel total power 4..." },
       { "filename": "insufficient_power.wav", "content": "Insufficient power..." },
       { "filename": "power_off.wav", "content": "Power off..." },
       { "filename": "power_on.wav", "content": "Power on..." },
