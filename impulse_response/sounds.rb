@@ -124,6 +124,16 @@ module Sounds
         end
       end
     end
+
+    module Corridor
+      BASE_PATH = File.join(__dir__, "assets", "audio", "level_1", "corridor")
+
+      class << self
+        def entry_trigger
+          @entry_trigger ||= NativeAudio::Clip.new("#{BASE_PATH}/entry_trigger.wav")
+        end
+      end
+    end
   end
 
   module CryoRoom

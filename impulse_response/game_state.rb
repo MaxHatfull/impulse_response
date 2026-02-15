@@ -6,7 +6,8 @@ class GameState
     medbay_diagnostic_pod_powered: false,
     medbay_terminal_powered: false,
     medbay_door_powered: true,
-    door_to_level_2_powered: false
+    door_to_level_2_powered: false,
+    level_1_intro_played: false
   }.freeze
 
   def initialize

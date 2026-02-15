@@ -74,5 +74,12 @@ class Level1Corridor < Level
     else
       player_spawn(x: 0, z: -6, rotation: 180)
     end
+
+    # Play intro voiceline on first entry
+    unless GameState.instance.get(:level_1_intro_played)
+      GameState.instance.update(level_1_intro_played: true)
+      Player.instance.voice_source.set_clip(Sounds::Level1::Corridor.entry_trigger)
+      Player.instance.voice_source.play
+    end
   end
 end
