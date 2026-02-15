@@ -35,15 +35,20 @@ class SoundCaster
       wall_hit = raycast_hits.select { |h| has_tag?(h, :wall) }.min_by(&:entry_distance)
       max_distance = wall_hit ? wall_hit.entry_distance : remaining_length
 
-      raycast_hits.select { |h| has_tag?(h, :listener) && h.entry_distance < max_distance && coming_towards?(h, current_dir) }.each do |h|
-        total_distance = distance_traveled + h.entry_distance
+      listener_hit = raycast_hits
+        .select { |h| has_tag?(h, :listener) && h.entry_distance < max_distance && coming_towards?(h, current_dir) && has_line_of_sight?(h) }
+        .min_by(&:entry_distance)
+
+      if listener_hit
+        total_distance = distance_traveled + listener_hit.entry_distance
         volume = volume_at_distance(current_volume, distance_traveled, total_distance)
         hits << SoundHit.new(
-          raycast_hit: h,
+          raycast_hit: listener_hit,
           travel_distance: total_distance,
           total_bounces: bounce_count,
           volume: volume
         )
+        break
       end
 
       if wall_hit && wall_hit.entry_distance < remaining_length && wall_hit.entry_distance > EPSILON
@@ -85,6 +90,24 @@ class SoundCaster
     listener_pos = hit.collider.center
     to_listener = listener_pos - hit.entry_point
     ray_dir.inner_product(to_listener) > 0
+  end
+
+  def has_line_of_sight?(hit)
+    hit_pos = hit.entry_point
+    direction = hit_pos - listener_pos_2d
+    distance = direction.magnitude
+    return true if distance < 0.001
+
+    ray = Physics::Ray.new(start_point: listener_pos_2d, direction: direction.normalize, length: distance)
+    closest_wall = Physics.raycast(ray)
+                          .select { |h| h.collider.tags.include?(:wall) }
+                          .min_by(&:entry_distance)
+    closest_wall.nil? || closest_wall.entry_distance >= distance - 0.001
+  end
+
+  def listener_pos_2d
+    pos = SoundListener.instance.game_object.pos
+    Vector[pos[0], pos[2]]
   end
 
   def rotate_direction(dir, angle)
