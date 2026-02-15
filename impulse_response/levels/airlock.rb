@@ -25,7 +25,7 @@ class Airlock < Level
     # Play find Kerrick dialogue on first entry
     # Quinn from player voice, terminal from scene source (both play simultaneously, timing baked into files)
     unless GameState.instance.get(:airlock_kerrick_found)
-      GameState.instance.update(airlock_kerrick_found: true)
+      GameState.instance.update(airlock_kerrick_found: true, carrying_kerrick: true)
 
       # Terminal voice in the room
       terminal_source = sound_source(x: 0, z: -5, clip: Sounds::Airlock.find_kerrick_terminal, loop: false, play_on_start: true)

@@ -106,11 +106,12 @@ class Level1Corridor < Level
     wall(x: -3.0, z: -9.07, width: 1, length: 3.1, rotation: -45)  # north chamfer
     wall(x: -3.0, z: -14.9, width: 1, length: 3.1, rotation: 45)   # south chamfer
 
-    # Door to MedBay - powered by circuit panel
+    # Door to MedBay - powered by circuit panel, locked until carrying Kerrick
+    medbay_door_locked = !GameState.instance.get(:carrying_kerrick)
     door(
       x: -5, z: -12,
       level_class: MedBay,
-      locked: true,
+      locked: medbay_door_locked,
       trigger_clip: Sounds::Level1::Door.medbay,
       powered: GameState.instance.get(:medbay_door_powered)
     )
