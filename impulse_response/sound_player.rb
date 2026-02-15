@@ -3,6 +3,7 @@ class SoundPlayer
   SOUND_RANGE = 10 # distance for full volume
   REVERB_RANGE = 15 # distance for full wet reverb
   DISTANCE_BUCKET_SIZE = 5 # meters per bucket
+  MIN_ECHO_DISTANCE = 2.0 # bounces shorter than this blend with direct sound
 
   # audio
   LEFT_ANGLE = 270
@@ -120,11 +121,12 @@ class SoundPlayer
     return { room_size: 0.0, damping: 0.0, wet: 0.0, dry: 1.0 } if total_volume <= 0
 
     # Direct hits (0 bounces) are dry, bounced hits are wet
+    # Short bounces blend with direct sound - wetness scales with distance
     direct_volume = contributions.select { |c| c[:bounces] == 0 }.sum { |c| c[:volume] }
-    bounced_volume = contributions.select { |c| c[:bounces] > 0 }.sum { |c| c[:volume] }
+    bounced_volume = contributions.select { |c| c[:bounces] > 0 }.sum { |c| c[:volume] * c[:distance] / MIN_ECHO_DISTANCE }
 
-    dry = direct_volume / total_volume
-    wet = bounced_volume / total_volume
+    wet = [bounced_volume / total_volume, 1.0].min
+    dry = 1.0 - wet
 
     # Average bounces weighted by volume - more bounces = duller sound
     avg_bounces = contributions.sum { |c| c[:volume] * c[:bounces] } / total_volume
