@@ -16,7 +16,7 @@ class Level1Corridor < Level
     # Left wall with gaps for MedBay (z=-10 to z=-14) and Airlock (z=-42 to z=-46)
     wall(x: -2, z: -3.8, width: 1, length: 9)     # z=0 to z=-10
     wall(x: -2, z: -28, width: 1, length: 24.75)    # z=-16 to z=-40 (between chamfers)
-    wall(x: -2, z: -48, width: 1, length: 4)     # z=-46 to z=-50
+    wall(x: -2, z: -49.15, width: 1, length: 3)     # z=-46 to z=-50
 
     # Right wall with gap for Stowage (z=-28 to z=-32)
     wall(x: 2, z: -14, width: 1, length: 28)     # z=0 to z=-28
