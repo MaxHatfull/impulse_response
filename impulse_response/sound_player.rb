@@ -121,7 +121,6 @@ class SoundPlayer
 
     # Direct hits (0 bounces) are dry, bounced hits are wet
     # Short bounces blend with direct sound - wetness scales with distance
-    direct_volume = contributions.select { |c| c[:bounces] == 0 }.sum { |c| c[:volume] }
     bounced_volume = contributions.select { |c| c[:bounces] > 0 }.sum { |c| c[:volume] * c[:distance] / MIN_ECHO_DISTANCE }
 
     wet = [bounced_volume / total_volume, 1.0].min
@@ -143,8 +142,8 @@ class SoundPlayer
 
     {
       room_size: room_size,
-      damping: damping,
-      wet: wet,
+      damping: damping * 0.01,
+      wet: wet * 0.4,
       dry: dry
     }
   end
