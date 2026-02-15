@@ -81,7 +81,7 @@ class MedBay < Level
   def quarantine_status_option
     {
       menu_item: Sounds::MedBay::Terminal.quarantine_status,
-      available: -> { GameState.instance.get(:kerrick_in_cryo) && !GameState.instance.get(:quarantine_disabled) },
+      available: -> { GameState.instance.get(:kerrick_in_cryo) },
       on_select_clip: Sounds::MedBay::Terminal.quarantine_status_result_terminal,
       on_select_player_clip: Sounds::MedBay::Terminal.quarantine_status_result_quinn,
       on_select: -> { GameState.instance.update(quarantine_disabled: true) }
@@ -91,7 +91,11 @@ class MedBay < Level
   def cryo_sleep_option
     {
       menu_item: Sounds::MedBay::Terminal.cryo_sleep,
-      available: -> { !GameState.instance.get(:kerrick_in_cryo) },
+      available: -> {
+        GameState.instance.get(:medbay_diagnostic_pod_powered) &&
+          GameState.instance.get(:kerrick_diagnosed) &&
+          !GameState.instance.get(:kerrick_in_cryo)
+      },
       on_select_clip: Sounds::MedBay::Terminal.cryo_sleep_result_terminal,
       on_select_player_clip: Sounds::MedBay::Terminal.cryo_sleep_result_quinn,
       on_select: -> { GameState.instance.update(kerrick_in_cryo: true) }

@@ -33,11 +33,13 @@ class TerminalControls < Engine::Component
   end
 
   def handle_menu_input
+    return if available_options.empty?
+
     if Engine::Input.key_down?(Engine::Input::KEY_E)
       @state = :selected
-      current_option[:on_select]&.call
       play_clip(current_option[:on_select_clip]) if current_option[:on_select_clip]
       play_player_clip(current_option[:on_select_player_clip]) if current_option[:on_select_player_clip]
+      current_option[:on_select]&.call
     elsif Engine::Input.key_down?(Engine::Input::KEY_W)
       @current_menu_index = (@current_menu_index - 1) % available_options.length
       play_clip(current_option[:menu_item])
