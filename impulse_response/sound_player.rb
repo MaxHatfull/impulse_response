@@ -3,6 +3,7 @@ class SoundPlayer
   SOUND_RANGE = 10 # distance for full volume
   REVERB_RANGE = 15 # distance for full wet reverb
   DISTANCE_BUCKET_SIZE = 5 # meters per bucket
+  MIN_ECHO_DISTANCE = 2.0 # bounces shorter than this blend with direct sound
 
   # audio
   LEFT_ANGLE = 270
@@ -23,8 +24,7 @@ class SoundPlayer
   end
 
   def update(hits)
-    visible_hits = hits.select { |hit| has_line_of_sight?(hit) }
-    build_stereo_contributions(visible_hits)
+    build_stereo_contributions(hits)
 
     update_audio
     # print_debug
@@ -120,11 +120,12 @@ class SoundPlayer
     return { room_size: 0.0, damping: 0.0, wet: 0.0, dry: 1.0 } if total_volume <= 0
 
     # Direct hits (0 bounces) are dry, bounced hits are wet
+    # Short bounces blend with direct sound - wetness scales with distance
     direct_volume = contributions.select { |c| c[:bounces] == 0 }.sum { |c| c[:volume] }
-    bounced_volume = contributions.select { |c| c[:bounces] > 0 }.sum { |c| c[:volume] }
+    bounced_volume = contributions.select { |c| c[:bounces] > 0 }.sum { |c| c[:volume] * c[:distance] / MIN_ECHO_DISTANCE }
 
-    dry = direct_volume / total_volume
-    wet = bounced_volume / total_volume
+    wet = [bounced_volume / total_volume, 1.0].min
+    dry = 1.0 - wet
 
     # Average bounces weighted by volume - more bounces = duller sound
     avg_bounces = contributions.sum { |c| c[:volume] * c[:bounces] } / total_volume
@@ -169,19 +170,6 @@ class SoundPlayer
     to_hit = hit.raycast_hit.entry_point - listener_pos
     # 2D cross product: negative = left, positive = right
     forward_2d[0] * to_hit[1] - forward_2d[1] * to_hit[0] < 0
-  end
-
-  def has_line_of_sight?(hit)
-    hit_pos = hit.raycast_hit.entry_point
-    direction = hit_pos - listener_pos
-    distance = direction.magnitude
-    return true if distance < 0.001
-
-    ray = Physics::Ray.new(start_point: listener_pos, direction: direction.normalize, length: distance)
-    closest_wall = Physics.raycast(ray)
-                          .select { |h| h.collider.tags.include?(:wall) }
-                          .min_by(&:entry_distance)
-    closest_wall.nil? || closest_wall.entry_distance >= distance - 0.001
   end
 
   def hit_volume(hit)
