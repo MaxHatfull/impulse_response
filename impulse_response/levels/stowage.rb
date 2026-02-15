@@ -21,7 +21,7 @@ class Stowage < Level
     wall(x: 1, z: -7, width: 1, length: 1)        # pillar 2
 
     # Door back to Level 1 corridor (controlled by circuit panel)
-    stowage_door = door(x: 3, z: -1, level_class: Level1Corridor, level_options: { from: :stowage }, trigger_clip: Sounds::Level1::Door.corridor_trigger, powered: true)
+    stowage_door = door(x: 3, z: -1, level_class: Level1Corridor, level_options: { from: :stowage }, trigger_clip: Sounds::Level1::Door.corridor_trigger, powered: true, rotation: 180)
       .component(::Door)
 
     # Circuit panel - controls power to devices on Level 1

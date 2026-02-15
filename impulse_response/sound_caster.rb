@@ -11,9 +11,10 @@ class SoundCaster
     @beam_strength = beam_strength
   end
 
-  def cast_beams(start:)
+  def cast_beams(start:, start_angle: 0, end_angle: 2 * Math::PI)
+    arc_range = end_angle - start_angle
     @beam_count.times.flat_map do |i|
-      angle = i * Math::PI / (@beam_count / 2.0)
+      angle = start_angle + (i * arc_range / @beam_count)
       direction = rotate_direction(Vector[0, 1], angle)
       cast_beam(start:, direction:)
     end

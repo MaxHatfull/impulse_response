@@ -20,7 +20,7 @@ class CryoRoomLevel < Level
     rectangular_room(center_x: 0, center_z: 0, width: 6, length: 14)
 
     # Door starts locked and unpowered
-    exit_door = door(x: 0, z: -6, level_class: Level0Corridor, powered: false, locked: true, trigger_clip: Sounds::CryoRoom::Door.corridor)
+    exit_door = door(x: 0, z: -6, level_class: Level0Corridor, powered: false, locked: true, trigger_clip: Sounds::CryoRoom::Door.corridor, rotation: 0)
       .component(::Door)
 
     # Terminal starts powered but locked

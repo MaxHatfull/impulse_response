@@ -29,7 +29,9 @@ class Player
           beam_length: 100,
           volume: 120.0,
           loop: false,
-          play_on_start: false
+          play_on_start: false,
+          start_angle: -Math::PI / 2,
+          end_angle: Math::PI / 2
         )
       ]
     )
