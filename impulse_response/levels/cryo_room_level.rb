@@ -5,7 +5,17 @@ class CryoRoomLevel < Level
     Physics::AABB.new(-8, -12, 8, 12)
   end
 
+  def skybox_color
+    Vector[0.8, 0.4, 0.1]  # Orange
+  end
+
   def create
+    # Alarm lights effect - flashes for 10s then settles to yellow
+    Engine::GameObject.create(
+      name: "AlarmLights",
+      components: [AlarmLights.create(alarm_color: skybox_color)]
+    )
+
     # Rectangular room
     rectangular_room(center_x: 0, center_z: 0, width: 6, length: 14)
 

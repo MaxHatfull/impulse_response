@@ -5,6 +5,10 @@ class Level0Corridor < Level
     Physics::AABB.new(-8, -46, 8, 6)
   end
 
+  def skybox_color
+    Vector[0.4, 0.4, 0.4]  # Darkish grey
+  end
+
   def create
     puts "loading 0"
     # Long corridor - 4m wide, 40m long

@@ -23,6 +23,24 @@ RSpec.describe "Levels" do
     end
   end
 
+  describe Airlock do
+    it "loads without error" do
+      expect { Map.instance.load_level(Airlock) }.not_to raise_error
+    end
+  end
+
+  describe MedBay do
+    it "loads without error" do
+      expect { Map.instance.load_level(MedBay) }.not_to raise_error
+    end
+  end
+
+  describe Stowage do
+    it "loads without error" do
+      expect { Map.instance.load_level(Stowage) }.not_to raise_error
+    end
+  end
+
   describe CargoBayLevel do
     it "loads without error" do
       expect { Map.instance.load_level(CargoBayLevel) }.not_to raise_error
