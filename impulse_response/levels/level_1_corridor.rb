@@ -140,7 +140,8 @@ class Level1Corridor < Level
       level_class: Level1Corridor,
       powered: GameState.instance.get(:door_to_level_2_powered),
       locked: !GameState.instance.get(:quarantine_disabled),
-      locked_clip: Sounds::Level1::Door.quarantine_active
+      locked_clip: Sounds::Level1::Door.quarantine_active,
+      trigger_clip: Sounds::Level1::Door.level_2
     )
   end
 
@@ -149,9 +150,9 @@ class Level1Corridor < Level
     when :airlock
       player_spawn(x: -3, z: -44, rotation: 270)
     when :medbay
-      player_spawn(x: -4, z: -12, rotation: 270)
+      player_spawn(x: -2, z: -12, rotation: 270)
     when :stowage
-      player_spawn(x: 4, z: -30, rotation: 90)
+      player_spawn(x: 2, z: -30, rotation: 90)
     else
       player_spawn(x: 0, z: -6, rotation: 180)
     end

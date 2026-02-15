@@ -126,6 +126,10 @@ module Sounds
         def quarantine_active
           @quarantine_active ||= NativeAudio::Clip.new("#{BASE_PATH}/quarantine_active.wav")
         end
+
+        def level_2
+          @level_2 ||= NativeAudio::Clip.new("#{BASE_PATH}/level_2.wav")
+        end
       end
     end
 
