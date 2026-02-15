@@ -31,6 +31,23 @@
       ],
       "corridor": [
         { "filename": "entry_trigger.wav", "content": "Level 1 entry trigger placeholder..." }
+      ],
+      "terminal": [
+        { "filename": "welcome.wav", "content": "Okay, terminal, terminal. Ugh, it's wet. Why is it? Wait. Copper. Oh, fuck. It's blood. Whose blood is this?" },
+        { "filename": "airlock_status.wav", "content": "Airlock status..." },
+        { "filename": "airlock_status_result.wav", "content": "Outer door: locked. Inner door: locked. Status: fully pressurized. Stable." },
+        { "filename": "crew_status.wav", "content": "Crew status..." },
+        { "filename": "crew_status_result_terminal.wav", "content": "Occupant: Captain Kerrick." },
+        { "filename": "crew_status_result_player.wav", "content": "Kerrick? Are you in there? Kerrick, come in. Kerrick!" },
+        { "filename": "eva_suit_status.wav", "content": "EVA suit status..." },
+        { "filename": "eva_suit_status_result.wav", "content": "EVA suits, 2 of 2 remaining. Inspection date: valid. Oxygen supply: full." },
+        { "filename": "depressurize.wav", "content": "Depressurize..." },
+        { "filename": "depressurize_result.wav", "content": "Error. Crew present in airlock. Please initiate depressurization from inside the airlock." },
+        { "filename": "outer_door.wav", "content": "Outer door..." },
+        { "filename": "outer_door_result.wav", "content": "Error. Airlock is currently pressurized. Please depressurize before proceeding." },
+        { "filename": "inner_door.wav", "content": "Inner door..." },
+        { "filename": "inner_door_result_terminal.wav", "content": "Opening inner door." },
+        { "filename": "inner_door_result_player.wav", "content": "Kerrick! Kerrick, can you hear me?" }
       ]
     },
     "stowage_room": {

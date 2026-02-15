@@ -134,6 +134,72 @@ module Sounds
         end
       end
     end
+
+    module Terminal
+      BASE_PATH = File.join(__dir__, "assets", "audio", "level_1", "terminal")
+
+      class << self
+        def welcome
+          @welcome ||= NativeAudio::Clip.new("#{BASE_PATH}/welcome.wav")
+        end
+
+        def airlock_status
+          @airlock_status ||= NativeAudio::Clip.new("#{BASE_PATH}/airlock_status.wav")
+        end
+
+        def airlock_status_result
+          @airlock_status_result ||= NativeAudio::Clip.new("#{BASE_PATH}/airlock_status_result.wav")
+        end
+
+        def crew_status
+          @crew_status ||= NativeAudio::Clip.new("#{BASE_PATH}/crew_status.wav")
+        end
+
+        def crew_status_result_terminal
+          @crew_status_result_terminal ||= NativeAudio::Clip.new("#{BASE_PATH}/crew_status_result_terminal.wav")
+        end
+
+        def crew_status_result_player
+          @crew_status_result_player ||= NativeAudio::Clip.new("#{BASE_PATH}/crew_status_result_player.wav")
+        end
+
+        def eva_suit_status
+          @eva_suit_status ||= NativeAudio::Clip.new("#{BASE_PATH}/eva_suit_status.wav")
+        end
+
+        def eva_suit_status_result
+          @eva_suit_status_result ||= NativeAudio::Clip.new("#{BASE_PATH}/eva_suit_status_result.wav")
+        end
+
+        def depressurize
+          @depressurize ||= NativeAudio::Clip.new("#{BASE_PATH}/depressurize.wav")
+        end
+
+        def depressurize_result
+          @depressurize_result ||= NativeAudio::Clip.new("#{BASE_PATH}/depressurize_result.wav")
+        end
+
+        def outer_door
+          @outer_door ||= NativeAudio::Clip.new("#{BASE_PATH}/outer_door.wav")
+        end
+
+        def outer_door_result
+          @outer_door_result ||= NativeAudio::Clip.new("#{BASE_PATH}/outer_door_result.wav")
+        end
+
+        def inner_door
+          @inner_door ||= NativeAudio::Clip.new("#{BASE_PATH}/inner_door.wav")
+        end
+
+        def inner_door_result_terminal
+          @inner_door_result_terminal ||= NativeAudio::Clip.new("#{BASE_PATH}/inner_door_result_terminal.wav")
+        end
+
+        def inner_door_result_player
+          @inner_door_result_player ||= NativeAudio::Clip.new("#{BASE_PATH}/inner_door_result_player.wav")
+        end
+      end
+    end
   end
 
   module CryoRoom

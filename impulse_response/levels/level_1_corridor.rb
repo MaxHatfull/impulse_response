@@ -33,8 +33,48 @@ class Level1Corridor < Level
     wall(x: -3.0, z: -46.93, width: 1, length: 3.1, rotation: 45)    # south chamfer
 
     # Door to Airlock at end of corridor
-    # Powered state controlled by stowage circuit panel
-    door(x: -7, z: -44, level_class: Airlock, trigger_clip: Sounds::Level1::Door.airlock, powered: GameState.instance.get(:airlock_interior_door_powered))
+    # Powered state controlled by stowage circuit panel, locked until terminal unlocks it
+    airlock_door_locked = !GameState.instance.get(:airlock_door_unlocked)
+    airlock_door = door(x: -7, z: -44, level_class: Airlock, trigger_clip: Sounds::Level1::Door.airlock, powered: GameState.instance.get(:airlock_interior_door_powered), locked: airlock_door_locked)
+      .component(::Door)
+
+    # Airlock terminal - controls inner door lock (near south chamfer)
+    terminal(
+      x: -4.5, z: -45,
+      welcome_clips: [Sounds::Level1::Terminal.welcome],
+      options: [
+        {
+          menu_item: Sounds::Level1::Terminal.airlock_status,
+          on_select_clip: Sounds::Level1::Terminal.airlock_status_result
+        },
+        {
+          menu_item: Sounds::Level1::Terminal.crew_status,
+          on_select_clip: Sounds::Level1::Terminal.crew_status_result_terminal,
+          on_select_player_clip: Sounds::Level1::Terminal.crew_status_result_player
+        },
+        {
+          menu_item: Sounds::Level1::Terminal.eva_suit_status,
+          on_select_clip: Sounds::Level1::Terminal.eva_suit_status_result
+        },
+        {
+          menu_item: Sounds::Level1::Terminal.depressurize,
+          on_select_clip: Sounds::Level1::Terminal.depressurize_result
+        },
+        {
+          menu_item: Sounds::Level1::Terminal.outer_door,
+          on_select_clip: Sounds::Level1::Terminal.outer_door_result
+        },
+        {
+          menu_item: Sounds::Level1::Terminal.inner_door,
+          on_select_clip: Sounds::Level1::Terminal.inner_door_result_terminal,
+          on_select_player_clip: Sounds::Level1::Terminal.inner_door_result_player,
+          on_select: -> {
+            airlock_door.unlock
+            GameState.instance.update(airlock_door_unlocked: true)
+          }
+        }
+      ]
+    )
 
     # MedBay corridor (4m wide, short, left side near spawn)
     # Gap is at z=-11 to z=-13 on left corridor wall, with 45° chamfers
@@ -66,7 +106,7 @@ class Level1Corridor < Level
     # Player spawn based on where they came from
     case from
     when :airlock
-      player_spawn(x: -5, z: -44, rotation: 270)
+      player_spawn(x: -3, z: -44, rotation: 270)
     when :medbay
       player_spawn(x: -4, z: -12, rotation: 270)
     when :stowage
