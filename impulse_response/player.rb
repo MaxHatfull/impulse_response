@@ -1,7 +1,7 @@
 class Player
   include Singleton
 
-  CAMERA_HEIGHT = 2
+  CAMERA_HEIGHT = 0.25
 
   attr_reader :voice_source
 
@@ -10,7 +10,7 @@ class Player
       name: "Player",
       pos: Vector[0, 0, 0],
       components: [
-        PlayerController.create(move_speed: 2.5, look_sensitivity: 0.3),
+        PlayerController.create(move_speed: 4.0, look_sensitivity: 0.3),
         Physics::CircleCollider.create(radius: 0.25, tags: [:player]),
         Physics::CircleCollider.create(radius: 1, tags: [:listener]),
         SoundListener.create
@@ -53,7 +53,7 @@ class Player
     Engine::GameObject.create(
       name: "Camera",
       pos: Vector[0, CAMERA_HEIGHT, 0],
-      rotation: Vector[20, 180, 0],
+      rotation: Vector[0, 180, 0],
       parent: @game_object,
       components: [
         Engine::Components::PerspectiveCamera.create(
