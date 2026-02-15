@@ -8,7 +8,13 @@ Engine.start do
   ])
 
   Player.instance.spawn
+  Player.instance.disable_controls
   Skybox.instance.spawn
+  Skybox.instance.set_color(Vector[0.4, 0.1, 0.6])  # Purple for main menu
   Scenery.instance.create_ground
-  Map.instance.load_level(CryoRoomLevel)
+
+  Engine::GameObject.create(
+    name: "MainMenu",
+    components: [MainMenuControls.create]
+  )
 end
