@@ -70,6 +70,10 @@ module Sounds
         @welcome ||= NativeAudio::Clip.new("#{BASE_PATH}/circuit_panel_total_power_1.wav")
       end
 
+      def welcome_power_3
+        @welcome_power_3 ||= NativeAudio::Clip.new("#{BASE_PATH}/circuit_panel_total_power_3.wav")
+      end
+
       def welcome_power_4
         @welcome_power_4 ||= NativeAudio::Clip.new("#{BASE_PATH}/circuit_panel_total_power_4.wav")
       end
@@ -259,10 +263,6 @@ module Sounds
 
         def stowage_door
           @stowage_door ||= NativeAudio::Clip.new("#{BASE_PATH}/stowage_door.wav")
-        end
-
-        def door_to_level_0
-          @door_to_level_0 ||= NativeAudio::Clip.new("#{BASE_PATH}/door_to_level_0.wav")
         end
 
         def door_to_level_2

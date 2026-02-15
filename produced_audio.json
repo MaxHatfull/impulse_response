@@ -2,6 +2,7 @@
   "audio": {
     "circuit_panel": [
       { "filename": "circuit_panel_total_power_1.wav", "content": "Circuit panel total power 1..." },
+      { "filename": "circuit_panel_total_power_3.wav", "content": "Circuit panel total power 3..." },
       { "filename": "circuit_panel_total_power_4.wav", "content": "Circuit panel total power 4..." },
       { "filename": "insufficient_power.wav", "content": "Insufficient power..." },
       { "filename": "power_off.wav", "content": "Power off..." },
@@ -36,7 +37,6 @@
         { "filename": "medbay_terminal.wav", "content": "Medbay terminal..." },
         { "filename": "medbay_door.wav", "content": "Medbay door..." },
         { "filename": "stowage_door.wav", "content": "Stowage door..." },
-        { "filename": "door_to_level_0.wav", "content": "Door to level 0..." },
         { "filename": "door_to_level_2.wav", "content": "Door to level 2..." }
       ]
     }

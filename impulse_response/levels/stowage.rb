@@ -27,8 +27,8 @@ class Stowage < Level
     # Power budget: 4, 7 devices total
     circuit_panel(
       x: -3, z: -8,
-      total_power: 4,
-      welcome_clip: Sounds::CircuitPanel.welcome_power_4,
+      total_power: 3,
+      welcome_clip: Sounds::CircuitPanel.welcome_power_3,
       devices: [
         {
           name_audio: Sounds::StowageRoom::CircuitPanel.airlock_interior_door,
@@ -68,14 +68,6 @@ class Stowage < Level
             powered: true,
             on_power_on: -> { GameState.instance.update(stowage_door_powered: true) },
             on_power_off: -> { GameState.instance.update(stowage_door_powered: false) }
-          )
-        },
-        {
-          name_audio: Sounds::StowageRoom::CircuitPanel.door_to_level_0,
-          device: CallbackDevice.new(
-            powered: true,
-            on_power_on: -> { GameState.instance.update(door_to_level_0_powered: true) },
-            on_power_off: -> { GameState.instance.update(door_to_level_0_powered: false) }
           )
         },
         {
