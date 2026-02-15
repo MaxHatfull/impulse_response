@@ -10,6 +10,12 @@ class CryoRoomLevel < Level
   end
 
   def create
+    # Alarm lights effect - flashes for 10s then settles to yellow
+    Engine::GameObject.create(
+      name: "AlarmLights",
+      components: [AlarmLights.create(alarm_color: skybox_color)]
+    )
+
     # Rectangular room
     rectangular_room(center_x: 0, center_z: 0, width: 6, length: 14)
 
