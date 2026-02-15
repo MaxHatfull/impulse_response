@@ -10,5 +10,5 @@ Engine.start do
   Player.instance.spawn
   Skybox.instance.spawn
   Scenery.instance.create_ground
-  Map.instance.load_level(CryoRoomLevel)
+  Map.instance.load_level(MedBay)
 end
