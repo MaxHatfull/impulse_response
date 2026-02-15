@@ -1,17 +1,18 @@
 class Door < Engine::Component
-  serialize :powered, :locked, :sound_source, :ambient_source, :on_open
+  serialize :powered, :locked, :locked_clip, :sound_source, :ambient_source, :on_open
 
   attr_reader :powered
 
   def start
     @powered = true if @powered.nil?
     @locked = false if @locked.nil?
+    @locked_clip ||= Sounds.door_locked
     update_ambient_pitch
   end
 
   def try_open
     if @locked
-      play_clip(Sounds.door_locked)
+      play_clip(@locked_clip)
       return
     end
 

@@ -27,7 +27,8 @@
       "door": [
         { "filename": "medbay.wav", "content": "Medbay..." },
         { "filename": "stowage.wav", "content": "Stowage..." },
-        { "filename": "airlock.wav", "content": "Airlock..." }
+        { "filename": "airlock.wav", "content": "Airlock..." },
+        { "filename": "quarantine_active.wav", "content": "Error. Quarantine active. Please contact Captain Kerrick." }
       ],
       "corridor": [
         { "filename": "entry_trigger.wav", "content": "Level 1 entry trigger placeholder..." }

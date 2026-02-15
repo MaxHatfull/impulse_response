@@ -1,6 +1,6 @@
 class Level
   class Door
-    def self.create(parent:, x:, z:, level_class:, radius: 1, powered: true, locked: false, trigger_clip: nil, level_options: {})
+    def self.create(parent:, x:, z:, level_class:, radius: 1, powered: true, locked: false, locked_clip: nil, trigger_clip: nil, level_options: {})
       ambient_source = Level::SoundSource.create(parent: parent, x: x, z: z, clip: Sounds.door_ambient, volume: 1)
         .component(SoundCastSource)
       effect_source = Level::SoundSource.create(parent: parent, x: x, z: z, clip: nil, loop: false, play_on_start: false)
@@ -9,6 +9,7 @@ class Level
       door_component = ::Door.create(
         powered: powered,
         locked: locked,
+        locked_clip: locked_clip,
         sound_source: effect_source,
         ambient_source: ambient_source,
         on_open: -> { Map.instance.load_level(level_class, level_options: level_options) }

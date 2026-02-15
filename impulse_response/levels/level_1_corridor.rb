@@ -112,6 +112,7 @@ class Level1Corridor < Level
       x: -5, z: -12,
       level_class: MedBay,
       locked: medbay_door_locked,
+      locked_clip: Sounds::Level1::Door.quarantine_active,
       trigger_clip: Sounds::Level1::Door.medbay,
       powered: GameState.instance.get(:medbay_door_powered)
     )
@@ -130,11 +131,13 @@ class Level1Corridor < Level
   end
 
   def create_level_2_door
-    # Door to Level 2 - powered by circuit panel
+    # Door to Level 2 - powered by circuit panel, locked until quarantine lifted
     door(
       x: 0, z: -48,
       level_class: Level1Corridor,
-      powered: GameState.instance.get(:door_to_level_2_powered)
+      powered: GameState.instance.get(:door_to_level_2_powered),
+      locked: !GameState.instance.get(:quarantine_disabled),
+      locked_clip: Sounds::Level1::Door.quarantine_active
     )
   end
 

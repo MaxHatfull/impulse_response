@@ -122,6 +122,10 @@ module Sounds
         def airlock
           @airlock ||= NativeAudio::Clip.new("#{BASE_PATH}/airlock.wav")
         end
+
+        def quarantine_active
+          @quarantine_active ||= NativeAudio::Clip.new("#{BASE_PATH}/quarantine_active.wav")
+        end
       end
     end
 
