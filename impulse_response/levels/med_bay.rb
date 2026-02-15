@@ -47,6 +47,7 @@ class MedBay < Level
     if GameState.instance.get(:medbay_diagnostic_pod_powered)
       {
         menu_item: Sounds::MedBay::Terminal.diagnostic_kerrick,
+        available: -> { !GameState.instance.get(:kerrick_in_cryo) },
         on_select_clip: Sounds::MedBay::Terminal.diagnostic_kerrick_result_terminal,
         on_select_player_clip: Sounds::MedBay::Terminal.diagnostic_kerrick_result_quinn,
         on_select: -> { GameState.instance.update(kerrick_diagnosed: true) }
@@ -54,6 +55,7 @@ class MedBay < Level
     else
       {
         menu_item: Sounds::MedBay::Terminal.diagnostic_kerrick,
+        available: -> { !GameState.instance.get(:kerrick_in_cryo) },
         on_select_clip: Sounds::MedBay::Terminal.diagnostic_kerrick_unpowered
       }
     end
@@ -63,12 +65,14 @@ class MedBay < Level
     if GameState.instance.get(:medbay_diagnostic_pod_powered)
       {
         menu_item: Sounds::MedBay::Terminal.diagnostic_quinn,
+        available: -> { !GameState.instance.get(:kerrick_in_cryo) },
         on_select_clip: Sounds::MedBay::Terminal.diagnostic_quinn_result_terminal,
         on_select_player_clip: Sounds::MedBay::Terminal.diagnostic_quinn_result_quinn
       }
     else
       {
         menu_item: Sounds::MedBay::Terminal.diagnostic_quinn,
+        available: -> { !GameState.instance.get(:kerrick_in_cryo) },
         on_select_clip: Sounds::MedBay::Terminal.diagnostic_quinn_unpowered
       }
     end
@@ -77,6 +81,7 @@ class MedBay < Level
   def quarantine_status_option
     {
       menu_item: Sounds::MedBay::Terminal.quarantine_status,
+      available: -> { GameState.instance.get(:kerrick_in_cryo) && !GameState.instance.get(:quarantine_disabled) },
       on_select_clip: Sounds::MedBay::Terminal.quarantine_status_result_terminal,
       on_select_player_clip: Sounds::MedBay::Terminal.quarantine_status_result_quinn,
       on_select: -> { GameState.instance.update(quarantine_disabled: true) }
@@ -86,6 +91,7 @@ class MedBay < Level
   def cryo_sleep_option
     {
       menu_item: Sounds::MedBay::Terminal.cryo_sleep,
+      available: -> { !GameState.instance.get(:kerrick_in_cryo) },
       on_select_clip: Sounds::MedBay::Terminal.cryo_sleep_result_terminal,
       on_select_player_clip: Sounds::MedBay::Terminal.cryo_sleep_result_quinn,
       on_select: -> { GameState.instance.update(kerrick_in_cryo: true) }

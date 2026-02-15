@@ -23,6 +23,10 @@ class TerminalControls < Engine::Component
     return if playing?
 
     if @state == :welcome || @state == :selected
+      if available_options.empty?
+        close
+        return
+      end
       @state = :menu
       play_clip(current_option[:menu_item])
     end
@@ -35,16 +39,20 @@ class TerminalControls < Engine::Component
       play_clip(current_option[:on_select_clip]) if current_option[:on_select_clip]
       play_player_clip(current_option[:on_select_player_clip]) if current_option[:on_select_player_clip]
     elsif Engine::Input.key_down?(Engine::Input::KEY_W)
-      @current_menu_index = (@current_menu_index - 1) % @options.length
+      @current_menu_index = (@current_menu_index - 1) % available_options.length
       play_clip(current_option[:menu_item])
     elsif Engine::Input.key_down?(Engine::Input::KEY_S)
-      @current_menu_index = (@current_menu_index + 1) % @options.length
+      @current_menu_index = (@current_menu_index + 1) % available_options.length
       play_clip(current_option[:menu_item])
     end
   end
 
+  def available_options
+    @options.select { |opt| opt[:available].nil? || opt[:available].call }
+  end
+
   def current_option
-    @options[@current_menu_index]
+    available_options[@current_menu_index % available_options.length]
   end
 
   def open
