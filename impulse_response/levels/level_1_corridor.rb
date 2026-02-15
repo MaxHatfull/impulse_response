@@ -31,7 +31,7 @@ class Level1Corridor < Level
     wall(x: -8, z: -44, width: 1, length: 4)     # west wall (end)
 
     # Door to Airlock at end of corridor
-    door(x: -7, z: -44, level_class: Airlock)
+    door(x: -7, z: -44, level_class: Airlock, trigger_clip: Sounds::Level1::Door.airlock)
 
     # MedBay corridor (4m wide, short, left side near spawn)
     # Gap is at z=-10 to z=-14 on left corridor wall
@@ -40,7 +40,7 @@ class Level1Corridor < Level
     wall(x: -6, z: -12, width: 1, length: 4)     # west wall (end)
 
     # Door to MedBay at end of corridor
-    door(x: -5, z: -12, level_class: MedBay, locked: true)
+    door(x: -5, z: -12, level_class: MedBay, locked: true, trigger_clip: Sounds::Level1::Door.medbay)
 
     # Stowage corridor (4m wide, short, right side)
     # Gap is at z=-28 to z=-32 on right corridor wall
@@ -49,7 +49,7 @@ class Level1Corridor < Level
     wall(x: 6, z: -30, width: 1, length: 4)      # east wall (end)
 
     # Door to Stowage at end of corridor
-    door(x: 5, z: -30, level_class: Stowage, locked: true)
+    door(x: 5, z: -30, level_class: Stowage, locked: true, trigger_clip: Sounds::Level1::Door.stowage)
 
     # Doors
     door(x: 0, z: -48, level_class: Level1Corridor)

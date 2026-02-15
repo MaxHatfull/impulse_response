@@ -100,7 +100,19 @@ module Sounds
 
       class << self
         def corridor_trigger
-          @corridor_trigger ||= NativeAudio::Clip.new("#{BASE_PATH}/Level 1 Corridor trigger.wav")
+          @corridor_trigger ||= NativeAudio::Clip.new("#{BASE_PATH}/corridor.wav")
+        end
+
+        def medbay
+          @medbay ||= NativeAudio::Clip.new("#{BASE_PATH}/medbay.wav")
+        end
+
+        def stowage
+          @stowage ||= NativeAudio::Clip.new("#{BASE_PATH}/stowage.wav")
+        end
+
+        def airlock
+          @airlock ||= NativeAudio::Clip.new("#{BASE_PATH}/airlock.wav")
         end
       end
     end

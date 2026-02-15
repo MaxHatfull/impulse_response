@@ -10,5 +10,5 @@ Engine.start do
   Player.instance.spawn
   Skybox.instance.spawn
   Scenery.instance.create_ground
-  Map.instance.load_level(Airlock)
+  Map.instance.load_level(Level1Corridor)
 end
