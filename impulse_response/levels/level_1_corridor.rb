@@ -52,7 +52,8 @@ class Level1Corridor < Level
       level_class: Airlock,
       trigger_clip: Sounds::Level1::Door.airlock,
       powered: GameState.instance.get(:airlock_interior_door_powered),
-      locked: airlock_door_locked
+      locked: airlock_door_locked,
+      rotation: -90
     ).component(::Door)
 
     # Airlock terminal - controls inner door lock
@@ -117,7 +118,8 @@ class Level1Corridor < Level
       locked: medbay_door_locked,
       locked_clip: Sounds::Level1::Door.quarantine_active,
       trigger_clip: Sounds::Level1::Door.medbay,
-      powered: GameState.instance.get(:medbay_door_powered)
+      powered: GameState.instance.get(:medbay_door_powered),
+      rotation: -90
     )
   end
 
@@ -130,7 +132,7 @@ class Level1Corridor < Level
     wall(x: 3.0, z: -32.9, width: 1, length: 3.1, rotation: -45)   # south chamfer
 
     # Door to Stowage
-    door(x: 5, z: -30, level_class: Stowage, trigger_clip: Sounds::Level1::Door.stowage)
+    door(x: 5, z: -30, level_class: Stowage, trigger_clip: Sounds::Level1::Door.stowage, rotation: 90)
   end
 
   def create_level_2_door
@@ -141,7 +143,8 @@ class Level1Corridor < Level
       powered: GameState.instance.get(:door_to_level_2_powered),
       locked: !GameState.instance.get(:quarantine_disabled),
       locked_clip: Sounds::Level1::Door.quarantine_active,
-      trigger_clip: Sounds::Level1::Door.level_2
+      trigger_clip: Sounds::Level1::Door.level_2,
+      rotation: 0
     )
   end
 

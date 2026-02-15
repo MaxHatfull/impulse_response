@@ -17,7 +17,7 @@ class MedBay < Level
     wall(x: 0, z: -18, width: 30, length: 1)      # front wall
 
     # Door back to Level 1 corridor (behind player spawn)
-    door(x: -13, z: -1, level_class: Level1Corridor, level_options: { from: :medbay }, trigger_clip: Sounds::Level1::Door.corridor_trigger)
+    door(x: -13, z: -1, level_class: Level1Corridor, level_options: { from: :medbay }, trigger_clip: Sounds::Level1::Door.corridor_trigger, rotation: 180)
 
     # Terminal - powered state controlled by stowage circuit panel
     terminal(

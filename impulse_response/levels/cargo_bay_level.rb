@@ -20,7 +20,7 @@ class CargoBayLevel < Level
     end
 
     # Door back to intro
-    door(x: 27, z: -28, level_class: CryoRoomLevel)
+    door(x: 27, z: -28, level_class: CryoRoomLevel, rotation: 0)
 
     # Player spawn at near corner
     player_spawn(x: 3, z: -3, rotation: 225)

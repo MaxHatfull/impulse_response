@@ -17,7 +17,7 @@ class Airlock < Level
     wall(x: 0, z: -10, width: 6, length: 1)      # front wall
 
     # Door back to Level 1 corridor (behind player spawn)
-    door(x: 0, z: -1, level_class: Level1Corridor, level_options: { from: :airlock }, trigger_clip: Sounds::Level1::Door.corridor_trigger)
+    door(x: 0, z: -1, level_class: Level1Corridor, level_options: { from: :airlock }, trigger_clip: Sounds::Level1::Door.corridor_trigger, rotation: 180)
 
     # Player spawn (facing into room)
     player_spawn(x: 0, z: -4.5, rotation: 180)
