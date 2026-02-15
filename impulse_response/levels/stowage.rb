@@ -32,31 +32,59 @@ class Stowage < Level
       devices: [
         {
           name_audio: Sounds::StowageRoom::CircuitPanel.airlock_interior_door,
-          device: CallbackDevice.new(powered: true)
+          device: CallbackDevice.new(
+            powered: true,
+            on_power_on: -> { GameState.instance.update(airlock_interior_door_powered: true) },
+            on_power_off: -> { GameState.instance.update(airlock_interior_door_powered: false) }
+          )
         },
         {
           name_audio: Sounds::StowageRoom::CircuitPanel.medbay_diagnostic_pod,
-          device: CallbackDevice.new(powered: false)
+          device: CallbackDevice.new(
+            powered: false,
+            on_power_on: -> { GameState.instance.update(medbay_diagnostic_pod_powered: true) },
+            on_power_off: -> { GameState.instance.update(medbay_diagnostic_pod_powered: false) }
+          )
         },
         {
           name_audio: Sounds::StowageRoom::CircuitPanel.medbay_terminal,
-          device: CallbackDevice.new(powered: false)
+          device: CallbackDevice.new(
+            powered: false,
+            on_power_on: -> { GameState.instance.update(medbay_terminal_powered: true) },
+            on_power_off: -> { GameState.instance.update(medbay_terminal_powered: false) }
+          )
         },
         {
           name_audio: Sounds::StowageRoom::CircuitPanel.medbay_door,
-          device: CallbackDevice.new(powered: true)
+          device: CallbackDevice.new(
+            powered: true,
+            on_power_on: -> { GameState.instance.update(medbay_door_powered: true) },
+            on_power_off: -> { GameState.instance.update(medbay_door_powered: false) }
+          )
         },
         {
           name_audio: Sounds::StowageRoom::CircuitPanel.stowage_door,
-          device: CallbackDevice.new(powered: true)
+          device: CallbackDevice.new(
+            powered: true,
+            on_power_on: -> { GameState.instance.update(stowage_door_powered: true) },
+            on_power_off: -> { GameState.instance.update(stowage_door_powered: false) }
+          )
         },
         {
           name_audio: Sounds::StowageRoom::CircuitPanel.door_to_level_0,
-          device: CallbackDevice.new(powered: true)
+          device: CallbackDevice.new(
+            powered: true,
+            on_power_on: -> { GameState.instance.update(door_to_level_0_powered: true) },
+            on_power_off: -> { GameState.instance.update(door_to_level_0_powered: false) }
+          )
         },
         {
           name_audio: Sounds::StowageRoom::CircuitPanel.door_to_level_2,
-          device: CallbackDevice.new(powered: false)
+          device: CallbackDevice.new(
+            powered: false,
+            on_power_on: -> { GameState.instance.update(door_to_level_2_powered: true) },
+            on_power_off: -> { GameState.instance.update(door_to_level_2_powered: false) }
+          )
         }
       ]
     )
