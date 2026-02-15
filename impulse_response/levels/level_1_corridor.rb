@@ -25,10 +25,12 @@ class Level1Corridor < Level
     wall(x: 0, z: -50, width: 4, length: 1)      # exit wall
 
     # Airlock corridor (4m wide, 6m long, left side)
-    # Gap is at z=-42 to z=-46 on left corridor wall
-    wall(x: -5, z: -42, width: 6, length: 1)     # north wall
-    wall(x: -5, z: -46, width: 6, length: 1)     # south wall
-    wall(x: -8, z: -44, width: 1, length: 4)     # west wall (end)
+    # Gap is at z=-42 to z=-46 on left corridor wall, with 45° chamfers
+    wall(x: -5.65, z: -42, width: 4, length: 1)   # north wall (stops at x=-3.65)
+    wall(x: -5.65, z: -46, width: 4, length: 1)   # south wall (stops at x=-3.65)
+    wall(x: -8, z: -44, width: 1, length: 4)      # west wall (end)
+    wall(x: -3.0, z: -41.07, width: 1, length: 3.1, rotation: -45)  # north chamfer
+    wall(x: -3.0, z: -46.9, width: 1, length: 3.1, rotation: 45)    # south chamfer
 
     # Door to Airlock at end of corridor
     door(x: -7, z: -44, level_class: Airlock, trigger_clip: Sounds::Level1::Door.airlock)
